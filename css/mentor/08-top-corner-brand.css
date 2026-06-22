@@ -1,0 +1,13 @@
+  /* ─── Top corner brand ─────────────────────────────────── */
+  .brand {
+    position: fixed;
+    top: 26px; left: 32px;
+    z-index: 40;
+    pointer-events: none;
+  }
+  .brand img {
+    display: block;
+    height: 24px; width: auto;
+    opacity: 0.92;
+    filter: drop-shadow(0 0 10px rgba(200, 168, 78, 0.18));
+  }

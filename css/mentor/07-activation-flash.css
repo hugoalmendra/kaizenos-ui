@@ -1,0 +1,36 @@
+  /* ─── Activation flash ─────────────────────────────────── */
+  .flash {
+    position: fixed;
+    left: 50%; top: 50%;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    z-index: 99;
+    box-shadow: 0 0 60px 30px rgba(255, 240, 200, 0.9);
+    opacity: 0;
+  }
+  .flash.fire { animation: flash-burst 1.1s ease-out forwards; }
+  @keyframes flash-burst {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    20%  { transform: translate(-50%, -50%) scale(80); opacity: 0.9; }
+    100% { transform: translate(-50%, -50%) scale(220); opacity: 0; }
+  }
+
+  /* sigil ring that expands outward on activation */
+  .sigil-ring {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-bright);
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sigil-ring.fire { animation: sigil-out 1.6s ease-out forwards; }
+  @keyframes sigil-out {
+    0%   { transform: translate(-50%, -50%) scale(0.8); opacity: 0.9; border-width: 2px; }
+    100% { transform: translate(-50%, -50%) scale(3.0); opacity: 0;   border-width: 0.5px; }
+  }

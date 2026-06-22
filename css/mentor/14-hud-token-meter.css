@@ -1,0 +1,25 @@
+  /* ─── Session HUD: token spend meter — first segment ───────── */
+  .token-meter {
+    width: 232px; flex: 0 0 auto;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 11px 18px;
+  }
+  .token-meter .tm-top { display: flex; align-items: center; gap: 8px;
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; }
+  .token-meter .tm-dot { width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright);
+    animation: dot-pulse 2s ease-in-out infinite; }
+  .token-meter .tm-label { color: rgba(232, 200, 112, 0.8); }
+  .token-meter .tm-count { margin-left: auto; color: rgba(234, 227, 200, 0.5); letter-spacing: 0.12em; }
+  .token-meter .tm-count b { color: var(--gold-bright); font-weight: 600; }
+  .token-meter .tm-track { height: 5px; border-radius: 999px;
+    background: rgba(234, 227, 200, 0.1); overflow: hidden; margin-top: 9px; }
+  .token-meter .tm-track > span { display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    box-shadow: 0 0 8px rgba(232, 200, 112, 0.45);
+    width: 80%; transition: width 0.5s ease, background 0.4s ease; }
+  .token-meter .tm-rate { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.35); margin-top: 7px; text-align: right; }
+  .token-meter.low .tm-track > span { background: linear-gradient(90deg, #a85a2e, #e8a870); box-shadow: 0 0 8px rgba(232, 168, 112, 0.5); }
+  .token-meter.low .tm-rate { color: rgba(232, 168, 112, 0.85); }
+  .token-meter.plan .tm-track > span { background: linear-gradient(90deg, var(--gold-bright), #fff5d6); }

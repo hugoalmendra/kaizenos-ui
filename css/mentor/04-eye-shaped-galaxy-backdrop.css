@@ -1,0 +1,203 @@
+  /* ─── Eye-shaped galaxy backdrop ─────────────────────── */
+  /* Galaxy hidden until Kaiso wakes up. */
+  .eye-galaxy {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 520px;
+    height: 520px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+    filter: blur(0.5px);
+  }
+  body.active .eye-galaxy { opacity: 1; }
+  .eye-galaxy svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+  /* The whole nebula — disk, dust, and starfield — rotates together,
+     glacially, as one cosmic field. */
+  .galaxy-rot {
+    transform-origin: 0 0;
+    transform-box: view-box;
+    animation: galaxy-spin 780s linear infinite;
+  }
+  /* Inner layers no longer self-rotate; they're carried by .galaxy-rot. */
+  .galaxy-disk, .galaxy-dust {
+    transform-origin: 0 0;
+    transform-box: view-box;
+  }
+  @keyframes galaxy-spin { to { transform: rotate(360deg); } }
+
+  .galaxy-stars circle { fill: #fff8e0; transform-origin: center; transform-box: fill-box; }
+  .galaxy-stars circle.tw {
+    animation: star-twinkle var(--td, 3s) ease-in-out infinite;
+    animation-delay: var(--del, 0s);
+  }
+  @keyframes star-twinkle {
+    0%, 100% { opacity: var(--ob, 0.25); transform: scale(0.8); }
+    50%      { opacity: 1;               transform: scale(1.25); }
+  }
+
+  .eye-rim {
+    stroke: rgba(232, 200, 112, 0);
+    stroke-width: 0.6;
+    transition: stroke 1.2s ease;
+  }
+  body.active .eye-rim { stroke: rgba(232, 200, 112, 0.18); }
+
+ /* Inner orbit rings (between Kaiso core and 13-moon outer ring). */
+  .inner-orbit {
+    position: absolute;
+    left: 50%; top: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+  .inner-orbit svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  .inner-orbit .moon-path { fill: none; stroke: rgba(200,168,78,0.04); stroke-width: 0.5; stroke-dasharray: 1 5; }
+
+  /* Orbit A: closer to core, clockwise. Faster than B. Smallest stars.
+     Tightened 10% inward from previous radius. */
+  .orbit-a {
+    width: 352px; height: 352px;
+    animation: spin-cw-slow 106s linear infinite;
+  }
+  @keyframes spin-cw-slow {
+    from { transform: translate(-50%, -50%) rotate(0deg);   }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* Orbit Ⓧ (innermost): along the outer compass frontier ring (r=168).
+     Rotates clockwise, like A. Stars stay steady (no blinking) at all times. */
+  .orbit-az {
+    width: 292px; height: 292px;
+    animation: spin-cw-az 61s linear infinite;
+  }
+  @keyframes spin-cw-az {
+    from { transform: translate(-50%, -50%) rotate(0deg);   }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .orbit-az .moon { fill: rgba(232, 200, 112, 0.28); }
+  body.active .orbit-az .moon {
+    fill: var(--gold-bright);
+    filter: drop-shadow(0 0 3px rgba(232,200,112,0.85));
+    /* No flicker animation — steady glow. */
+  }
+  body.active .orbit-az .moon-path { stroke: rgba(232,200,112,0.16); }
+
+  /* Orbit B: middle, counter-clockwise. ~44% faster than original
+     (was 140s → 112s → 97s). Radius set so the ring passes EXACTLY
+     through the KAISO LISTENING dot. */
+  .orbit-b {
+    width: 414px; height: 414px;
+    animation: spin-ccw-mid 97s linear infinite;
+  }
+  @keyframes spin-ccw-mid {
+    from { transform: translate(-50%, -50%) rotate(0deg);    }
+    to   { transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+
+  /* Active: orbit paths brighten faintly + stars flicker.
+     A blinks in unison with KAISO LISTENING dot (2s pulse).
+     B blinks randomly/sporadically per-star (delays + durations
+     are randomized inline by JS). */
+  body.active .orbit-a .moon-path,
+  body.active .orbit-b .moon-path { stroke: rgba(232,200,112,0.16); }
+
+  /* Orbit A stars: smallest of all (smaller than the outer 13 moons). */
+  .orbit-a .moon { fill: rgba(232, 200, 112, 0.28); }
+  .orbit-b .moon { fill: rgba(232, 200, 112, 0.28); }
+  body.active .orbit-a .moon {
+    fill: var(--gold-bright);
+    filter: drop-shadow(0 0 3px rgba(232,200,112,0.85));
+    animation: flicker-a 2s ease-in-out infinite;
+  }
+  body.active .orbit-b .moon {
+    fill: var(--gold-bright);
+    filter: drop-shadow(0 0 3px rgba(232,200,112,0.85));
+    animation: flicker-b 2.4s ease-in-out infinite;
+  }
+  @keyframes flicker-a {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1;   }
+  }
+  @keyframes flicker-b {
+    0%, 100% { opacity: 1;   }
+    18%      { opacity: 0.18;}
+    32%      { opacity: 0.95;}
+    55%      { opacity: 0.15;}
+    80%      { opacity: 0.7; }
+  }
+
+  /* Outer-ring purple aura: hidden until the mentor wakes, then a faint
+     deep-purple wash radiates from the 13-moon ring (~240px) INWARD.
+     Sits BEHIND everything else (z-index: -1). */
+  .outer-aura {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 520px; height: 520px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    /* Tight ring band only — transparent everywhere except a narrow rim. */
+    background:
+      radial-gradient(circle at center,
+        rgba(60, 30, 110, 0)     0%,
+        rgba(60, 30, 110, 0)     78%,
+        rgba(86, 48, 150, 0.04)  90%,
+        rgba(96, 54, 168, 0.08)  97%,
+        rgba(96, 54, 168, 0)    100%);
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 1.6s ease;
+    z-index: -1;
+  }
+  body.active .outer-aura { opacity: 1; }
+
+  /* Cropped violet nebula glow inside the moon ring. Lives inside
+     .moon-orbit so it rotates with the 13 moons. Hidden until the
+     mentor wakes; tight asymmetric arm so rotation is visible. */
+  .moon-ring-aura { opacity: 0; transition: opacity 1.6s ease; }
+  body.active .moon-ring-aura { opacity: 0.5; }
+
+  /* Cropped violet nebula container — its own slow clockwise rotation,
+     independent of the moon ring. Positioned identically to .moon-orbit
+     so the clipped aura aligns with the 13-moon ring. */
+  .moon-aura-rot {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 520px; height: 520px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: spin-cw-aura 600s linear infinite;
+  }
+  @keyframes spin-cw-aura {
+    from { transform: translate(-50%, -50%) rotate(0deg);   }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .moon-aura-rot svg { width: 100%; height: 100%; overflow: visible; display: block; }
+
+ /* Moon-orbit ring: 13 small star-points orbiting counter-clockwise.
+     Spins at all times (dormant + active). */
+  .moon-orbit {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 520px; height: 520px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: spin-ccw 180s linear infinite;
+  }
+  @keyframes spin-ccw {
+    from { transform: translate(-50%, -50%) rotate(0deg);    }
+    to   { transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+  .moon-orbit svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  /* Dormant: faint star-points only — no glow halo, no orbit path. */
+  .moon-path { fill: none; stroke: rgba(200,168,78,0.04); stroke-width: 0.5; stroke-dasharray: 1 5; }
+  .moon { fill: rgba(232, 200, 112, 0.28); }
+  .moon-glow { fill: rgba(232, 200, 112, 0); transition: fill 0.8s ease; }
+  /* Active: moons illuminate softly — still subtle, like distant stars. */
+  /* Active: moons illuminate at full original size with halo + glow. */
+  body.active .moon { fill: var(--gold-bright); filter: drop-shadow(0 0 4px rgba(232,200,112,0.9)); transform: scale(2.5); transform-origin: center; transform-box: fill-box; transition: transform 0.8s ease, fill 0.8s ease; }
+  body.active .moon-glow { fill: rgba(232, 200, 112, 0.22); transform: scale(2.5); transform-origin: center; transform-box: fill-box; transition: transform 0.8s ease, fill 0.8s ease; }
+  body.active .moon-path { stroke: rgba(232,200,112,0.22); }

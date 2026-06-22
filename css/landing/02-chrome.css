@@ -1,0 +1,7 @@
+  /* ─── Chrome ───────────────────────────────────────────────── */
+  .brand {
+    position: fixed; top: 20px; left: 26px; z-index: 40;
+    display: flex; align-items: center;
+  }
+  .brand img { display: block; height: 24px; width: auto; opacity: 0.92;
+    filter: drop-shadow(0 0 10px rgba(200,168,78,0.18)); }

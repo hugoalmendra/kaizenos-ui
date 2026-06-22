@@ -1,0 +1,19 @@
+  /* ─── Session HUD: top-right rail — one unified glass surface ── */
+  .hud-top {
+    position: fixed; top: 14px; right: 24px; z-index: 36;
+    display: flex; align-items: stretch;
+    background: linear-gradient(180deg, rgba(14, 12, 20, 0.66), rgba(8, 7, 12, 0.62));
+    border: 1px solid rgba(200, 168, 78, 0.22);
+    border-radius: 18px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 240, 200, 0.05);
+    overflow: hidden;
+    opacity: 0; pointer-events: none;
+    transform: translateY(-12px);
+    transition: opacity 0.6s ease 0.25s, transform 0.6s ease 0.25s,
+                border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  body.active .hud-top { opacity: 1; pointer-events: auto; transform: none; }
+  /* Tint the whole rail amber when tokens run low. */
+  .hud-top:has(.token-meter.low) { border-color: rgba(232, 168, 112, 0.45); }

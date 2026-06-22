@@ -1,0 +1,43 @@
+  /* ─── Account button + menu ──────────────────────────────── */
+  .account-btn {
+    position: relative; flex: 0 0 auto; align-self: stretch;
+    width: 60px; border: 0; border-radius: 0;
+    border-left: 1px solid rgba(200, 168, 78, 0.14);
+    background: transparent; color: rgba(232, 200, 112, 0.82);
+    display: grid; place-items: center; cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  /* Circular ring keeps the avatar affordance while living in the rail. */
+  .account-btn::before {
+    content: ''; position: absolute; width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(200, 168, 78, 0.3);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .account-btn:hover { background: rgba(200, 168, 78, 0.07); color: var(--gold-bright); }
+  .account-btn:hover::before { border-color: var(--gold-bright); background: rgba(200, 168, 78, 0.06); }
+  .account-btn svg { position: relative; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+
+  .account-menu {
+    position: fixed; top: 70px; right: 24px; z-index: 37; width: 214px;
+    background: rgba(10, 9, 14, 0.95);
+    border: 1px solid rgba(200, 168, 78, 0.28);
+    border-radius: 14px; padding: 7px; backdrop-filter: blur(14px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    opacity: 0; transform: translateY(-8px); pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .account-menu.open { opacity: 1; transform: none; pointer-events: auto; }
+  .account-menu button {
+    display: flex; align-items: center; gap: 11px; width: 100%; text-align: left;
+    background: transparent; border: 0; color: rgba(234, 227, 200, 0.75);
+    font: inherit; font-size: 12px; letter-spacing: 0.03em;
+    padding: 11px 12px; border-radius: 9px; cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .account-menu button:hover { background: rgba(200, 168, 78, 0.08); color: var(--gold-bright); }
+  .account-menu .ic { width: 16px; height: 16px; flex: 0 0 16px; color: var(--gold);
+    display: grid; place-items: center; }
+  .account-menu .ic svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .account-menu .sep { height: 1px; background: rgba(200, 168, 78, 0.12); margin: 4px 6px; }
+  .account-menu button.danger:hover { color: #e8a870; background: rgba(232, 168, 112, 0.08); }
+  .account-menu button.danger:hover .ic { color: #e8a870; }

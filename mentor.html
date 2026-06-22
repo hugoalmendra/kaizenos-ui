@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#03030a">
+<title>Kaiso — Sacred Invocation</title>
+<link rel="stylesheet" href="css/mentor/00-base.css">
+<link rel="stylesheet" href="css/mentor/01-star-field.css">
+<link rel="stylesheet" href="css/mentor/02-stage.css">
+<link rel="stylesheet" href="css/mentor/03-medallion-dormant-vs-compass-active.css">
+<link rel="stylesheet" href="css/mentor/04-eye-shaped-galaxy-backdrop.css">
+<link rel="stylesheet" href="css/mentor/05-text-labels.css">
+<link rel="stylesheet" href="css/mentor/06-activated-state.css">
+<link rel="stylesheet" href="css/mentor/07-activation-flash.css">
+<link rel="stylesheet" href="css/mentor/08-top-corner-brand.css">
+<link rel="stylesheet" href="css/mentor/09-funding-readiness-meter.css">
+<link rel="stylesheet" href="css/mentor/10-chat-scribe-window.css">
+<link rel="stylesheet" href="css/mentor/11-mobile-breakpoints.css">
+<link rel="stylesheet" href="css/mentor/12-chat-bubbles.css">
+<link rel="stylesheet" href="css/mentor/13-hud-rail.css">
+<link rel="stylesheet" href="css/mentor/14-hud-token-meter.css">
+<link rel="stylesheet" href="css/mentor/15-account-button-menu.css">
+<link rel="stylesheet" href="css/mentor/16-modal-library-plan.css">
+<link rel="stylesheet" href="css/mentor/17-executive-summary-one-pager.css">
+<link rel="stylesheet" href="css/mentor/18-onboarding-tour.css">
+</head>
+<body>
+
+<div class="stars"></div>
+<div class="stars-2"></div>
+<div class="stars-3"></div>
+<div class="stars-extra"></div>
+<div class="nebula"></div>
+
+<!-- KaizenOS wordmark -->
+<div class="brand"><img src="assets/kaizenOS.png" alt="KaizenOS" /></div>
+
+<!-- Scroll icon — opens chat. Visible only after Kaiso is activated. -->
+<button class="scroll-toggle" id="scrollToggle" aria-label="Open the scribe" title="Open the scribe">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <!-- Feather quill -->
+    <path d="M20 4c-3.5 0.5-7.2 2.3-9.6 4.7-2 2-3.4 4.6-3.7 7.4l-0.2 1.6 1.6-0.2c2.8-0.3 5.4-1.7 7.4-3.7C18 11.2 19.5 7.5 20 4z" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M11 13c1.6-2 3.6-3.6 5.8-4.6" stroke-linecap="round" opacity="0.7"/>
+    <path d="M7 17l-3 3" stroke-linecap="round"/>
+    <path d="M5.5 18.5l1 1" stroke-linecap="round" opacity="0.6"/>
+  </svg>
+</button>
+
+<!-- Chat window — lower-left quadrant -->
+<aside class="chat-window" id="chatWindow" role="dialog" aria-label="Kaiso chat">
+  <div class="chat-header">
+    <div class="chat-title"><span class="pulse-dot"></span>KAISO · SCRIBE</div>
+    <button class="chat-close" id="chatClose" aria-label="Close chat">✕</button>
+  </div>
+  <div class="chat-log" id="chatLog"></div>
+  <form class="chat-input" id="chatForm" autocomplete="off">
+    <button class="chat-mic" type="button" id="chatMic" aria-label="Mute microphone" title="Mute microphone">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+        <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/>
+      </svg>
+    </button>
+    <input id="chatInput" type="text" placeholder="Type" aria-label="Message Kaiso"/>
+    <button class="chat-send" type="submit" id="chatSend">Send</button>
+  </form>
+</aside>
+
+<div class="stage">
+  <div class="glyph-area">
+
+    <!-- Eye-shaped (vertical vesica) galaxy backdrop, behind Kaiso button -->
+    <div class="eye-galaxy" aria-hidden="true">
+      <svg viewBox="-260 -260 520 520" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <clipPath id="eyeClip">
+            <circle cx="0" cy="0" r="240"/>
+          </clipPath>
+          <!-- Fully smooth radial falloff so the galaxy dissolves into the void. -->
+          <radialGradient id="eyeFalloff" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="45%"  stop-color="#ffffff" stop-opacity="0.92"/>
+            <stop offset="75%"  stop-color="#ffffff" stop-opacity="0.55"/>
+            <stop offset="92%"  stop-color="#ffffff" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+          </radialGradient>
+          <mask id="eyeFade">
+            <rect x="-260" y="-260" width="520" height="520" fill="url(#eyeFalloff)"/>
+          </mask>
+          <radialGradient id="neb1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#f6dca0" stop-opacity="0.55"/>
+            <stop offset="40%"  stop-color="#c8a84e" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#1a1530" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="neb2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#a8b8ff" stop-opacity="0.32"/>
+            <stop offset="55%"  stop-color="#3b4280" stop-opacity="0.12"/>
+            <stop offset="100%" stop-color="#000"    stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="neb3" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#e8c870" stop-opacity="0.28"/>
+            <stop offset="50%"  stop-color="#5a3a8a" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#000"    stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <g clip-path="url(#eyeClip)" mask="url(#eyeFade)">
+          <rect x="-260" y="-260" width="520" height="520" fill="#070612"/>
+          <!-- Entire nebula+dust+starfield rotates together, super slowly. -->
+          <g class="galaxy-rot">
+            <g class="galaxy-disk">
+              <ellipse cx="0"   cy="-40" rx="180" ry="260" fill="url(#neb1)"/>
+              <ellipse cx="-50" cy="60"  rx="140" ry="220" fill="url(#neb2)"/>
+              <ellipse cx="40"  cy="-90" rx="110" ry="180" fill="url(#neb3)"/>
+              <ellipse cx="20"  cy="120" rx="90"  ry="160" fill="url(#neb1)"/>
+            </g>
+            <g class="galaxy-dust">
+              <ellipse cx="-30" cy="-160" rx="70"  ry="130" fill="url(#neb2)" opacity="0.7"/>
+              <ellipse cx="50"  cy="180"  rx="80"  ry="140" fill="url(#neb3)" opacity="0.7"/>
+            </g>
+            <g id="galaxy-stars" class="galaxy-stars"></g>
+          </g>
+        </g>
+
+        <path class="eye-rim"
+              d="M 240,0 A 240,240 0 1,1 -240,0 A 240,240 0 1,1 240,0 Z"
+              fill="none"/>
+      </svg>
+    </div>
+
+    <!-- Shooting-star field: streaks crossing between Kaiso core and moon orbit -->
+    <div class="shooters">
+      <svg viewBox="-230 -230 460 460" aria-hidden="true">
+        <defs>
+          <linearGradient id="shootGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"  stop-color="#fff5d6" stop-opacity="0"/>
+            <stop offset="60%" stop-color="#fff5d6" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+          </linearGradient>
+        </defs>
+        <g id="shooters-g"></g>
+      </svg>
+    </div>
+
+    <!-- Inner orbit Ⓧ (innermost orbit, on the compass frontier ring r=168).
+         Clockwise, steady glow (no blinking). -->
+    <div class="inner-orbit orbit-az">
+      <svg viewBox="-146 -146 292 292" aria-hidden="true">
+        <circle class="moon-path" cx="0" cy="0" r="146"></circle>
+        <g id="orbit-az-stars"></g>
+      </svg>
+    </div>
+
+    <!-- Inner orbit A: 8 small stars, clockwise. Radius shrunk 10% inward. -->
+    <div class="inner-orbit orbit-a">
+      <svg viewBox="-176 -176 352 352" aria-hidden="true">
+        <circle class="moon-path" cx="0" cy="0" r="176"></circle>
+        <g id="orbit-a-stars"></g>
+      </svg>
+    </div>
+
+    <!-- Inner orbit B: 10 stars, counter-clockwise.
+         Radius tuned so the ring transects the KAISO LISTENING dot. -->
+    <div class="inner-orbit orbit-b">
+      <svg viewBox="-207 -207 414 414" aria-hidden="true">
+        <circle class="moon-path" cx="0" cy="0" r="207"></circle>
+        <g id="orbit-b-stars"></g>
+      </svg>
+    </div>
+
+    <!-- Deep-purple aura radiating from the outer 13-moon ring inward.
+         Static (does not rotate with the moons). -->
+    <div class="outer-aura" aria-hidden="true"></div>
+
+    <!-- Cropped violet nebula — lives in its own container so it can
+         rotate independently of the moon ring. Slow clockwise spin. -->
+    <div class="moon-aura-rot" aria-hidden="true">
+      <svg viewBox="-260 -260 520 520">
+        <defs>
+          <radialGradient id="moonRingViolet2" cx="0" cy="0" r="240" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#3a1d6e" stop-opacity="0"/>
+            <stop offset="82%"  stop-color="#5a2db8" stop-opacity="0"/>
+            <stop offset="93%"  stop-color="#6a36d2" stop-opacity="0.07"/>
+            <stop offset="100%" stop-color="#7c44ee" stop-opacity="0.14"/>
+          </radialGradient>
+          <radialGradient id="moonRingVioletArm2" cx="-150" cy="-90" r="170" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#7a3df0" stop-opacity="0.13"/>
+            <stop offset="55%"  stop-color="#5a2db8" stop-opacity="0.04"/>
+            <stop offset="100%" stop-color="#3a1d6e" stop-opacity="0"/>
+          </radialGradient>
+          <clipPath id="moonRingClip2">
+            <circle cx="0" cy="0" r="240"/>
+          </clipPath>
+        </defs>
+        <g class="moon-ring-aura" clip-path="url(#moonRingClip2)">
+          <circle cx="0" cy="0" r="240" fill="url(#moonRingViolet2)"/>
+          <circle cx="0" cy="0" r="240" fill="url(#moonRingVioletArm2)"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Outer moon orbit: 13 moons revolving counter-clockwise, slower -->
+    <div class="moon-orbit" id="moon-orbit">
+      <svg viewBox="-260 -260 520 520" aria-hidden="true">
+        <defs>
+          <clipPath id="moonRingClip">
+            <circle cx="0" cy="0" r="240"/>
+          </clipPath>
+        </defs>
+        <circle class="moon-path" cx="0" cy="0" r="240"></circle>
+        <!-- 13 moons placed evenly; built dynamically below for cleanliness -->
+        <g id="moons"></g>
+      </svg>
+    </div>
+
+    <!-- Sigil rings (firework on activation) -->
+    <div class="sigil-ring" id="sigil-1"></div>
+    <div class="sigil-ring" id="sigil-2" style="animation-delay: 0.15s;"></div>
+
+    <!-- Third eye core -->
+    <div class="third-eye"></div>
+
+    <!-- The single sacred button: hexagram #1 with compass structure -->
+    <button class="sacred" id="sacred" aria-label="Awaken Kaiso">
+      <div class="aura"></div>
+      <svg class="sacred-svg" viewBox="-140 -140 280 280" aria-hidden="true">
+        <defs>
+          <radialGradient id="pinealCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="18%" stop-color="#fff5d6" stop-opacity="1"/>
+            <stop offset="42%" stop-color="#f1d27a" stop-opacity="0.85"/>
+            <stop offset="72%" stop-color="#c8a84e" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#c8a84e" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="pinealHalo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#fff5d6" stop-opacity="0.85"/>
+            <stop offset="60%" stop-color="#c8a84e" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#c8a84e" stop-opacity="0"/>
+          </radialGradient>
+          <!-- Mask: opaque (visible) inside r=78, fading to transparent
+               by r=120, fully gone by r=128. Causes radial lines and grid
+               to fade out within the halo, never reaching beyond. -->
+          <radialGradient id="compassFade" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="55%"  stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="82%"  stop-color="#ffffff" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+          </radialGradient>
+          <mask id="compassMask">
+            <rect x="-140" y="-140" width="280" height="280" fill="url(#compassFade)"/>
+          </mask>
+        </defs>
+
+        <!-- Pineal blinding-light core at the back -->
+        <g class="pineal" aria-hidden="true">
+          <circle cx="0" cy="0" r="170" fill="url(#pinealHalo)"/>
+          <circle cx="0" cy="0" r="80"  fill="url(#pinealCore)"/>
+          <circle cx="0" cy="0" r="18"  fill="#ffffff"/>
+        </g>
+
+        <!-- COMPASS BACKGROUND: only the grid + rings + ticks rotate.
+             Hexagram lines are pulled OUT of this group below so they
+             remain fixed vertical. -->
+        <g class="compass" mask="url(#compassMask)">
+
+          <!-- Single solid ring snug around the hexagram (narrow margin) -->
+          <circle class="bezel-outer" cx="0" cy="0" r="92"></circle>
+
+          <!-- Faint compass grid (highly transparent structure) -->
+          <g class="compass-structure" stroke-opacity="0.18" fill="none">
+            <line class="grid-line" x1="0" y1="-120" x2="0" y2="120"/>
+            <line class="grid-line" x1="-120" y1="0" x2="120" y2="0"/>
+            <line class="grid-line" x1="-85" y1="-85" x2="85" y2="85"/>
+            <line class="grid-line" x1="-85" y1="85"  x2="85" y2="-85"/>
+            <circle class="grid-line" cx="0" cy="0" r="40"/>
+            <circle class="grid-line" cx="0" cy="0" r="60"/>
+            <circle class="grid-line" cx="0" cy="0" r="100"/>
+          </g>
+
+          <g id="compass-ticks" class="compass-structure" stroke-opacity="0.14"></g>
+
+          <g class="compass-structure ring-outer-g">
+            <circle class="ring-outer" cx="0" cy="0" r="128"></circle>
+          </g>
+          <circle class="ring-inner" cx="0" cy="0" r="80" style="display:none"></circle>
+          <!-- Outermost dotted ring — spins clockwise, faint fade -->
+          <circle class="compass-structure ring-frontier" cx="0" cy="0" r="168"></circle>
+        </g>
+
+        <!-- HEXAGRAM #1 — FIXED vertical (does NOT rotate with compass) -->
+        <g class="hexagram-fixed" transform="scale(0.8)">
+          <rect class="hex-line hex-fixed"  x="-60" y="-65" width="120" height="10" rx="2"></rect>
+          <rect class="hex-line hex-audio" data-idx="0" x="-60" y="-41" width="120" height="10" rx="2"></rect>
+          <rect class="hex-line hex-audio" data-idx="1" x="-60" y="-17" width="120" height="10" rx="2"></rect>
+          <rect class="hex-line hex-audio" data-idx="2" x="-60" y="7"   width="120" height="10" rx="2"></rect>
+          <rect class="hex-line hex-audio" data-idx="3" x="-60" y="31"  width="120" height="10" rx="2"></rect>
+          <rect class="hex-line hex-fixed"  x="-60" y="55"  width="120" height="10" rx="2"></rect>
+        </g>
+      </svg>
+
+      <div class="deact-hint">▸ TAP TO DEACTIVATE ◂</div>
+
+      <div class="label-stack">
+        <div class="kaiso-listening">
+          <span class="pulse-dot"></span>KAISO LISTENING
+        </div>
+      </div>
+    </button>
+
+  </div>
+</div>
+
+<!-- Session timer (visible only when Kaiso is active) -->
+<div class="session-timer" id="sessionTimer" role="status" aria-label="Session time" aria-hidden="true">
+  <span class="st-label">Session</span><span class="st-time">00:00</span>
+</div>
+
+<!-- ─── Session HUD: top-right rail — tokens · readiness · account ─── -->
+<div class="hud-top" id="hudTop">
+  <!-- Token spend meter -->
+  <div class="token-meter" id="tokenMeter" role="status" aria-label="Token usage">
+    <div class="tm-top">
+      <span class="tm-dot"></span>
+      <span class="tm-label">Tokens</span>
+      <span class="tm-count"><b id="tokCount">48</b> / <span id="tokTotal">60</span></span>
+    </div>
+    <div class="tm-track"><span id="tokBar"></span></div>
+    <div class="tm-rate" id="tokRate">Spending · live session</div>
+  </div>
+
+  <!-- Funding readiness meter -->
+  <div class="readiness" id="readiness" role="status" aria-label="Funding readiness" title="How fundable your venture looks — grows as you talk with Kaiso">
+    <div class="rd-gauge" id="rdGauge" style="--p:0">
+      <span class="rd-grade" id="rdGrade">—</span>
+    </div>
+    <div class="rd-text">
+      <span class="rd-cap">Funding Readiness</span>
+      <span class="rd-verdict" id="rdVerdict">Talk with Kaiso to begin</span>
+    </div>
+  </div>
+
+  <!-- Account button (dropdown lives below, anchored to viewport) -->
+  <button class="account-btn" id="accountBtn" aria-label="Account menu" title="Account">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="8" r="3.4"/>
+      <path d="M5 19.5c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+<nav class="account-menu" id="accountMenu" aria-label="Account">
+  <button data-panel="library">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6v14H4zM14 5h6v14h-6z" stroke-linejoin="round"/></svg></span>
+    Library
+  </button>
+  <button data-panel="plan">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z" stroke-linejoin="round"/></svg></span>
+    Plan &amp; Tokens
+  </button>
+  <button id="tourReplay">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l2.6 1.6" stroke-linecap="round"/></svg></span>
+    Take the tour
+  </button>
+  <div class="sep"></div>
+  <button class="danger" id="signOutBtn">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v8" stroke-linecap="round"/><path d="M7.5 6.5a7 7 0 1 0 9 0" stroke-linecap="round"/></svg></span>
+    Sign out
+  </button>
+</nav>
+
+<!-- Modal: Library + Plan & Tokens -->
+<div class="kmodal" id="kmodal" role="dialog" aria-modal="true">
+  <div class="kmodal-backdrop" data-close></div>
+
+  <!-- Library panel -->
+  <section class="kpanel" id="panelLibrary" aria-label="Library">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso · Library</span>
+      <button class="kp-close" data-close aria-label="Close">✕</button>
+    </div>
+    <p class="kp-sub">Kaiso forges these as you talk — the more it learns, the closer each one gets to ready.</p>
+    <div class="lib-item locked" data-output="exec" data-need="3">
+      <span class="lib-thumb">✦</span>
+      <span class="lib-meta">
+        <b>Executive Summary</b>
+        <span class="lib-status">Not started — talk with Kaiso to forge it</span>
+        <span class="lib-prog"><span class="lib-prog-fill"></span></span>
+      </span>
+      <button class="kbtn" id="execOpenBtn" disabled>Forging</button>
+    </div>
+    <div class="lib-item locked" data-output="landing" data-need="5">
+      <span class="lib-thumb">◈</span>
+      <span class="lib-meta">
+        <b>Landing Page</b>
+        <span class="lib-status">Not started — talk with Kaiso to forge it</span>
+        <span class="lib-prog"><span class="lib-prog-fill"></span></span>
+      </span>
+      <button class="kbtn" disabled>Forging</button>
+    </div>
+    <div class="lib-item locked" data-output="deck" data-need="8">
+      <span class="lib-thumb">❖</span>
+      <span class="lib-meta">
+        <b>Pitch Deck</b>
+        <span class="lib-status">Not started — talk with Kaiso to forge it</span>
+        <span class="lib-prog"><span class="lib-prog-fill"></span></span>
+      </span>
+      <button class="kbtn" disabled>Forging</button>
+    </div>
+    <p class="kp-note">Stored in your account — always yours, even between sessions.</p>
+  </section>
+
+  <!-- Plan & Tokens panel -->
+  <section class="kpanel" id="panelPlan" aria-label="Plan and tokens">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Plan &amp; Tokens</span>
+      <button class="kp-close" data-close aria-label="Close">✕</button>
+    </div>
+    <p class="kp-sub">Keep the conversation going. Enroll monthly or top up tokens à la carte.</p>
+    <div class="plan-grid">
+      <div class="plan-card sel" data-plan="monthly">
+        <span class="pc-name">Monthly Plan</span>
+        <span class="pc-sub">Recurring</span>
+        <span class="pc-price">$29<small> / mo</small></span>
+      </div>
+      <div class="plan-card" data-plan="tokens">
+        <span class="pc-name">Buy Tokens</span>
+        <span class="pc-sub">À la carte</span>
+        <span class="pc-price">from $6</span>
+      </div>
+    </div>
+    <div id="planDetail"></div>
+    <p class="kp-note"><b>Buys more session time</b> — not an instant unlock. Keep talking so Kaiso can finish your work.</p>
+  </section>
+
+  <!-- Executive Summary panel -->
+  <section class="kpanel kpanel-wide" id="panelExec" aria-label="Executive Summary">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso · Executive Summary</span>
+      <button class="kp-close" data-close aria-label="Close">✕</button>
+    </div>
+
+    <div class="exec-actions">
+      <button class="kbtn primary" id="execDownloadBtn" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 4v10" stroke-linecap="round"/><path d="M8 11l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke-linecap="round"/>
+        </svg>
+        Download as PDF
+      </button>
+    </div>
+
+    <!-- One-pager document — printable -->
+    <article class="exec-doc" id="execPrintable">
+      <header class="exec-banner">
+        <div class="exec-banner-mark">✦</div>
+        <div class="exec-eyebrow">Executive Summary · One-Pager</div>
+        <h1 class="exec-co">Helm</h1>
+        <p class="exec-tag">The operations autopilot for independent e-commerce brands.</p>
+        <div class="exec-meta">
+          <span>Forged by Kaiso</span><span class="exec-dot">·</span>
+          <span id="execDate">June 2026</span><span class="exec-dot">·</span>
+          <span>Confidential</span>
+        </div>
+      </header>
+
+      <div class="exec-grid">
+        <section class="exec-sec">
+          <h2 class="exec-sec-title">The Problem</h2>
+          <p class="exec-sec-body">Independent online stores lose 12+ hours a week stitching together inventory, fulfillment, and customer support across disconnected tools. Hiring an ops manager is expensive and out of reach for the 90% of brands doing under $2M in revenue.</p>
+        </section>
+
+        <section class="exec-sec">
+          <h2 class="exec-sec-title">The Solution</h2>
+          <p class="exec-sec-body">Helm is an AI operations layer that connects a store's existing tools and runs the repetitive work — reorder alerts, shipment triage, refund handling, and daily reporting — autonomously, with a human-in-the-loop dashboard.</p>
+        </section>
+
+        <section class="exec-sec">
+          <h2 class="exec-sec-title">Business Model</h2>
+          <p class="exec-sec-body">Tiered SaaS from $79–$399 / month based on order volume, plus a usage fee on automated actions. Land at the solo-founder tier, expand as the brand scales.</p>
+        </section>
+
+        <section class="exec-sec">
+          <h2 class="exec-sec-title">Why Now</h2>
+          <p class="exec-sec-body">Agentic AI finally makes reliable, low-cost operations automation possible, while a record number of solo founders are launching stores without back-office staff.</p>
+        </section>
+      </div>
+
+      <section class="exec-band">
+        <h2 class="exec-sec-title">Market Opportunity</h2>
+        <div class="exec-stats">
+          <div class="exec-stat"><span class="es-val">$48B</span><span class="es-lbl">TAM · global SMB e-commerce ops</span></div>
+          <div class="exec-stat"><span class="es-val">$6.2B</span><span class="es-lbl">SAM · English-speaking DTC brands</span></div>
+          <div class="exec-stat"><span class="es-val">$310M</span><span class="es-lbl">SOM · 3-year reachable</span></div>
+        </div>
+      </section>
+
+      <section class="exec-band">
+        <h2 class="exec-sec-title">Traction</h2>
+        <div class="exec-stats">
+          <div class="exec-stat"><span class="es-val">1,400</span><span class="es-lbl">Brands on the waitlist</span></div>
+          <div class="exec-stat"><span class="es-val">$18K</span><span class="es-lbl">MRR from pilot cohort</span></div>
+          <div class="exec-stat"><span class="es-val">9%</span><span class="es-lbl">Week-over-week growth</span></div>
+          <div class="exec-stat"><span class="es-val">62</span><span class="es-lbl">NPS across pilots</span></div>
+        </div>
+      </section>
+
+      <div class="exec-grid">
+        <section class="exec-sec">
+          <h2 class="exec-sec-title">Team</h2>
+          <p class="exec-sec-body"><b>Founder &amp; CEO</b> — 8 years scaling DTC operations, ex-Shopify Plus.<br><b>CTO</b> — former ML lead, two prior exits in workflow automation.</p>
+        </section>
+
+        <section class="exec-sec exec-sec-ask">
+          <h2 class="exec-sec-title">The Ask</h2>
+          <p class="exec-sec-body">Raising a <b>$1.5M pre-seed</b> to reach 5,000 paying brands and $1M ARR over 18 months — capital allocated to engineering, integrations, and go-to-market.</p>
+        </section>
+      </div>
+
+      <footer class="exec-foot">
+        <span class="exec-foot-co">Helm</span>
+        <span class="exec-foot-contact">hello@helm.app · helm.app</span>
+        <span class="exec-foot-mark">Forged with Kaiso</span>
+      </footer>
+    </article>
+
+    <p class="kp-note">This one-pager is drafted from your session with Kaiso. Keep talking to refine it — every detail sharpens the story.</p>
+  </section>
+</div>
+
+<!-- Toast -->
+<div class="ktoast" id="ktoast" role="status" aria-live="polite"></div>
+
+<!-- Onboarding tour -->
+<div class="tour-block" id="tourBlock"></div>
+<div class="tour-spot" id="tourSpot"></div>
+<div class="tour-tip" id="tourTip">
+  <div class="tt-step" id="ttStep">Step 1 of 5</div>
+  <div class="tt-title" id="ttTitle"></div>
+  <div class="tt-body" id="ttBody"></div>
+  <div class="tt-foot">
+    <div class="tt-dots" id="ttDots"></div>
+    <button class="tt-skip" id="ttSkip">Skip</button>
+    <button class="tt-next" id="ttNext">Next</button>
+  </div>
+</div>
+
+<div class="flash" id="flash"></div>
+
+<script src="js/mentor/00-eye-galaxy-starfield.js"></script>
+<script src="js/mentor/01-shooting-stars-between-core-and-moon-orbit.js"></script>
+<script src="js/mentor/02-build-compass-tick-marks-every-15.js"></script>
+<script src="js/mentor/03-audio-bars.js"></script>
+<script src="js/mentor/04-activation-flow.js"></script>
+<script src="js/mentor/05-chat.js"></script>
+<script src="js/mentor/06-session-timer.js"></script>
+<script src="js/mentor/07-output-forge.js"></script>
+<script src="js/mentor/08-funding-readiness-meter.js"></script>
+<script src="js/mentor/09-binary-clock-hh.js"></script>
+<script src="js/mentor/10-hud-controller.js"></script>
+<script src="js/mentor/11-onboarding-tour.js"></script>
+
+</body>
+</html>

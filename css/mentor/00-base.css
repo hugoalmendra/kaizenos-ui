@@ -1,0 +1,17 @@
+  :root {
+    --gold: #c8a84e;
+    --gold-bright: #e8c870;
+    --gold-soft: #8a7434;
+    --void: #03030a;
+    --ink: #eae3c8;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    background: radial-gradient(ellipse at 50% 50%, #0a0817 0%, #04030a 55%, #000 100%);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }

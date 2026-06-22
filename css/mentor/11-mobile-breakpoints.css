@@ -1,0 +1,79 @@
+  /* ─── Mobile breakpoints — touch targets, readable type ────── */
+  @media (max-width: 820px) {
+    .chat-window { height: 70vh; border-radius: 24px 24px 0 0; }
+    body.chat-open .stage { transform: translateY(-30vh) scale(0.40); }
+    .session-timer { bottom: 24px; right: 24px; line-height: 48px; }
+    .token-meter { width: 200px; padding: 10px 16px; }
+    .readiness { padding: 0 14px; gap: 9px; }
+    .readiness .rd-cap { display: none; }
+    .rd-gauge { width: 40px; height: 40px; flex: 0 0 40px; }
+    .scroll-toggle { bottom: 24px; left: 24px; width: 48px; height: 48px; }
+    body.chat-open .scroll-toggle { bottom: calc(70vh + 12px); }
+  }
+  @media (max-width: 480px) {
+    body.chat-open .stage { transform: translateY(-28vh) scale(0.38); }
+    .session-timer { line-height: 52px; }
+    .scroll-toggle { width: 52px; height: 52px; }  /* iOS HIG min touch target */
+  }
+  /* Phones in landscape — keep proportions sensible. */
+  @media (max-height: 520px) and (orientation: landscape) {
+    .chat-window { height: 80vh; }
+    body.chat-open .stage { transform: translateY(-40vh) scale(0.30); }
+  }
+
+  .chat-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 26px 14px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.10);
+  }
+  .chat-title {
+    font-size: 10px;
+    letter-spacing: 0.45em;
+    color: rgba(232, 200, 112, 0.85);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chat-title .pulse-dot {
+    width: 6px; height: 6px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--gold-bright);
+    animation: dot-pulse 1.6s ease-in-out infinite;
+  }
+  .chat-close {
+    background: transparent;
+    border: none;
+    color: rgba(234, 227, 200, 0.5);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 6px;
+    transition: color 0.2s ease;
+  }
+  .chat-close:hover { color: var(--gold-bright); }
+
+  .chat-log {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;  /* momentum scroll on iOS */
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(200,168,78,0.25) transparent;
+    /* Center the message column on wider viewports so messages don't
+       stretch absurdly wide when the scribe is full-width. */
+    align-items: stretch;
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .chat-log::-webkit-scrollbar { width: 6px; }
+  .chat-log::-webkit-scrollbar-thumb { background: rgba(200,168,78,0.2); border-radius: 3px; }

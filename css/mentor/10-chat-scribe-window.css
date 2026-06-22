@@ -1,0 +1,59 @@
+  /* ─── Chat (scribe) window — bottom 70%, full width when open.
+     Slides up from bottom; in default state Kaiso fills the whole
+     viewport. Mobile-friendly: rounded top corners, max-width clamp,
+     touch-friendly type sizes. */
+  .chat-window {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 70vh;
+    background: linear-gradient(180deg, rgba(14,12,18,0.92) 0%, rgba(8,7,12,0.96) 100%);
+    border-top: 1px solid rgba(200, 168, 78, 0.32);
+    border-radius: 28px 28px 0 0;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(100%);
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2,0.7,0.2,1);
+    z-index: 29;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 -16px 48px rgba(0,0,0,0.7),
+                0 0 0 1px rgba(200,168,78,0.06) inset,
+                0 -2px 60px rgba(200,168,78,0.06);
+    overflow: hidden;
+  }
+  body.chat-open .chat-window {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  /* When the scribe is open, Kaiso shrinks to the top 30% of the
+     screen so the user can see both the listening glyph AND the
+     transcript without scrolling. */
+  body.chat-open .stage {
+    transform: translateY(-35vh) scale(0.45);
+    transform-origin: 50% 50%;
+    transition: transform 0.45s cubic-bezier(0.2,0.7,0.2,1);
+  }
+  /* Hide ambient decorations when scribe is open — keep focus on the
+     conversation. The audio-bar hexagram still animates in the
+     compressed glyph as a visual heartbeat. */
+  body.chat-open .moons,
+  body.chat-open .moon-orbit,
+  body.chat-open .moon-aura-rot,
+  body.chat-open .session-timer,
+  body.chat-open #binaryClock { opacity: 0.0; pointer-events: none; transition: opacity 0.35s ease; }
+  /* Collapse the readiness segment out of the rail when the scribe opens. */
+  body.chat-open .readiness {
+    max-width: 0; padding-left: 0; padding-right: 0;
+    opacity: 0; pointer-events: none; border-left-color: transparent;
+  }
+  /* Soften the stars too so the scribe surface reads cleanly. */
+  body.chat-open .stars,
+  body.chat-open .stars-2,
+  body.chat-open .stars-3,
+  body.chat-open .stars-extra { opacity: 0.35; transition: opacity 0.35s ease; }
+  .stage { transition: transform 0.45s cubic-bezier(0.2,0.7,0.2,1); }
+
+  /* Scroll-toggle button moves up out of the way when scribe opens. */
+  body.chat-open .scroll-toggle { bottom: calc(70vh + 16px); opacity: 0.6; }

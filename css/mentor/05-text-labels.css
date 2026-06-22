@@ -1,0 +1,36 @@
+  /* ─── Text labels ───────────────────────────────────────── */
+  .label-stack {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    pointer-events: none;
+    text-align: center;
+  }
+  .label-top {
+    position: absolute;
+    top: -190px; left: 0; right: 0;
+    font-size: 13px;
+    letter-spacing: 0.55em;
+    color: rgba(232, 200, 112, 0.85);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .label-bottom {
+    position: absolute;
+    bottom: -190px; left: 0; right: 0;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    color: rgba(234, 227, 200, 0.45);
+    text-transform: uppercase;
+    font-style: italic;
+  }
+  .label-bottom .hint {
+    display: block;
+    margin-top: 26px;
+    font-size: 10px;
+    letter-spacing: 0.55em;
+    color: rgba(234, 227, 200, 0.32);
+    font-style: normal;
+    transition: opacity 0.5s ease;
+  }

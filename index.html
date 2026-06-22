@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#03030a">
+<title>Kaiso</title>
+<link rel="stylesheet" href="css/landing/00-base.css">
+<link rel="stylesheet" href="css/landing/01-star-field.css">
+<link rel="stylesheet" href="css/landing/02-chrome.css">
+<link rel="stylesheet" href="css/landing/03-stage-panel.css">
+</head>
+<body>
+
+<div class="stars"></div>
+<div class="stars-2"></div>
+<div class="stars-3"></div>
+<div class="nebula"></div>
+
+<div class="brand"><img src="assets/kaizenOS.png" alt="KaizenOS" /></div>
+
+<svg id="glyphTpl" style="display:none" viewBox="-70 -70 140 140" xmlns="http://www.w3.org/2000/svg">
+  <g class="glyph-g">
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#c8a84e" stroke-opacity="0.3" stroke-width="1" stroke-dasharray="2 4"/>
+    <circle cx="0" cy="0" r="50" fill="none" stroke="#c8a84e" stroke-opacity="0.45" stroke-width="1"/>
+    <g fill="#e8c870">
+      <rect x="-30" y="-33" width="60" height="6" rx="2"/>
+      <rect x="-30" y="-21" width="60" height="6" rx="2"/>
+      <rect x="-30" y="-9"  width="60" height="6" rx="2"/>
+      <rect x="-30" y="3"   width="60" height="6" rx="2"/>
+      <rect x="-30" y="15"  width="60" height="6" rx="2"/>
+      <rect x="-30" y="27"  width="60" height="6" rx="2"/>
+    </g>
+  </g>
+</svg>
+
+<main class="stage" id="stage">
+
+  <!-- ════════ FLOW 1 · LEAD MAGNET ════════ -->
+
+  <!-- 1. Survey -->
+  <section class="screen" data-screen="1" data-flow="1">
+    <div class="panel">
+      <div class="ph"><span class="num">1</span><span class="nm">Founder Mirror</span><span class="badge free">Free · no account</span></div>
+      <div class="spread" style="margin-bottom:14px">
+        <span class="lbl">Question <span id="qNum">1</span> of 6</span>
+        <span class="lbl" id="qPct">17%</span>
+      </div>
+      <div class="prog-track" style="margin-bottom:20px"><span id="qBar" style="width:17%"></span></div>
+      <h2 class="h">Where does your venture feel <span class="accent">most stuck</span> right now?</h2>
+      <p class="sub" style="margin-bottom:18px">There are no wrong answers. Kaiso reads between the lines.</p>
+      <div class="stack-sm" id="surveyOpts">
+        <div class="opt sel"><span class="ra"></span>Vision &amp; direction</div>
+        <div class="opt"><span class="ra"></span>Fundraising &amp; runway</div>
+        <div class="opt"><span class="ra"></span>Team &amp; hiring</div>
+        <div class="opt"><span class="ra"></span>Product &amp; focus</div>
+      </div>
+      <button class="btn primary mt-auto" id="surveyNext">Next</button>
+    </div>
+  </section>
+
+  <!-- 2. Email opt-in -->
+  <section class="screen" data-screen="2" data-flow="1">
+    <div class="panel center">
+      <div class="ph"><span class="num">2</span><span class="nm">Email Opt-in</span><span class="badge free">Free</span></div>
+      <h2 class="h" style="margin-top:6px">Your founder reading <span class="accent">is ready.</span></h2>
+      <p class="sub">Tell Kaiso where to send it. No account, no card — we'll email the full report.</p>
+      <div style="text-align:left;margin-top:20px">
+        <span class="lbl">Email address</span>
+        <div class="field"><input type="email" id="leadEmail" placeholder="you@venture.com" value="you@venture.com"></div>
+      </div>
+      <button class="btn primary" style="margin-top:16px" data-goto="3">Email me my report</button>
+      <p class="muted" style="margin-top:14px"><b>Captured:</b> email only · no card required</p>
+    </div>
+  </section>
+
+  <!-- 3. Check inbox (report delivered by email) -->
+  <section class="screen" data-screen="3" data-flow="1">
+    <div class="panel center">
+      <div class="ph"><span class="num">3</span><span class="nm">Check Your Inbox</span><span class="badge">Email sent</span></div>
+      <div class="medallion" style="width:96px;height:96px">
+        <svg viewBox="-70 -70 140 140">
+          <circle class="med-ring med-spin-b" cx="0" cy="0" r="62" stroke-opacity="0.28" stroke-width="1" stroke-dasharray="2 5"/>
+          <circle class="med-ring" cx="0" cy="0" r="46" stroke-opacity="0.5" stroke-width="1"/>
+          <g fill="#e8c870" filter="drop-shadow(0 0 5px rgba(232,200,112,0.6))">
+            <rect x="-26" y="-14" width="52" height="6" rx="2" opacity="0.5"/>
+            <path d="M-26 -16 L0 4 L26 -16" fill="none" stroke="#e8c870" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+            <rect x="-30" y="-20" width="60" height="40" rx="5" fill="none" stroke="#e8c870" stroke-width="2.5"/>
+          </g>
+        </svg>
+      </div>
+      <h2 class="h" style="margin-top:16px">Check your <span class="accent">inbox.</span></h2>
+      <p class="sub">Your founder reading is on its way to <b id="sentTo">you@venture.com</b>.</p>
+      <div class="mailcard" style="margin-top:18px">
+        <div class="mc-top">
+          <span class="mc-ava">◈</span>
+          <div class="mc-from"><b>Kaiso</b><span>oracle@kaiso.ai</span></div>
+        </div>
+        <div class="mc-body">
+          <div class="mc-subj">Your Founder Archetype: The Visionary</div>
+          <div class="mc-prev">You move faster than your systems can follow… inside, Kaiso can turn this reading into your Pitch Deck, Landing Page &amp; Executive Summary.</div>
+        </div>
+      </div>
+      <a class="btn primary" style="margin-top:16px" href="report-email.html" target="_blank">Preview the email →</a>
+      <button class="btn sm" style="margin-top:10px" data-goto="4">Talk with Kaiso now</button>
+      <p class="muted" style="margin-top:12px">Didn't get it? Check spam or resend.</p>
+    </div>
+  </section>
+
+  <!-- ════════ FLOW 2 · KAISO APP ════════ -->
+
+  <!-- 4. Talk With Kaiso (offer / landing from email) -->
+  <section class="screen" data-screen="4" data-flow="2">
+    <div class="panel center">
+      <div class="ph"><span class="num">4</span><span class="nm">Talk With Kaiso</span><span class="badge free">Landing</span></div>
+      <h2 class="h" style="margin-top:4px">Speak with <span class="accent">Kaiso.</span></h2>
+      <p class="sub">A living mentor that listens, counsels, and builds the artifacts your venture needs — in real time.</p>
+      <span class="lbl" style="display:block;text-align:left;margin:20px 0 10px">What Kaiso will build with you</span>
+      <div class="grid3">
+        <div class="tile" style="align-items:flex-start"><span class="ti">◈</span><span class="tt">Landing Page</span><span class="ts">Web</span></div>
+        <div class="tile" style="align-items:flex-start"><span class="ti">❖</span><span class="tt">Pitch Deck</span><span class="ts">Slides</span></div>
+        <div class="tile" style="align-items:flex-start"><span class="ti">✦</span><span class="tt">Exec Summary</span><span class="ts">PDF</span></div>
+      </div>
+      <button class="btn primary mt-auto" data-goto="5">Start free</button>
+      <p class="muted center" style="margin-top:12px">Already with Kaiso? <a class="link" data-goto="12">Sign in</a></p>
+    </div>
+  </section>
+
+  <!-- 5. Create account -->
+  <section class="screen" data-screen="5" data-flow="2">
+    <div class="panel">
+      <div class="ph"><span class="num">5</span><span class="nm">Create Account</span><span class="badge free">Sign up</span></div>
+      <h2 class="h center" style="margin-top:2px">Create your <span class="accent">account.</span></h2>
+      <p class="sub center" style="margin-bottom:20px">Save your work and pick up where you left off.</p>
+      <a class="btn google" href="#" data-goto="6">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.2c-.3 1.5-1.1 2.7-2.4 3.5v2.9h3.9c2.3-2.1 3.3-5.2 3.3-8.6z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.8-2.9l-3.9-2.9c-1.1.7-2.4 1.1-3.9 1.1-3 0-5.6-2-6.5-4.8H1.6v3C3.5 21.4 7.4 24 12 24z"/><path fill="#FBBC05" d="M5.5 14.5c-.2-.7-.4-1.4-.4-2.5s.1-1.8.4-2.5v-3H1.6C.6 8 0 9.9 0 12s.6 4 1.6 5.5l3.9-3z"/><path fill="#EA4335" d="M12 4.8c1.7 0 3.2.6 4.4 1.7l3.3-3.3C17.9 1.2 15.2 0 12 0 7.4 0 3.5 2.6 1.6 6.5l3.9 3C6.4 6.7 9 4.8 12 4.8z"/></svg>
+        Continue with Google
+      </a>
+      <div class="divider" style="margin:16px 0">or sign up with email</div>
+      <span class="lbl">Email</span>
+      <div class="field"><input type="email" id="signupEmail" value="you@venture.com"></div>
+      <span class="lbl" style="display:block;margin-top:12px">Create a password</span>
+      <div class="field"><input type="password" placeholder="••••••••" value="········"></div>
+      <button class="btn primary" style="margin-top:18px" data-goto="6">Create account</button>
+      <p class="muted center" style="margin-top:14px">Already have an account? <a class="link" data-goto="12">Sign in</a></p>
+      <p class="muted center" style="margin-top:8px">By continuing you agree to Kaiso's Terms &amp; Privacy.</p>
+    </div>
+  </section>
+
+  <!-- 6. Free tokens granted -->
+  <section class="screen" data-screen="6" data-flow="2">
+    <div class="panel center">
+      <div class="ph"><span class="num">6</span><span class="nm">Free Tokens Granted</span><span class="badge free">No card</span></div>
+      <div class="medallion">
+        <svg viewBox="-70 -70 140 140">
+          <circle class="med-ring med-spin-b" cx="0" cy="0" r="62" stroke-opacity="0.28" stroke-width="1" stroke-dasharray="2 5"/>
+          <circle class="med-ring med-spin-a" cx="0" cy="0" r="50" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="6 4"/>
+          <circle class="med-ring" cx="0" cy="0" r="38" stroke-opacity="0.7" stroke-width="1.25" stroke="#e8c870"/>
+          <g class="med-core" fill="#e8c870" filter="drop-shadow(0 0 6px rgba(232,200,112,0.7))">
+            <rect x="-22" y="-24" width="44" height="5" rx="2"/>
+            <rect x="-22" y="-15" width="44" height="5" rx="2"/>
+            <rect x="-22" y="-6"  width="44" height="5" rx="2"/>
+            <rect x="-22" y="3"   width="44" height="5" rx="2"/>
+            <rect x="-22" y="12"  width="44" height="5" rx="2"/>
+            <rect x="-22" y="21"  width="44" height="5" rx="2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="token lg" style="margin:18px auto 0"><span class="o"></span> 60 tokens</div>
+      <h2 class="h" style="margin-top:16px">A gift to <span class="accent">begin.</span></h2>
+      <p class="sub">Enough to open the conversation and let Kaiso start building. No payment collected.</p>
+      <a class="btn primary" style="margin-top:18px" href="mentor.html">Enter Kaiso</a>
+    </div>
+  </section>
+
+  <!-- 7. Voice session (Kaiso Mentor) -->
+  <section class="screen" data-screen="7" data-flow="2">
+    <div class="panel center">
+      <div class="ph"><span class="num">7</span><span class="nm">Voice Session</span><span class="badge live">Live · spends tokens</span></div>
+      <div class="medallion" style="width:150px;height:150px">
+        <svg viewBox="-70 -70 140 140">
+          <circle class="med-ring med-spin-b" cx="0" cy="0" r="64" stroke-opacity="0.22" stroke-width="0.8" stroke-dasharray="1 5"/>
+          <circle class="med-ring med-spin-a" cx="0" cy="0" r="50" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="6 4"/>
+          <circle class="med-ring" cx="0" cy="0" r="38" stroke-opacity="0.7" stroke-width="1.25" stroke="#e8c870"/>
+          <g class="med-core" fill="#e8c870" filter="drop-shadow(0 0 6px rgba(232,200,112,0.7))">
+            <rect x="-22" y="-24" width="44" height="5" rx="2"/>
+            <rect x="-22" y="-15" width="44" height="5" rx="2"/>
+            <rect x="-22" y="-6"  width="44" height="5" rx="2"/>
+            <rect x="-22" y="3"   width="44" height="5" rx="2"/>
+            <rect x="-22" y="12"  width="44" height="5" rx="2"/>
+            <rect x="-22" y="21"  width="44" height="5" rx="2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="token" style="margin:16px auto 0"><span class="o"></span> 48 remaining</div>
+      <h2 class="h" style="margin-top:14px">Kaiso is <span class="accent">listening.</span></h2>
+      <p class="sub">The full immersive session — voice, transcript, token meter, library &amp; plan — lives in the dedicated experience.</p>
+      <a class="btn primary" style="margin-top:18px" href="mentor.html">Open live session →</a>
+    </div>
+  </section>
+
+  <!-- 8. Sneak peek -->
+  <section class="screen" data-screen="8" data-flow="2">
+    <div class="panel">
+      <div class="ph"><span class="num">8</span><span class="nm">Sneak Peek</span><span class="badge free">Teaser</span></div>
+      <h2 class="h">Forming <span class="accent">backstage.</span></h2>
+      <p class="sub" style="margin-bottom:6px">Kaiso is shaping your artifacts as you speak — here's a glimpse of what's coming together.</p>
+      <span class="lbl" style="display:block;margin:16px 0 10px">In progress · not finished</span>
+      <div class="grid3">
+        <div class="wip"><div class="thumb"><div class="prog-track mini"><span style="width:30%"></span></div></div><div class="cap">Landing · 30%</div></div>
+        <div class="wip"><div class="thumb"><div class="prog-track mini"><span style="width:45%"></span></div></div><div class="cap">Summary · 45%</div></div>
+        <div class="wip"><div class="thumb"><div class="prog-track mini"><span style="width:15%"></span></div></div><div class="cap">Deck · 15%</div></div>
+      </div>
+      <button class="btn primary mt-auto" data-goto="9">Keep building with Kaiso →</button>
+      <p class="muted center" style="margin-top:12px">Free quota spent · add time so Kaiso can finish these</p>
+    </div>
+  </section>
+
+  <!-- 9. Choose plan & pay -->
+  <section class="screen" data-screen="9" data-flow="2">
+    <div class="panel">
+      <div class="ph"><span class="num">9</span><span class="nm">Choose Plan &amp; Pay</span><span class="badge paid">Paid</span></div>
+      <span class="lbl">Add more time — pick one</span>
+      <div class="grid2" style="margin:12px 0 18px" id="planGrid">
+        <div class="tile plan sel"><span class="tt">Monthly Plan</span><span class="ts">Recurring · 500 / mo</span><span class="price">$29<small> / mo</small></span></div>
+        <div class="tile plan"><span class="tt">Buy Tokens</span><span class="ts">À la carte</span><span class="price">$12<small> / 200</small></span></div>
+      </div>
+      <span class="lbl">Payment details</span>
+      <div class="field"><input placeholder="Card number"></div>
+      <div class="btn-row" style="margin-top:10px">
+        <div class="field" style="flex:1;margin:0"><input placeholder="MM / YY"></div>
+        <div class="field" style="flex:1;margin:0"><input placeholder="CVC"></div>
+      </div>
+      <button class="btn primary mt-auto" data-goto="10">Confirm &amp; pay</button>
+      <p class="muted center" style="margin-top:12px"><b>Buys more session time</b> — not an instant unlock.</p>
+    </div>
+  </section>
+
+  <!-- 10. Generated outputs -->
+  <section class="screen" data-screen="10" data-flow="2">
+    <div class="panel">
+      <div class="ph"><span class="num">10</span><span class="nm">Generated Outputs</span><span class="badge">Completed</span></div>
+      <span class="lbl">Finished as you kept talking</span>
+      <div class="stack-sm" style="margin-top:14px">
+        <div class="out-row"><span class="oi">◈</span><span class="ot"><b>Landing Page</b><span>Hero · features · CTA</span></span><span class="done">Done</span></div>
+        <div class="out-row"><span class="oi">❖</span><span class="ot"><b>Pitch Deck</b><span>12 slides</span></span><span class="done">Done</span></div>
+        <div class="out-row"><span class="oi">✦</span><span class="ot"><b>Executive Summary</b><span>PDF · one-pager</span></span><span class="done">Done</span></div>
+      </div>
+      <button class="btn primary mt-auto" data-goto="11">Go to library →</button>
+    </div>
+  </section>
+
+  <!-- 11. Outputs library -->
+  <section class="screen" data-screen="11" data-flow="2">
+    <div class="panel">
+      <div class="ph"><span class="num">11</span><span class="nm">Outputs Library</span><span class="badge">Storage</span></div>
+      <div class="spread" style="margin-bottom:14px">
+        <span class="lbl">Saved items</span>
+        <span class="token dashed"><span class="o"></span> 22</span>
+      </div>
+      <div class="lib">
+        <div class="card"><div class="art"><div class="crest" data-crest></div></div><div class="meta-c"><b>Landing Page</b><span>Web</span></div></div>
+        <div class="card"><div class="art"><div class="crest" data-crest></div></div><div class="meta-c"><b>Pitch Deck</b><span>12 slides</span></div></div>
+        <div class="card"><div class="art"><div class="crest" data-crest></div></div><div class="meta-c"><b>Exec Summary</b><span>PDF</span></div></div>
+        <div class="card"><div class="art"><div class="crest" data-crest></div></div><div class="meta-c"><b>Brand notes</b><span>Doc</span></div></div>
+      </div>
+      <div class="btn-row mt-auto">
+        <button class="btn sm" data-goto="7">New session</button>
+        <button class="btn sm" data-goto="9">Plan / tokens</button>
+      </div>
+      <p class="muted center" style="margin-top:12px">Start a new session or manage tokens anytime.</p>
+    </div>
+  </section>
+
+  <!-- 12. Sign in (returning users) -->
+  <section class="screen" data-screen="12" data-flow="2">
+    <div class="panel">
+      <div class="ph"><span class="num">↩</span><span class="nm">Sign In</span><span class="badge">Returning</span></div>
+      <h2 class="h center" style="margin-top:2px">Welcome <span class="accent">back.</span></h2>
+      <p class="sub center" style="margin-bottom:20px">Sign in to return to your sessions and saved work.</p>
+      <a class="btn google" href="#" data-goto="11">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.2c-.3 1.5-1.1 2.7-2.4 3.5v2.9h3.9c2.3-2.1 3.3-5.2 3.3-8.6z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.8-2.9l-3.9-2.9c-1.1.7-2.4 1.1-3.9 1.1-3 0-5.6-2-6.5-4.8H1.6v3C3.5 21.4 7.4 24 12 24z"/><path fill="#FBBC05" d="M5.5 14.5c-.2-.7-.4-1.4-.4-2.5s.1-1.8.4-2.5v-3H1.6C.6 8 0 9.9 0 12s.6 4 1.6 5.5l3.9-3z"/><path fill="#EA4335" d="M12 4.8c1.7 0 3.2.6 4.4 1.7l3.3-3.3C17.9 1.2 15.2 0 12 0 7.4 0 3.5 2.6 1.6 6.5l3.9 3C6.4 6.7 9 4.8 12 4.8z"/></svg>
+        Continue with Google
+      </a>
+      <div class="divider" style="margin:16px 0">or sign in with email</div>
+      <span class="lbl">Email</span>
+      <div class="field"><input type="email" value="you@venture.com"></div>
+      <span class="lbl" style="display:block;margin-top:12px">Password</span>
+      <div class="field"><input type="password" placeholder="••••••••" value="········"></div>
+      <div class="spread" style="margin-top:12px">
+        <label class="remember muted"><input type="checkbox" checked> Remember me</label>
+        <a class="link" role="button" tabindex="0">Forgot password?</a>
+      </div>
+      <button class="btn primary" style="margin-top:16px" data-goto="11">Sign in</button>
+      <p class="muted center" style="margin-top:14px">New to Kaiso? <a class="link" data-goto="5">Create an account</a></p>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/landing/00-app.js"></script>
+</body>
+</html>

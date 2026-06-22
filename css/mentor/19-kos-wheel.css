@@ -1,0 +1,59 @@
+  /* ─── KOS wheel: current pillar · node indicator + ambient tint ── */
+  /* Smoothly animatable color (Chrome/Safari 16.4+; degrades to a snap). */
+  @property --kos-color {
+    syntax: '<color>'; inherits: false; initial-value: rgba(200, 168, 78, 0);
+  }
+
+  /* Ambient background wash that matches the active pillar's wheel colour. */
+  .kos-tint {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    --kos-color: rgba(200, 168, 78, 0);
+    background: radial-gradient(ellipse at 50% 14%, var(--kos-color) 0%, transparent 62%);
+    opacity: 0;
+    transition: --kos-color 1.4s ease, opacity 1.4s ease;
+  }
+  body.active .kos-tint { opacity: 1; }
+
+  /* Top-centre pill: which pillar & node the founder is filling right now. */
+  .kos-indicator {
+    position: fixed; top: 18px; left: 50%; z-index: 36;
+    transform: translateX(-50%) translateY(-10px);
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px; border-radius: 999px;
+    background: rgba(8, 7, 12, 0.55);
+    border: 1px solid rgba(200, 168, 78, 0.18);
+    backdrop-filter: blur(10px);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s, border-color 0.6s ease;
+  }
+  body.active .kos-indicator {
+    opacity: 1; pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .kos-gem {
+    width: 9px; height: 9px; border-radius: 50%; flex: 0 0 9px;
+    background: var(--gold-bright); box-shadow: 0 0 10px var(--gold-bright);
+    transition: background 0.9s ease, box-shadow 0.9s ease;
+  }
+  .kos-pillar {
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600;
+    color: var(--kos-pillar-color, var(--gold-bright));
+    transition: color 0.9s ease;
+  }
+  .kos-sep { color: rgba(234, 227, 200, 0.3); font-size: 10px; }
+  .kos-node {
+    font-size: 11px; letter-spacing: 0.04em;
+    color: rgba(234, 227, 200, 0.82);
+  }
+  .kos-count {
+    margin-left: 4px; font-size: 8px; letter-spacing: 0.14em;
+    color: rgba(234, 227, 200, 0.35);
+  }
+
+  /* Tie the pill's border to the active pillar for a touch of cohesion. */
+  body.active .kos-indicator { border-color: var(--kos-pillar-border, rgba(200, 168, 78, 0.18)); }
+
+  @media (max-width: 600px) {
+    .kos-indicator { top: 12px; padding: 6px 12px; gap: 8px; }
+    .kos-count { display: none; }
+  }

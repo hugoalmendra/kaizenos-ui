@@ -23,7 +23,7 @@ kaizenos-ui/
 ├── assets/
 │   └── kaizenOS.png        # wordmark logo
 ├── css/
-│   ├── mentor/             # 19 component stylesheets (00-base … 18-onboarding-tour)
+│   ├── mentor/             # 20 component stylesheets (00-base … 19-kos-wheel)
 │   └── landing/            # 4 stylesheets (base, star-field, chrome, stage-panel)
 └── js/
     ├── mentor/             # 12 feature modules (see below)
@@ -40,14 +40,15 @@ prefixed with a two-digit index that reflects load order.
 `09-funding-readiness-meter` · `10-chat-window` · `11-mobile-breakpoints` ·
 `12-chat-bubbles` · `13-hud-rail` · `14-hud-token-meter` ·
 `15-account-button-menu` · `16-modal` · `17-executive-summary` ·
-`18-onboarding-tour`.
+`18-onboarding-tour` · `19-kos-wheel` (pillar/node indicator + ambient tint).
 
 ### Mentor JS features (`js/mentor/`)
 `00-eye-galaxy-starfield` · `01-shooting-stars` · `02-compass-ticks` ·
 `03-audio-bars` · `04-activation-flow` · `05-chat` (text + Web Speech STT/TTS
 + realtime voice) · `06-session-timer` · `07-output-forge` ·
 `08-funding-readiness-meter` · `09-binary-clock` · `10-hud-controller` ·
-`11-onboarding-tour`.
+`11-onboarding-tour` · `12-kos-wheel` (tracks the current pillar/node; tints the
+background to match the KOS wheel colour; advances on each `kaiso:exchange`).
 
 > **Load order matters.** These are plain (non-module) scripts that share the
 > global scope, so they must stay in the numbered order in `mentor.html`.

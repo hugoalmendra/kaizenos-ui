@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <meta name="theme-color" content="#03030a">
 <title>Kaiso — Sacred Invocation</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="css/mentor/00-base.css">
 <link rel="stylesheet" href="css/mentor/01-star-field.css">
 <link rel="stylesheet" href="css/mentor/02-stage.css">
@@ -24,6 +25,7 @@
 <link rel="stylesheet" href="css/mentor/16-modal-library-plan.css">
 <link rel="stylesheet" href="css/mentor/17-executive-summary-one-pager.css">
 <link rel="stylesheet" href="css/mentor/18-onboarding-tour.css">
+<link rel="stylesheet" href="css/mentor/19-kos-wheel.css">
 </head>
 <body>
 
@@ -33,8 +35,20 @@
 <div class="stars-extra"></div>
 <div class="nebula"></div>
 
+<!-- KOS wheel: ambient pillar-coloured wash (behind everything) -->
+<div class="kos-tint" id="kosTint" aria-hidden="true"></div>
+
 <!-- KaizenOS wordmark -->
 <div class="brand"><img src="assets/kaizenOS.png" alt="KaizenOS" /></div>
+
+<!-- KOS wheel: which pillar & node you're filling right now -->
+<div class="kos-indicator" id="kosIndicator" role="status" aria-live="polite" title="The pillar and node you're shaping right now">
+  <span class="kos-gem" id="kosGem"></span>
+  <span class="kos-pillar" id="kosPillar">Company</span>
+  <span class="kos-sep">·</span>
+  <span class="kos-node" id="kosNode">Mission</span>
+  <span class="kos-count" id="kosCount">1 / 6</span>
+</div>
 
 <!-- Scroll icon — opens chat. Visible only after Kaiso is activated. -->
 <button class="scroll-toggle" id="scrollToggle" aria-label="Open the scribe" title="Open the scribe">
@@ -558,6 +572,7 @@
 <script src="js/mentor/09-binary-clock-hh.js"></script>
 <script src="js/mentor/10-hud-controller.js"></script>
 <script src="js/mentor/11-onboarding-tour.js"></script>
+<script src="js/mentor/12-kos-wheel.js"></script>
 
 </body>
 </html>

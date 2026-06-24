@@ -26,6 +26,8 @@
 <link rel="stylesheet" href="css/mentor/17-executive-summary-one-pager.css">
 <link rel="stylesheet" href="css/mentor/18-onboarding-tour.css">
 <link rel="stylesheet" href="css/mentor/19-kos-wheel.css">
+<link rel="stylesheet" href="css/mentor/21-kos-plan-panel.css">
+<link rel="stylesheet" href="css/mentor/20-done-talking.css">
 </head>
 <body>
 
@@ -41,14 +43,19 @@
 <!-- KaizenOS wordmark -->
 <div class="brand"><img src="assets/kaizenOS.png" alt="KaizenOS" /></div>
 
-<!-- KOS wheel: which pillar & node you're filling right now -->
-<div class="kos-indicator" id="kosIndicator" role="status" aria-live="polite" title="The pillar and node you're shaping right now">
+<!-- KOS wheel: which pillar & node you're filling right now (opens plan on click) -->
+<button type="button" class="kos-indicator" id="kosIndicator"
+        aria-expanded="false" aria-controls="panelKos" aria-live="polite"
+        aria-label="Current pillar and node — open your plan"
+        title="Your plan — click to see progress on every node">
   <span class="kos-gem" id="kosGem"></span>
   <span class="kos-pillar" id="kosPillar">Company</span>
   <span class="kos-sep">·</span>
   <span class="kos-node" id="kosNode">Mission</span>
   <span class="kos-count" id="kosCount">1 / 6</span>
-</div>
+  <span class="kos-ready-pill" aria-hidden="true"><b id="kosReadyPct">0</b>%</span>
+  <span class="kos-chevron" aria-hidden="true">▾</span>
+</button>
 
 <!-- Scroll icon — opens chat. Visible only after Kaiso is activated. -->
 <button class="scroll-toggle" id="scrollToggle" aria-label="Open the scribe" title="Open the scribe">
@@ -320,6 +327,11 @@
       </div>
     </button>
 
+    <!-- Optional nudge — tell Kaiso you're finished without waiting for the pause -->
+    <button type="button" class="done-talking" id="doneTalking" aria-label="I'm done talking" title="Tell Kaiso you're finished — skips the pause while he waits to make sure you're done" hidden>
+      Done talking
+    </button>
+
   </div>
 </div>
 
@@ -422,6 +434,25 @@
     <p class="kp-note">Stored in your account — always yours, even between sessions.</p>
   </section>
 
+  <!-- KOS plan — node progress (opened from top-centre indicator) -->
+  <section class="kpanel kpanel-kos" id="panelKos" aria-label="Your plan">
+    <div class="kp-head plan-kp-head">
+      <div class="plan-head-title">
+        <span class="tm-dot"></span>
+        <span class="kp-title">Your plan</span>
+      </div>
+      <div class="plan-head-actions">
+        <span class="plan-ready-badge" aria-label="Overall plan readiness">
+          <span class="plan-ready-pct" id="planReadyPct">0</span><span class="plan-ready-suffix">%</span>
+          <span class="plan-ready-label">ready</span>
+        </span>
+        <button class="kp-close" data-close aria-label="Close">✕</button>
+      </div>
+    </div>
+    <p class="kp-sub plan-kp-sub">Every node in the KOS wheel — Kaiso fills these as you talk.</p>
+    <div class="plan-scroll" id="kosPlanList"></div>
+  </section>
+
   <!-- Plan & Tokens panel -->
   <section class="kpanel" id="panelPlan" aria-label="Plan and tokens">
     <div class="kp-head">
@@ -446,7 +477,6 @@
     <p class="kp-note"><b>Buys more session time</b> — not an instant unlock. Keep talking so Kaiso can finish your work.</p>
   </section>
 
-  <!-- Executive Summary panel -->
   <section class="kpanel kpanel-wide" id="panelExec" aria-label="Executive Summary">
     <div class="kp-head">
       <span class="tm-dot"></span>

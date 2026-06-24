@@ -1,0 +1,63 @@
+  /* Optional "done talking" nudge — below the listening label on the stage. */
+  .done-talking {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 228px);
+    transform: translateX(-50%);
+    z-index: 15;
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(200, 168, 78, 0.28);
+    background: rgba(8, 8, 18, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: rgba(232, 200, 112, 0.82);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease, border-color 0.2s ease,
+                color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .done-talking::after {
+    content: '→';
+    letter-spacing: 0;
+    font-size: 12px;
+    opacity: 0.75;
+    transition: transform 0.2s ease;
+  }
+  .done-talking.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  .done-talking:hover,
+  .done-talking:focus-visible {
+    border-color: rgba(232, 200, 112, 0.55);
+    color: var(--gold-bright);
+    background: rgba(12, 12, 24, 0.72);
+    outline: none;
+  }
+  .done-talking:hover::after { transform: translateX(2px); }
+  .done-talking:active { transform: translateX(-50%) scale(0.98); }
+  .done-talking:disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .done-talking {
+      top: calc(50% + 200px);
+      padding: 8px 14px;
+      font-size: 9px;
+      letter-spacing: 0.26em;
+    }
+  }

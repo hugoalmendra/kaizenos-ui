@@ -67,6 +67,13 @@
     function openPanel(which) {
       panelLibrary.classList.toggle('show', which === 'library');
       panelPlan.classList.toggle('show', which === 'plan');
+      const panelKos = document.getElementById('panelKos');
+      const kosInd = document.getElementById('kosIndicator');
+      if (panelKos) panelKos.classList.toggle('show', which === 'kos');
+      if (kosInd) {
+        kosInd.classList.toggle('open', which === 'kos');
+        kosInd.setAttribute('aria-expanded', which === 'kos' ? 'true' : 'false');
+      }
       if (panelExec) panelExec.classList.toggle('show', which === 'exec');
       if (which === 'plan') renderPlanDetail();
       modal.classList.add('open');

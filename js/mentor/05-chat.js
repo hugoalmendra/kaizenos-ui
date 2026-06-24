@@ -35,6 +35,7 @@
     const input     = document.getElementById('chatInput');
     const micBtn    = document.getElementById('chatMic');
     const sendBtn   = document.getElementById('chatSend');
+    const doneBtn   = document.getElementById('doneTalking');
 
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     const isSecure = window.isSecureContext === true
@@ -44,6 +45,8 @@
 
     let sessionId   = null;
     let pendingTurn = false;
+    let liveInterim = '';       // latest STT preview — not yet finalized by the browser
+    let skipNextFinal = false;  // drop one SR final after a manual "done talking" commit
 
     // ─ DOM helpers ────────────────────────────────────────
     function escapeHtml(s) {
@@ -127,6 +130,7 @@
       // not a backend is wired up — so the artifacts build as you talk.
       window.dispatchEvent(new CustomEvent('kaiso:exchange'));
       pendingTurn = true;
+      syncDoneBtn();
       sendBtn.disabled = true;
       const thinkEl = appendMsg('kaiso', '');
       const body = thinkEl.querySelector('.body');
@@ -186,7 +190,46 @@
       } finally {
         pendingTurn = false;
         sendBtn.disabled = false;
+        syncDoneBtn();
         log.scrollTop = log.scrollHeight;
+      }
+    }
+
+    function syncDoneBtn() {
+      if (!doneBtn) return;
+      const show = !!log.dataset.engaged
+        && !kaisoSpeaking
+        && !pendingTurn
+        && (cfg.voiceProvider === 'grok-realtime'
+          ? !!(grokRealtime && grokRealtime.isReady && grokRealtime.isReady())
+          : !!(listening && !micMuted));
+      doneBtn.hidden = !show;
+      doneBtn.classList.toggle('visible', show);
+      doneBtn.disabled = !show;
+    }
+
+    function finishTalking() {
+      if (!log.dataset.engaged || pendingTurn || kaisoSpeaking) return;
+      if (cfg.voiceProvider === 'grok-realtime') {
+        grokRealtime.commitTurn();
+        return;
+      }
+      const text = liveInterim.trim();
+      if (text) {
+        skipNextFinal = true;
+        liveInterim = '';
+        commitLive(text);
+        syncDoneBtn();
+        sendTurn(text);
+        if (recognition && !micMuted) {
+          echoFlushing = true;
+          try { recognition.abort(); } catch (_) {}
+        }
+        return;
+      }
+      // No preview yet — nudge the browser STT to finalize whatever it heard.
+      if (recognition && listening && !micMuted) {
+        try { recognition.stop(); } catch (_) {}
       }
     }
 
@@ -240,6 +283,7 @@
         // Single bidirectional WebSocket to xAI; the agent handles STT+LLM+TTS.
         grokRealtime.engage().then(() => {
           syncMicVisual();
+          syncDoneBtn();
         }).catch((e) => {
           appendErr('Grok realtime engage failed: ' + e.message);
           // Soft fallback to Haiku+Charon path if realtime fails.
@@ -265,12 +309,15 @@
       }
       startSession().catch((e) => console.warn('[kaiso] session start skipped:', e.message));
       startListening();
+      syncDoneBtn();
     }
     function disengageKaiso() {
       if (!log.dataset.engaged) return;
       delete log.dataset.engaged;
       micMuted = false;
       echoFlushing = false;
+      liveInterim = '';
+      skipNextFinal = false;
       if (cfg.voiceProvider === 'grok-realtime') {
         grokRealtime.disengage();
       }
@@ -279,6 +326,7 @@
       endSession();
       closeScribe();
       setMicMentorActive(false);
+      syncDoneBtn();
     }
     function openScribe() {
       if (!document.body.classList.contains('active')) return;
@@ -358,10 +406,12 @@
       if (kaisoSpeakingTimer) { clearTimeout(kaisoSpeakingTimer); kaisoSpeakingTimer = null; }
       if (on) {
         kaisoSpeaking = true;
+        syncDoneBtn();
       } else {
         kaisoSpeakingTimer = setTimeout(() => {
           kaisoSpeaking = false;
           kaisoSpeakingTimer = null;
+          syncDoneBtn();
           // Flush any in-flight buffer so SR can't post-deliver echo.
           if (recognition && !micMuted && log.dataset.engaged) {
             echoFlushing = true;
@@ -389,9 +439,19 @@
           const t = ev.results[i][0].transcript;
           if (ev.results[i].isFinal) final += t; else interim += t;
         }
-        if (interim) showLive(interim);
+        if (interim) {
+          liveInterim = interim;
+          showLive(interim);
+          syncDoneBtn();
+        }
         if (final.trim()) {
+          if (skipNextFinal) {
+            skipNextFinal = false;
+            return;
+          }
+          liveInterim = '';
           commitLive(final.trim());
+          syncDoneBtn();
           sendTurn(final.trim());
         }
       });
@@ -424,9 +484,11 @@
           listening = true;
           try { recognition.start(); } catch (_) { /* already started */ }
           syncMicVisual();
+          syncDoneBtn();
         } else {
           listening = false;
           syncMicVisual();
+          syncDoneBtn();
         }
       });
       return recognition;
@@ -476,12 +538,14 @@
       micMuted = true;
       stopCapture();
       syncMicVisual();
+      syncDoneBtn();
     }
     function unmuteMic() {
       if (!log.dataset.engaged) return;
       micMuted = false;
       syncMicVisual();
       startListening();
+      syncDoneBtn();
     }
     function handleMicClick() {
       if (!log.dataset.engaged) {
@@ -530,6 +594,7 @@
         rec.start();
         listening = true;
         syncMicVisual();
+        syncDoneBtn();
         console.log('[kaiso] recognition.start() called, listening=true');
         // Unmissable visible feedback in the chat itself.
         if (!log.dataset.listenedOnce) {
@@ -567,12 +632,20 @@
       liveEl.querySelector('.who').textContent = 'YOU';
       liveEl.querySelector('.body').textContent = text;
       liveEl = null;
+      liveInterim = '';
     }
     micBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
       handleMicClick();
     });
+    if (doneBtn) {
+      doneBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        finishTalking();
+      });
+    }
 
     // ─ "Tap to talk" — primary voice entry, mirrors /diag pattern ──
     // This is the path most users will hit. Same gesture chain as /diag,
@@ -688,7 +761,9 @@
       }
     });
     // If the user starts typing, drop the live STT preview so it doesn't fight.
-    input.addEventListener('focus', () => { if (liveEl) { liveEl.remove(); liveEl = null; } });
+    input.addEventListener('focus', () => {
+      if (liveEl) { liveEl.remove(); liveEl = null; liveInterim = ''; syncDoneBtn(); }
+    });
 
     // ─ Grok Voice Agent (alternate path, ?voice=grok-realtime) ─────
     // Single bidirectional WebSocket to wss://api.x.ai/v1/realtime.
@@ -971,8 +1046,21 @@
         ws.send(JSON.stringify({ type: 'response.create' }));
       }
 
+      function commitTurn() {
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        try {
+          ws.send(JSON.stringify({ type: 'input_audio_buffer.commit' }));
+          ws.send(JSON.stringify({ type: 'response.create' }));
+        } catch (e) {
+          console.warn('[grok] commitTurn failed', e);
+        }
+      }
+      function isReady() {
+        return !!(ws && ws.readyState === WebSocket.OPEN);
+      }
+
       return {
-        engage, disengage, sendText, toggleMute,
+        engage, disengage, sendText, toggleMute, commitTurn, isReady,
         isMuted: () => muted,
         _state: () => ({ ws: ws && ws.readyState, audioCtx: audioCtx && audioCtx.state, muted }),
       };

@@ -759,6 +759,13 @@
       if (e.key === 'Escape' && document.body.classList.contains('chat-open')) {
         e.stopPropagation();
       }
+      if (e.code !== 'Space' || e.repeat) return;
+      if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
+      const modal = document.getElementById('kmodal');
+      if (modal && modal.classList.contains('open')) return;
+      if (!doneBtn || doneBtn.hidden || doneBtn.disabled) return;
+      e.preventDefault();
+      finishTalking();
     });
     // If the user starts typing, drop the live STT preview so it doesn't fight.
     input.addEventListener('focus', () => {

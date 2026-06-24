@@ -328,8 +328,12 @@
     </button>
 
     <!-- Optional nudge — tell Kaiso you're finished without waiting for the pause -->
-    <button type="button" class="done-talking" id="doneTalking" aria-label="I'm done talking" title="Tell Kaiso you're finished — skips the pause while he waits to make sure you're done" hidden>
-      Done talking
+    <button type="button" class="done-talking" id="doneTalking"
+            aria-label="I'm done talking. Spacebar also works."
+            title="Tell Kaiso you're finished — click or press Space" hidden>
+      <span class="done-talking-label">Done talking</span>
+      <kbd class="done-talking-kbd" aria-hidden="true">Space</kbd>
+      <span class="done-talking-arrow" aria-hidden="true">→</span>
     </button>
 
   </div>

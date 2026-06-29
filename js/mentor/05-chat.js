@@ -1093,6 +1093,7 @@
       session: () => sessionId,
       end: endSession,
       send: sendTurn,
+      history: () => chatHistory.slice(),
       voices: () => (window.speechSynthesis ? window.speechSynthesis.getVoices() : []),
       pickedVoice: () => pickedVoice,
       grok: grokRealtime,

@@ -35,9 +35,23 @@
     transition: color 0.4s ease;
   }
   /* A+ — celebratory state */
-  .readiness.funded { background: rgba(232, 200, 112, 0.06); }
+  .readiness.funded { background: rgba(232, 200, 112, 0.06); max-width: 480px; cursor: default; }
   .readiness.funded .rd-grade,
   .readiness.funded .rd-verdict { color: var(--gold-bright); }
+  .rd-yc-btn {
+    flex: 0 0 auto; border-radius: 999px; padding: 7px 12px; margin-left: 2px;
+    font: inherit; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid rgba(232, 200, 112, 0.55);
+    background: linear-gradient(135deg, rgba(232, 200, 112, 0.18), rgba(200, 168, 78, 0.08));
+    color: var(--gold-bright); cursor: pointer; white-space: nowrap;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+  .rd-yc-btn[hidden] { display: none; }
+  .rd-yc-btn:hover {
+    border-color: var(--gold-bright);
+    background: linear-gradient(135deg, rgba(232, 200, 112, 0.28), rgba(200, 168, 78, 0.12));
+    transform: translateY(-1px);
+  }
 
   .meta {
     position: fixed;

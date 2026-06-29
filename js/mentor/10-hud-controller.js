@@ -11,6 +11,7 @@
     const panelLibrary = document.getElementById('panelLibrary');
     const panelPlan    = document.getElementById('panelPlan');
     const panelExec    = document.getElementById('panelExec');
+    const panelYcApply = document.getElementById('panelYcApply');
     const planDetail   = document.getElementById('planDetail');
     const toast        = document.getElementById('ktoast');
     if (!meter || !accountBtn) return;
@@ -75,11 +76,22 @@
         kosInd.setAttribute('aria-expanded', which === 'kos' ? 'true' : 'false');
       }
       if (panelExec) panelExec.classList.toggle('show', which === 'exec');
+      if (panelYcApply) panelYcApply.classList.toggle('show', which === 'yc');
       if (which === 'plan') renderPlanDetail();
+      if (which === 'yc' && window.kaisoYc) window.kaisoYc.render();
       modal.classList.add('open');
     }
     function closeModal() { modal.classList.remove('open'); }
     modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeModal));
+
+    const applyYcBtnHud = document.getElementById('applyYcBtn');
+    if (applyYcBtnHud) {
+      applyYcBtnHud.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPanel('yc');
+      });
+    }
+
     // Capture Escape before the stage-dismiss handler when the modal is open.
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && modal.classList.contains('open')) { e.stopPropagation(); closeModal(); }

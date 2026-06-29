@@ -4,6 +4,7 @@
     const gauge = document.getElementById('rdGauge');
     const gradeEl = document.getElementById('rdGrade');
     const verdictEl = document.getElementById('rdVerdict');
+    const applyYcBtn = document.getElementById('applyYcBtn');
     if (!root || !gauge) return;
     const toast = document.getElementById('ktoast');
     let toastT;
@@ -34,6 +35,7 @@
         gradeEl.textContent = '—';
         verdictEl.textContent = 'Talk with Kaiso to begin';
         root.classList.remove('funded');
+        if (applyYcBtn) applyYcBtn.hidden = true;
         return;
       }
       const score = scoreFor(exchanges);
@@ -43,6 +45,7 @@
       verdictEl.textContent = tier.verdict;
       const funded = tier.grade === 'A+';
       root.classList.toggle('funded', funded);
+      if (applyYcBtn) applyYcBtn.hidden = !funded;
       if (funded && !celebrated) {
         celebrated = true;
         showToast('A+ — your venture is likely to get funded');

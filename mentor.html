@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="css/mentor/19-kos-wheel.css">
 <link rel="stylesheet" href="css/mentor/21-kos-plan-panel.css">
 <link rel="stylesheet" href="css/mentor/20-done-talking.css">
+<link rel="stylesheet" href="css/mentor/22-yc-application-pack.css">
 </head>
 <body>
 
@@ -366,6 +367,7 @@
       <span class="rd-cap">Funding Readiness</span>
       <span class="rd-verdict" id="rdVerdict">Talk with Kaiso to begin</span>
     </div>
+    <button class="rd-yc-btn" id="applyYcBtn" type="button" hidden>Apply to YC</button>
   </div>
 
   <!-- Account button (dropdown lives below, anchored to viewport) -->
@@ -573,6 +575,25 @@
 
     <p class="kp-note">This one-pager is drafted from your session with Kaiso. Keep talking to refine it — every detail sharpens the story.</p>
   </section>
+
+  <!-- YC Application Pack panel -->
+  <section class="kpanel kpanel-wide" id="panelYcApply" aria-label="YC Application Pack">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso · YC Application Pack</span>
+      <button class="kp-close" data-close aria-label="Close">✕</button>
+    </div>
+    <p class="kp-sub">Review and copy each answer into the matching field at ycombinator.com/apply. You'll need to log in to YC first.</p>
+
+    <div class="yc-actions">
+      <button class="kbtn" id="ycDownloadMdBtn" type="button">Download Markdown</button>
+      <button class="kbtn primary" id="ycOpenApplyBtn" type="button">Open YC Application</button>
+    </div>
+
+    <div class="yc-fields" id="ycFields"></div>
+
+    <p class="kp-note">Forged from your session and Executive Summary. Keep talking with Kaiso to sharpen answers before you submit.</p>
+  </section>
 </div>
 
 <!-- Toast -->
@@ -604,6 +625,7 @@
 <script src="js/mentor/07-output-forge.js"></script>
 <script src="js/mentor/08-funding-readiness-meter.js"></script>
 <script src="js/mentor/09-binary-clock-hh.js"></script>
+<script src="js/mentor/13-yc-application-pack.js"></script>
 <script src="js/mentor/10-hud-controller.js"></script>
 <script src="js/mentor/11-onboarding-tour.js"></script>
 <script src="js/mentor/12-kos-wheel.js"></script>

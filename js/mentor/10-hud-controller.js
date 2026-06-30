@@ -11,6 +11,8 @@
     const panelLibrary = document.getElementById('panelLibrary');
     const panelPlan    = document.getElementById('panelPlan');
     const panelExec    = document.getElementById('panelExec');
+    const panelLanding = document.getElementById('panelLanding');
+    const panelDeck    = document.getElementById('panelDeck');
     const panelYcApply = document.getElementById('panelYcApply');
     const planDetail   = document.getElementById('planDetail');
     const toast        = document.getElementById('ktoast');
@@ -76,6 +78,8 @@
         kosInd.setAttribute('aria-expanded', which === 'kos' ? 'true' : 'false');
       }
       if (panelExec) panelExec.classList.toggle('show', which === 'exec');
+      if (panelLanding) panelLanding.classList.toggle('show', which === 'landing');
+      if (panelDeck) panelDeck.classList.toggle('show', which === 'deck');
       if (panelYcApply) panelYcApply.classList.toggle('show', which === 'yc');
       if (which === 'plan') renderPlanDetail();
       if (which === 'yc' && window.kaisoYc) window.kaisoYc.render();
@@ -83,6 +87,10 @@
     }
     function closeModal() { modal.classList.remove('open'); }
     modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeModal));
+
+    window.addEventListener('kaiso:open-forge', (e) => {
+      if (e.detail) openPanel(e.detail);
+    });
 
     const applyYcBtnHud = document.getElementById('applyYcBtn');
     if (applyYcBtnHud) {
@@ -97,87 +105,28 @@
       if (e.key === 'Escape' && modal.classList.contains('open')) { e.stopPropagation(); closeModal(); }
     }, true);
 
-    // ─ Executive Summary ─────────────────────────────────────
+    // ─ Forged assets (exec, landing, deck) ─────────────────────
     const execDateEl = document.getElementById('execDate');
     if (execDateEl) {
       execDateEl.textContent = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     }
-    const execOpenBtn = document.getElementById('execOpenBtn');
-    if (execOpenBtn) {
-      execOpenBtn.addEventListener('click', () => {
-        if (execOpenBtn.disabled) return; // only when the artifact is forged
-        openPanel('exec');
-      });
-    }
-    const execDownloadBtn = document.getElementById('execDownloadBtn');
-    if (execDownloadBtn) execDownloadBtn.addEventListener('click', downloadExecPDF);
 
-    // Open the one-pager in a clean popup and trigger the browser's print → Save as PDF.
-    function downloadExecPDF() {
-      const docEl = document.getElementById('execPrintable');
-      if (!docEl) return;
-
-      const coName = (docEl.querySelector('.exec-co') || {}).textContent || 'Venture';
+    function printForge(docId, titlePrefix, styleKey) {
+      const docEl = document.getElementById(docId);
+      if (!docEl || !window.kaisoPrint) return;
+      const coName = (docEl.querySelector('.exec-co, .land-logo, .deck-title') || {}).textContent || 'Venture';
       const dateStr = new Date().toISOString().slice(0, 10);
-
-      // Inline every readable stylesheet so the popup renders identically.
-      let allCSS = '';
-      for (const sheet of document.styleSheets) {
-        try {
-          for (const rule of sheet.cssRules || []) allCSS += rule.cssText + '\n';
-        } catch (e) { /* cross-origin — skip */ }
-      }
-
-      const printCSS = `
-        html, body { height: auto !important; overflow: visible !important;
-          background: #ffffff !important; margin: 0; padding: 0;
-          -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        body { display: block !important; padding: 28px;
-          font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-        .exec-doc { background: #ffffff !important; border: none !important; box-shadow: none !important;
-          max-width: 860px; margin: 0 auto; padding: 8px 4px !important; color: #1a1a1a !important; }
-        .exec-banner { border-bottom: 1px solid #d8c98f !important; }
-        .exec-banner-mark { color: #b78f1f !important; text-shadow: none !important; }
-        .exec-eyebrow, .exec-sec-title, .es-val, .exec-foot-co, .exec-foot-mark { color: #8a6a1c !important; }
-        .exec-co { color: #1a1a1a !important; }
-        .exec-tag { color: #3a3a3a !important; }
-        .exec-meta { color: #6a6a6a !important; }
-        .exec-meta .exec-dot { color: #b78f1f !important; }
-        .exec-sec-title { border-bottom: 1px solid #d8c98f !important; }
-        .exec-sec-body { color: #2a2a2a !important; }
-        .exec-sec-body b { color: #111 !important; }
-        .exec-stat { background: #faf7ed !important; border: 0.5px solid #d8c98f !important; }
-        .es-lbl { color: #5a4a1e !important; }
-        .exec-foot { border-top: 1px solid #d8c98f !important; }
-        .exec-foot-contact { color: #4a4a4a !important; }
-        .exec-foot-mark { color: #6a6a6a !important; }
-        .exec-sec, .exec-band, .exec-foot, .exec-banner { break-inside: avoid; page-break-inside: avoid; }
-        @media print { @page { size: A4; margin: 14mm; } body { padding: 0; } .exec-doc { max-width: 100%; } }
-      `;
-
-      const safeName = String(coName).replace(/[<>&"]/g, '');
-      const popupHTML = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
-        + '<title>' + safeName + ' — Executive Summary (' + dateStr + ')</title>'
-        + '<style>' + allCSS + printCSS + '</style></head><body>'
-        + docEl.outerHTML
-        + '<scr' + 'ipt>'
-        + 'window.addEventListener("load",function(){'
-        + 'var go=function(){setTimeout(function(){window.print();},250);};'
-        + 'if(document.fonts&&document.fonts.ready){document.fonts.ready.then(go);}else{setTimeout(go,500);}'
-        + '});'
-        + 'window.addEventListener("afterprint",function(){setTimeout(function(){window.close();},300);});'
-        + '</scr' + 'ipt></body></html>';
-
-      const popup = window.open('', '_blank', 'width=900,height=1200,resizable=yes,scrollbars=yes');
-      if (!popup) {
-        showToast('Allow popups to download the PDF');
-        return;
-      }
-      popup.document.open();
-      popup.document.write(popupHTML);
-      popup.document.close();
-      popup.focus();
+      const ok = window.kaisoPrint(
+        docEl,
+        coName.trim() + ' — ' + titlePrefix + ' (' + dateStr + ')',
+        window.kaisoPrintStyles?.[styleKey] || ''
+      );
+      if (!ok) showToast('Allow popups to download the PDF');
     }
+
+    document.getElementById('execDownloadBtn')?.addEventListener('click', () => printForge('execPrintable', 'Executive Summary', 'exec'));
+    document.getElementById('landingDownloadBtn')?.addEventListener('click', () => printForge('landingPrintable', 'Landing Page', 'landing'));
+    document.getElementById('deckDownloadBtn')?.addEventListener('click', () => printForge('deckPrintable', 'Pitch Deck', 'deck'));
 
     // ─ Plan selection ────────────────────────────────────────
     panelPlan.querySelectorAll('[data-plan]').forEach((c) =>

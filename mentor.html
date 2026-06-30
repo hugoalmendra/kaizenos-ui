@@ -29,6 +29,8 @@
 <link rel="stylesheet" href="css/mentor/21-kos-plan-panel.css">
 <link rel="stylesheet" href="css/mentor/20-done-talking.css">
 <link rel="stylesheet" href="css/mentor/22-yc-application-pack.css">
+<link rel="stylesheet" href="css/mentor/23-landing-page-forge.css">
+<link rel="stylesheet" href="css/mentor/24-pitch-deck-forge.css">
 </head>
 <body>
 
@@ -426,7 +428,7 @@
         <span class="lib-status">Not started — talk with Kaiso to forge it</span>
         <span class="lib-prog"><span class="lib-prog-fill"></span></span>
       </span>
-      <button class="kbtn" disabled>Forging</button>
+      <button class="kbtn" id="landingOpenBtn" disabled>Forging</button>
     </div>
     <div class="lib-item locked" data-output="deck" data-need="8">
       <span class="lib-thumb">❖</span>
@@ -435,7 +437,7 @@
         <span class="lib-status">Not started — talk with Kaiso to forge it</span>
         <span class="lib-prog"><span class="lib-prog-fill"></span></span>
       </span>
-      <button class="kbtn" disabled>Forging</button>
+      <button class="kbtn" id="deckOpenBtn" disabled>Forging</button>
     </div>
     <p class="kp-note">Stored in your account — always yours, even between sessions.</p>
   </section>
@@ -576,6 +578,157 @@
     <p class="kp-note">This one-pager is drafted from your session with Kaiso. Keep talking to refine it — every detail sharpens the story.</p>
   </section>
 
+  <!-- Landing Page panel -->
+  <section class="kpanel kpanel-wide" id="panelLanding" aria-label="Landing Page">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso · Landing Page</span>
+      <button class="kp-close" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="exec-actions">
+      <button class="kbtn primary" id="landingDownloadBtn" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 4v10" stroke-linecap="round"/><path d="M8 11l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke-linecap="round"/>
+        </svg>
+        Download as PDF
+      </button>
+    </div>
+    <article class="land-doc" id="landingPrintable">
+      <header class="land-hero">
+        <span class="land-logo">Helm</span>
+        <h1>Run ops on autopilot</h1>
+        <p class="land-tag">The operations autopilot for independent e-commerce brands.</p>
+        <span class="land-cta">Start free trial</span>
+      </header>
+      <section class="land-block">
+        <h2 class="land-lbl">The problem</h2>
+        <p class="land-body">Independent online stores lose 12+ hours a week stitching together inventory, fulfillment, and customer support across disconnected tools. Hiring an ops manager is out of reach for most brands under $2M in revenue.</p>
+      </section>
+      <section class="land-block">
+        <h2 class="land-lbl">How Helm works</h2>
+        <div class="land-feats">
+          <div class="land-feat"><b>Connect</b><span>Plugs into your existing store stack — Shopify, 3PL, support, ads.</span></div>
+          <div class="land-feat"><b>Automate</b><span>Reorder alerts, shipment triage, refunds, and daily reporting run on their own.</span></div>
+          <div class="land-feat"><b>Oversee</b><span>Human-in-the-loop dashboard — you approve, Helm executes.</span></div>
+        </div>
+      </section>
+      <section class="land-block">
+        <h2 class="land-lbl">Traction</h2>
+        <div class="land-stats">
+          <div class="land-stat"><b>1,400</b><span>Waitlist brands</span></div>
+          <div class="land-stat"><b>$18K</b><span>Pilot MRR</span></div>
+          <div class="land-stat"><b>9%</b><span>WoW growth</span></div>
+          <div class="land-stat"><b>62</b><span>NPS</span></div>
+        </div>
+      </section>
+      <section class="land-block">
+        <h2 class="land-lbl">Pricing</h2>
+        <p class="land-body">Tiered SaaS from $79–$399 / month based on order volume, plus a usage fee on automated actions. Start solo, scale as you grow.</p>
+      </section>
+      <footer class="land-foot">hello@helm.app · helm.app · Forged with Kaiso</footer>
+    </article>
+    <p class="kp-note">Hero · features · CTA — forged from your session. Keep talking to refine copy and structure.</p>
+  </section>
+
+  <!-- Pitch Deck panel -->
+  <section class="kpanel kpanel-wide" id="panelDeck" aria-label="Pitch Deck">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso · Pitch Deck</span>
+      <button class="kp-close" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="exec-actions">
+      <button class="kbtn primary" id="deckDownloadBtn" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 4v10" stroke-linecap="round"/><path d="M8 11l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke-linecap="round"/>
+        </svg>
+        Download as PDF
+      </button>
+    </div>
+    <div class="deck-doc" id="deckPrintable">
+      <div class="deck-slide cover">
+        <span class="deck-glyph">☰</span>
+        <div class="deck-eyebrow">Pre-seed · 2026</div>
+        <h2 class="deck-title">Helm</h2>
+        <p class="deck-body">The operations autopilot for independent e-commerce brands.</p>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">02</span>
+        <div class="deck-eyebrow">Company</div>
+        <h2 class="deck-title">Why now</h2>
+        <p class="deck-body">Agentic AI finally makes reliable, low-cost operations automation possible, while a record number of solo founders are launching stores without back-office staff.</p>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">03</span>
+        <div class="deck-eyebrow">Product</div>
+        <h2 class="deck-title">The problem</h2>
+        <p class="deck-body">Independent online stores lose 12+ hours a week on inventory, fulfillment, and support across disconnected tools. 90% of brands under $2M can't afford an ops manager.</p>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">04</span>
+        <div class="deck-eyebrow">Product</div>
+        <h2 class="deck-title">What it is</h2>
+        <p class="deck-body">Helm is an AI operations layer that connects a store's existing tools and runs repetitive work autonomously — with a human-in-the-loop dashboard.</p>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">05</span>
+        <div class="deck-eyebrow">Company</div>
+        <h2 class="deck-title">Business model</h2>
+        <p class="deck-body">Tiered SaaS from $79–$399 / month based on order volume, plus usage fees on automated actions. Land at solo-founder tier, expand as brands scale.</p>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">06</span>
+        <div class="deck-eyebrow">Market</div>
+        <h2 class="deck-title">Market opportunity</h2>
+        <div class="deck-grid">
+          <div class="deck-cell"><b>TAM</b><span>$48B · global SMB e-commerce ops</span></div>
+          <div class="deck-cell"><b>SAM</b><span>$6.2B · English-speaking DTC</span></div>
+          <div class="deck-cell"><b>SOM</b><span>$310M · 3-year reachable</span></div>
+        </div>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">07</span>
+        <div class="deck-eyebrow">Product</div>
+        <h2 class="deck-title">Traction</h2>
+        <p class="deck-body">1,400 brands on the waitlist · $18K MRR from pilot cohort · 9% week-over-week growth · 62 NPS across pilots.</p>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">08</span>
+        <div class="deck-eyebrow">People</div>
+        <h2 class="deck-title">Why this team</h2>
+        <div class="deck-grid">
+          <div class="deck-cell"><b>CEO</b><span>8 years scaling DTC operations, ex-Shopify Plus.</span></div>
+          <div class="deck-cell"><b>CTO</b><span>Former ML lead, two prior exits in workflow automation.</span></div>
+        </div>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">09</span>
+        <div class="deck-eyebrow">Product</div>
+        <h2 class="deck-title">Roadmap · 12 months</h2>
+        <p class="deck-body">Deep Shopify integration → multi-platform → enterprise pilots. Each milestone unlocks the next tier of automation and ACV expansion.</p>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">10</span>
+        <div class="deck-eyebrow">Finance</div>
+        <h2 class="deck-title">Use of funds</h2>
+        <p class="deck-body">Engineering &amp; integrations (50%) · GTM &amp; partnerships (30%) · ops runway (20%). Target: 5,000 paying brands and $1M ARR in 18 months.</p>
+      </div>
+      <div class="deck-slide">
+        <span class="deck-num">11</span>
+        <div class="deck-eyebrow">Finance · The ask</div>
+        <h2 class="deck-title">Raising $1.5M pre-seed</h2>
+        <p class="deck-body">Capital allocated to engineering, integrations, and go-to-market to reach 5,000 paying brands and $1M ARR over 18 months.</p>
+      </div>
+      <div class="deck-slide cover">
+        <span class="deck-glyph">☰</span>
+        <div class="deck-eyebrow">Thank you</div>
+        <h2 class="deck-title">Let's build the future.</h2>
+        <p class="deck-body">hello@helm.app · helm.app</p>
+      </div>
+    </div>
+    <p class="kp-note">12 slides forged from your session — print or export as PDF. Keep talking to sharpen each slide.</p>
+  </section>
+
   <!-- YC Application Pack panel -->
   <section class="kpanel kpanel-wide" id="panelYcApply" aria-label="YC Application Pack">
     <div class="kp-head">
@@ -626,6 +779,7 @@
 <script src="js/mentor/08-funding-readiness-meter.js"></script>
 <script src="js/mentor/09-binary-clock-hh.js"></script>
 <script src="js/mentor/13-yc-application-pack.js"></script>
+<script src="js/mentor/14-forged-assets.js"></script>
 <script src="js/mentor/10-hud-controller.js"></script>
 <script src="js/mentor/11-onboarding-tour.js"></script>
 <script src="js/mentor/12-kos-wheel.js"></script>

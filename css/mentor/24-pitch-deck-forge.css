@@ -1,0 +1,39 @@
+  /* ─── Forged pitch deck preview ───────────────────────────── */
+  .deck-doc { display: flex; flex-direction: column; gap: 14px; }
+  .deck-slide {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 14px;
+    aspect-ratio: 16 / 9; min-height: 140px; padding: 18px 20px;
+    background: radial-gradient(100% 80% at 20% 0%, rgba(120, 90, 160, 0.14), transparent 55%),
+                linear-gradient(160deg, rgba(14, 11, 20, 0.95), rgba(6, 5, 10, 0.98));
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .deck-slide.cover { text-align: center; justify-content: center; }
+  .deck-num {
+    position: absolute; top: 12px; right: 14px;
+    font-size: 9px; letter-spacing: 0.2em; color: rgba(234, 227, 200, 0.35);
+  }
+  .deck-glyph { font-size: 14px; color: var(--gold-bright); opacity: 0.7; margin-bottom: 6px; }
+  .deck-eyebrow {
+    font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.65); margin-bottom: 8px;
+  }
+  .deck-title {
+    font-size: 18px; font-weight: 700; color: #f5eed4; line-height: 1.25; margin: 0 0 8px;
+  }
+  .deck-slide.cover .deck-title { font-size: 26px; }
+  .deck-body { font-size: 12px; line-height: 1.55; color: rgba(234, 227, 200, 0.75); margin: 0; }
+  .deck-slide.cover .deck-body { font-size: 13px; max-width: 380px; margin: 0 auto; }
+  .deck-sub {
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(200, 168, 78, 0.12);
+    font-size: 11px; line-height: 1.5; color: rgba(234, 227, 200, 0.6);
+  }
+  .deck-sub b { color: rgba(232, 200, 112, 0.8); font-weight: 600; }
+  .deck-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .deck-cell {
+    border: 1px solid rgba(200, 168, 78, 0.12); border-radius: 10px; padding: 10px;
+    background: rgba(200, 168, 78, 0.03);
+  }
+  .deck-cell b { display: block; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold-bright); margin-bottom: 4px; }
+  .deck-cell span { font-size: 11px; line-height: 1.45; color: rgba(234, 227, 200, 0.7); }

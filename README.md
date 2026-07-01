@@ -11,7 +11,7 @@ vanilla JS so the UI is easy to read, lift, and reuse.
 | --- | --- |
 | `index.html` | Marketing / entry landing page. |
 | `mentor.html` | The main interactive app — the "sacred" glyph, live chat scribe, session HUD (tokens · funding readiness · account), onboarding tour, and the Executive Summary one-pager. |
-| `report-email.html` | Founder-archetype report email. Table-based with **inline styles** on purpose (email-client safety) — intentionally left self-contained. |
+| `report-email.html` | Venture profile report email, populated from founder intake (`kaiso:founder-intake`). Table-based with **inline styles** on purpose (email-client safety). |
 
 ## Structure
 

@@ -125,7 +125,10 @@
     }
 
     document.getElementById('execDownloadBtn')?.addEventListener('click', () => printForge('execPrintable', 'Executive Summary', 'exec'));
-    document.getElementById('landingDownloadBtn')?.addEventListener('click', () => printForge('landingPrintable', 'Landing Page', 'landing'));
+    document.getElementById('landingExportBtn')?.addEventListener('click', () => {
+      if (window.kaisoExportLandingCode?.()) showToast('Landing page code downloaded');
+      else showToast('Export failed — open the landing page first');
+    });
     document.getElementById('deckDownloadBtn')?.addEventListener('click', () => printForge('deckPrintable', 'Pitch Deck', 'deck'));
 
     // ─ Plan selection ────────────────────────────────────────

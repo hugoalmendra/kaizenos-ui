@@ -14,7 +14,7 @@
       });
     });
 
-    // Popup print → Save as PDF (shared by exec, landing, deck).
+    // Popup print → Save as PDF (exec + deck).
     window.kaisoPrint = function (docEl, docTitle, printCSS) {
       if (!docEl) return false;
       let allCSS = '';
@@ -63,18 +63,6 @@
         .exec-stat { background: #faf7ed !important; border: 0.5px solid #d8c98f !important; }
         .exec-sec, .exec-band, .exec-foot, .exec-banner { break-inside: avoid; page-break-inside: avoid; }
       `,
-      landing: BASE_PRINT + `
-        .land-doc { background: #fff !important; border: none !important; max-width: 720px; margin: 0 auto;
-          color: #1a1a1a !important; }
-        .land-hero { background: #faf7ed !important; border-bottom: 1px solid #d8c98f !important; }
-        .land-logo, .land-lbl { color: #8a6a1c !important; }
-        .land-hero h1 { color: #111 !important; }
-        .land-tag, .land-body { color: #333 !important; }
-        .land-cta { color: #140e04 !important; }
-        .land-feat, .land-stat { border: 0.5px solid #d8c98f !important; background: #faf7ed !important; }
-        .land-feat b, .land-stat b { color: #8a6a1c !important; }
-        .land-block { border-color: #e8dfc8 !important; }
-      `,
       deck: BASE_PRINT + `
         .deck-doc { max-width: 720px; margin: 0 auto; gap: 0 !important; }
         .deck-slide { aspect-ratio: auto !important; min-height: 0 !important; height: auto !important;
@@ -86,5 +74,94 @@
         .deck-eyebrow, .deck-glyph, .deck-cell b { color: #8a6a1c !important; }
         .deck-cell { border-color: #d8c98f !important; background: #fff !important; }
       `,
+    };
+
+    // Deploy-ready landing page — standalone HTML download.
+    const LANDING_EXPORT_CSS = `
+      *, *::before, *::after { box-sizing: border-box; margin: 0; }
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        color: #1a1a1a; background: #ffffff; line-height: 1.5; -webkit-font-smoothing: antialiased;
+      }
+      .land-doc { max-width: 760px; margin: 0 auto; }
+      .land-hero {
+        text-align: center; padding: 56px 24px 48px;
+        background: linear-gradient(180deg, #faf7ed 0%, #ffffff 100%);
+        border-bottom: 1px solid #e8dfc8;
+      }
+      .land-logo {
+        display: inline-block; font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase;
+        color: #8a6a1c; font-weight: 600; margin-bottom: 16px;
+      }
+      .land-hero h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 700; color: #111; margin: 0 0 12px; line-height: 1.15; }
+      .land-tag { font-size: 17px; line-height: 1.55; color: #444; max-width: 520px; margin: 0 auto 28px; }
+      .land-cta {
+        display: inline-block; border-radius: 999px; padding: 14px 28px;
+        font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-decoration: none;
+        color: #140e04;
+        background: linear-gradient(135deg, #e8c870, #c8a84e 60%, #8a7434);
+        box-shadow: 0 8px 24px rgba(200, 168, 78, 0.35);
+      }
+      .land-cta:hover { filter: brightness(1.06); }
+      .land-block { padding: 40px 24px; border-bottom: 1px solid #eee; }
+      .land-lbl {
+        font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+        color: #8a6a1c; font-weight: 600; margin: 0 0 12px;
+      }
+      .land-body { font-size: 16px; line-height: 1.65; color: #333; }
+      .land-feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
+      .land-feat {
+        border: 1px solid #e8dfc8; border-radius: 14px; padding: 18px; background: #faf7ed;
+      }
+      .land-feat b { display: block; font-size: 14px; color: #111; margin-bottom: 8px; }
+      .land-feat span { font-size: 14px; line-height: 1.55; color: #555; }
+      .land-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+      .land-stat {
+        flex: 1; min-width: 120px; text-align: center; padding: 18px 12px;
+        border: 1px solid #e8dfc8; border-radius: 14px; background: #faf7ed;
+      }
+      .land-stat b { display: block; font-size: 26px; font-weight: 700; color: #8a6a1c; margin-bottom: 4px; }
+      .land-stat span { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #666; }
+      .land-foot { padding: 28px 24px; text-align: center; font-size: 13px; color: #888; }
+      @media (max-width: 640px) {
+        .land-feats { grid-template-columns: 1fr; }
+        .land-hero { padding: 40px 20px 36px; }
+      }
+    `;
+
+    window.kaisoExportLandingCode = function () {
+      const doc = document.getElementById('landingPrintable');
+      if (!doc) return false;
+
+      const logo = doc.querySelector('.land-logo')?.textContent?.trim() || 'venture';
+      const safeName = logo.replace(/[^a-zA-Z0-9가-힣一-龯_-]/g, '_').slice(0, 30);
+      const dateStr = new Date().toISOString().slice(0, 10);
+      const filename = 'kaiso_landing_' + safeName + '_' + dateStr + '.html';
+
+      // Turn preview CTA span into a real link in the export.
+      let bodyHtml = doc.innerHTML.replace(
+        /<span class="land-cta">([^<]*)<\/span>/,
+        '<a class="land-cta" href="#signup">$1</a>'
+      );
+
+      const pageTitle = logo.replace(/[<>&"]/g, '');
+      const standaloneHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n'
+        + '<meta charset="utf-8">\n'
+        + '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        + '<title>' + pageTitle + ' — Landing Page</title>\n'
+        + '<meta name="description" content="' + (doc.querySelector('.land-tag')?.textContent?.trim() || '').replace(/"/g, '&quot;') + '">\n'
+        + '<style>' + LANDING_EXPORT_CSS + '</style>\n'
+        + '</head>\n<body>\n<main class="land-doc">\n'
+        + bodyHtml
+        + '\n</main>\n<!-- Forged with Kaiso -->\n</body>\n</html>';
+
+      const blob = new Blob([standaloneHTML], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      return true;
     };
   })();

@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/landing/01-star-field.css">
 <link rel="stylesheet" href="css/landing/02-chrome.css">
 <link rel="stylesheet" href="css/landing/03-stage-panel.css">
+<link rel="stylesheet" href="css/landing/04-intake-survey.css">
 </head>
 <body>
 
@@ -39,24 +40,18 @@
 
   <!-- ════════ FLOW 1 · LEAD MAGNET ════════ -->
 
-  <!-- 1. Survey -->
-  <section class="screen" data-screen="1" data-flow="1">
+  <!-- 1. Founder intake survey -->
+  <section class="screen active" data-screen="1" data-flow="1">
     <div class="panel">
-      <div class="ph"><span class="num">1</span><span class="nm">Founder Mirror</span><span class="badge free">Free · no account</span></div>
+      <div class="ph"><span class="num">1</span><span class="nm">Founder Intake</span><span class="badge free">Free · no account</span></div>
       <div class="spread" style="margin-bottom:14px">
-        <span class="lbl">Question <span id="qNum">1</span> of 6</span>
-        <span class="lbl" id="qPct">17%</span>
+        <span class="lbl">Section <span id="intakeSecNum">1</span> of 4</span>
+        <span class="lbl" id="intakePct">25%</span>
       </div>
-      <div class="prog-track" style="margin-bottom:20px"><span id="qBar" style="width:17%"></span></div>
-      <h2 class="h">Where does your venture feel <span class="accent">most stuck</span> right now?</h2>
-      <p class="sub" style="margin-bottom:18px">There are no wrong answers. Kaiso reads between the lines.</p>
-      <div class="stack-sm" id="surveyOpts">
-        <div class="opt sel"><span class="ra"></span>Vision &amp; direction</div>
-        <div class="opt"><span class="ra"></span>Fundraising &amp; runway</div>
-        <div class="opt"><span class="ra"></span>Team &amp; hiring</div>
-        <div class="opt"><span class="ra"></span>Product &amp; focus</div>
-      </div>
-      <button class="btn primary mt-auto" id="surveyNext">Next</button>
+      <div class="prog-track" style="margin-bottom:20px"><span id="intakeBar" style="width:25%"></span></div>
+      <h2 class="h" id="intakeSecTitle">Company <span class="accent">·</span> 1 of 4</h2>
+      <p class="sub" id="intakeSecSub" style="margin-bottom:18px">Tell us about your venture.</p>
+      <div id="intakeRoot"></div>
     </div>
   </section>
 
@@ -64,8 +59,8 @@
   <section class="screen" data-screen="2" data-flow="1">
     <div class="panel center">
       <div class="ph"><span class="num">2</span><span class="nm">Email Opt-in</span><span class="badge free">Free</span></div>
-      <h2 class="h" style="margin-top:6px">Your founder reading <span class="accent">is ready.</span></h2>
-      <p class="sub">Tell Kaiso where to send it. No account, no card — we'll email the full report.</p>
+      <h2 class="h" style="margin-top:6px">Your venture profile <span class="accent">is ready.</span></h2>
+      <p class="sub">Confirm where Kaiso should send your intake-based summary. No account, no card required.</p>
       <div style="text-align:left;margin-top:20px">
         <span class="lbl">Email address</span>
         <div class="field"><input type="email" id="leadEmail" placeholder="you@venture.com" value="you@venture.com"></div>
@@ -91,15 +86,15 @@
         </svg>
       </div>
       <h2 class="h" style="margin-top:16px">Check your <span class="accent">inbox.</span></h2>
-      <p class="sub">Your founder reading is on its way to <b id="sentTo">you@venture.com</b>.</p>
+      <p class="sub">Your venture profile is on its way to <b id="sentTo">you@venture.com</b>.</p>
       <div class="mailcard" style="margin-top:18px">
         <div class="mc-top">
           <span class="mc-ava">◈</span>
           <div class="mc-from"><b>Kaiso</b><span>oracle@kaiso.ai</span></div>
         </div>
         <div class="mc-body">
-          <div class="mc-subj">Your Founder Archetype: The Visionary</div>
-          <div class="mc-prev">You move faster than your systems can follow… inside, Kaiso can turn this reading into your Pitch Deck, Landing Page &amp; Executive Summary.</div>
+          <div class="mc-subj" id="reportMailSubj">Your Venture Profile</div>
+          <div class="mc-prev" id="reportMailPrev">Built from your founder intake — open to see your full snapshot.</div>
         </div>
       </div>
       <a class="btn primary" style="margin-top:16px" href="report-email.html" target="_blank">Preview the email →</a>
@@ -299,6 +294,11 @@
 
 </main>
 
+<script src="js/landing/intake-options.js"></script>
+<script src="js/landing/intake-storage.js"></script>
+<script src="js/landing/intake-schema.js"></script>
+<script src="js/landing/intake-report.js"></script>
+<script src="js/landing/intake-form.js"></script>
 <script src="js/landing/00-app.js"></script>
 </body>
 </html>

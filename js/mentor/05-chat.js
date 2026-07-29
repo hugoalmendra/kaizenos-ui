@@ -36,6 +36,9 @@
     const micBtn    = document.getElementById('chatMic');
     const sendBtn   = document.getElementById('chatSend');
     const doneBtn   = document.getElementById('doneTalking');
+    const phaseEl     = document.getElementById('kaisoPhase');
+    const phaseTextEl = phaseEl && phaseEl.querySelector('.kl-text');
+    let   currentPhase = 'listening';
 
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     const isSecure = window.isSecureContext === true
@@ -195,7 +198,23 @@
       }
     }
 
+    // Drive the orb status label from the live state. Runs on every
+    // transition since syncDoneBtn() is called at each one (turn start /
+    // end, speech start / end). Speaking wins over thinking wins over
+    // listening.
+    function applyKaisoPhase() {
+      if (!phaseEl) return;
+      const phase = kaisoSpeaking ? 'speaking'
+                  : (pendingTurn  ? 'thinking'
+                  :                 'listening');
+      if (phase === currentPhase) return;
+      currentPhase = phase;
+      phaseEl.dataset.phase = phase;
+      if (phaseTextEl) phaseTextEl.textContent = 'KAISO ' + phase.toUpperCase();
+    }
+
     function syncDoneBtn() {
+      applyKaisoPhase();
       if (!doneBtn) return;
       const show = !!log.dataset.engaged
         && !kaisoSpeaking

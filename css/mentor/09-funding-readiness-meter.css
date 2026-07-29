@@ -141,6 +141,26 @@
     50%      { opacity: 1;   transform: scale(1.15); }
   }
 
+  /* ── Orb status phases: LISTENING · THINKING · SPEAKING ──────
+     The label text is swapped in JS; these accents make each phase
+     legible at a glance from the dot's colour and cadence. */
+
+  /* THINKING — a calmer, contemplative amber with a slow breath. */
+  .kaiso-listening[data-phase="thinking"] { color: rgba(232, 200, 112, 0.65); }
+  .kaiso-listening[data-phase="thinking"] .pulse-dot {
+    background: #d8b45a;
+    box-shadow: 0 0 8px rgba(216, 180, 90, 0.7);
+    animation: dot-pulse 2.6s ease-in-out infinite;
+  }
+
+  /* SPEAKING — brighter and quicker, the voice is active. */
+  .kaiso-listening[data-phase="speaking"] { color: rgba(255, 240, 200, 0.95); }
+  .kaiso-listening[data-phase="speaking"] .pulse-dot {
+    background: #fff5d6;
+    box-shadow: 0 0 12px rgba(255, 240, 200, 0.85);
+    animation: dot-pulse 0.85s ease-in-out infinite;
+  }
+
   /* Reset button */
   .reset {
     position: fixed;

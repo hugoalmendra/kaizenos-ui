@@ -14,6 +14,24 @@
     body.chat-open .stage { transform: translateY(-28vh) scale(0.38); }
     .session-timer { line-height: 52px; }
     .scroll-toggle { width: 52px; height: 52px; }  /* iOS HIG min touch target */
+
+    /* Top chrome: brand left, HUD right — reserve space so they don't collide. */
+    .brand { top: 14px; left: 12px; }
+    .brand img { height: 16px; }
+
+    .hud-top {
+      top: 10px; right: 10px; border-radius: 16px;
+      max-width: calc(100vw - 118px);
+    }
+    .token-meter {
+      width: auto; min-width: 0; flex: 1 1 auto;
+      padding: 8px 12px;
+    }
+    .token-meter .tm-rate { display: none; }
+    .readiness { display: none; }   /* keep the rail compact: tokens + avatar */
+    .account-btn { width: 44px; }
+    .account-btn::before { width: 30px; height: 30px; }
+    .account-menu { top: 58px; right: 10px; }
   }
   /* Phones in landscape — keep proportions sensible. */
   @media (max-height: 520px) and (orientation: landscape) {

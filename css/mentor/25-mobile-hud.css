@@ -38,9 +38,15 @@
 
   /* KOS pillar indicator lives top-centre on desktop, where it would
      collide with both the brand (left) and the token rail (right) on a
-     phone. Drop it to a second, centred row just under the rail. */
+     phone. On mobile: drop it to a second row, right-aligned directly
+     under the token rail. Its centring transform (translateX(-50%)) is
+     cleared in both the dormant and active states. */
   @media (max-width: 600px) {
-    .kos-indicator { top: 66px; }
+    .kos-indicator {
+      top: 64px; left: auto; right: 12px;
+      transform: translateY(-10px);
+    }
+    body.active .kos-indicator { transform: translateY(0); }
   }
 
   /* Very small phones (≤360px): tighten the token label so the

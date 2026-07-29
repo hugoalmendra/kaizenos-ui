@@ -1,0 +1,52 @@
+  /* ─── Mobile top chrome — brand + HUD rail (loads LAST) ───────
+     Must load after 13-hud-rail / 14-hud-token-meter / 15-account
+     so these compact overrides win the cascade. Goal: brand on the
+     left and the token+avatar rail on the right never overlap, and
+     the avatar stays fully on-screen. */
+  @media (max-width: 600px) {
+    /* Brand: compact wordmark, pinned top-left. */
+    .brand { top: 15px; left: 14px; }
+    .brand img { height: 15px; }
+
+    /* HUD rail: pinned top-right, reserving room for the brand so the
+       two never collide. max-width keeps its left edge clear. */
+    .hud-top {
+      top: 12px; right: 12px; left: auto;
+      border-radius: 14px;
+      max-width: calc(100vw - 136px);
+    }
+
+    /* Token meter shrinks to fit; drop the fixed 232px width and the
+       third "rate" line to stay a tidy two-row pill. */
+    .token-meter {
+      width: auto; min-width: 0; flex: 1 1 auto;
+      padding: 8px 13px;
+    }
+    .token-meter .tm-top { letter-spacing: 0.18em; }
+    .token-meter .tm-rate { display: none; }
+
+    /* Funding readiness is hidden on phones to keep the rail compact. */
+    .readiness { display: none; }
+
+    /* Avatar: narrower fixed column so it never overflows the viewport. */
+    .account-btn { width: 46px; flex: 0 0 46px; }
+    .account-btn::before { width: 32px; height: 32px; }
+
+    /* Dropdown re-anchored under the compact rail. */
+    .account-menu { top: 60px; right: 12px; width: min(214px, calc(100vw - 24px)); }
+  }
+
+  /* KOS pillar indicator lives top-centre on desktop, where it would
+     collide with both the brand (left) and the token rail (right) on a
+     phone. Drop it to a second, centred row just under the rail. */
+  @media (max-width: 600px) {
+    .kos-indicator { top: 66px; }
+  }
+
+  /* Very small phones (≤360px): tighten the token label so the
+     count never wraps or clips. */
+  @media (max-width: 360px) {
+    .hud-top { max-width: calc(100vw - 118px); }
+    .token-meter { padding: 8px 11px; }
+    .token-meter .tm-top { letter-spacing: 0.12em; font-size: 8.5px; }
+  }

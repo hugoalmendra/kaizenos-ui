@@ -9,11 +9,18 @@
     .brand img { height: 15px; }
 
     /* HUD rail: pinned top-right, reserving room for the brand so the
-       two never collide. max-width keeps its left edge clear. */
+       two never collide. */
     .hud-top {
       top: 12px; right: 12px; left: auto;
+    }
+
+    /* Token rail and pillar share ONE width + corner radius so they read
+       as a matched, right-aligned stack. The 136px reserve keeps their
+       left edge clear of the brand wordmark. */
+    .hud-top, .kos-indicator {
+      width: calc(100vw - 136px);
+      max-width: none;
       border-radius: 14px;
-      max-width: calc(100vw - 136px);
     }
 
     /* Token meter shrinks to fit; drop the fixed 232px width and the
@@ -44,6 +51,7 @@
   @media (max-width: 600px) {
     .kos-indicator {
       top: 64px; left: auto; right: 12px;
+      justify-content: center;   /* balance content in the shared width */
       transform: translateY(-10px);
     }
     body.active .kos-indicator { transform: translateY(0); }
@@ -52,7 +60,6 @@
   /* Very small phones (≤360px): tighten the token label so the
      count never wraps or clips. */
   @media (max-width: 360px) {
-    .hud-top { max-width: calc(100vw - 118px); }
     .token-meter { padding: 8px 11px; }
     .token-meter .tm-top { letter-spacing: 0.12em; font-size: 8.5px; }
   }

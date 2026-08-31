@@ -32,6 +32,7 @@
 <link rel="stylesheet" href="css/mentor/23-landing-page-forge.css">
 <link rel="stylesheet" href="css/mentor/24-pitch-deck-forge.css">
 <link rel="stylesheet" href="css/mentor/25-mobile-hud.css">
+<link rel="stylesheet" href="css/mentor/26-feedback-account.css">
 </head>
 <body>
 
@@ -390,9 +391,17 @@
     <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z" stroke-linejoin="round"/></svg></span>
     Plan &amp; Tokens
   </button>
+  <button data-panel="feedback">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" stroke-linejoin="round"/></svg></span>
+    Give Feedback
+  </button>
+  <button data-panel="account">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" stroke-linecap="round"/></svg></span>
+    Manage account
+  </button>
   <button id="tourReplay">
     <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l2.6 1.6" stroke-linecap="round"/></svg></span>
-    Take the tour
+    Replay Tour
   </button>
   <div class="sep"></div>
   <button class="danger" id="signOutBtn">
@@ -748,6 +757,77 @@
 
     <p class="kp-note">Forged from your session and Executive Summary. Keep talking with Kaiso to sharpen answers before you submit.</p>
   </section>
+
+  <!-- Feedback — matches production one-for-one -->
+  <section class="kpanel" id="panelFeedback" aria-label="Feedback">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso &middot; Feedback</span>
+      <button class="kp-close" data-close aria-label="Close">&#10005;</button>
+    </div>
+    <p class="kp-sub">Tell us what broke or what you loved &mdash; it goes straight to the team.</p>
+    <div class="fb-scale" id="fbScale" role="radiogroup" aria-label="How was it?">
+      <button class="fb-score" type="button" role="radio" aria-checked="false" data-score="1">1</button>
+      <button class="fb-score" type="button" role="radio" aria-checked="false" data-score="2">2</button>
+      <button class="fb-score" type="button" role="radio" aria-checked="false" data-score="3">3</button>
+      <button class="fb-score" type="button" role="radio" aria-checked="false" data-score="4">4</button>
+      <button class="fb-score" type="button" role="radio" aria-checked="false" data-score="5">5</button>
+    </div>
+    <textarea class="fb-note" id="fbNote" placeholder="Optional &mdash; what happened?" aria-label="What happened?"></textarea>
+    <button class="kbtn primary block" id="fbSend" style="margin-top:14px">Send feedback</button>
+  </section>
+
+  <!-- Manage account — production renders the identity provider's own
+       white modal here; this is the same content in the app's skin. -->
+  <section class="kpanel" id="panelAccount" aria-label="Manage account">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Manage Account</span>
+      <button class="kp-close" data-close aria-label="Close">&#10005;</button>
+    </div>
+
+    <div class="acct-card">
+      <span class="acct-avatar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" stroke-linecap="round"/></svg>
+      </span>
+      <span class="acct-who">
+        <b id="acctName">Hugo Almendra</b>
+        <span id="acctPlan">Free tokens &middot; no plan yet</span>
+      </span>
+      <button class="kbtn" type="button" style="font-size:8px;padding:10px 12px">Edit</button>
+    </div>
+
+    <span class="kp-lbl" style="display:block;margin:18px 0 9px">Email addresses</span>
+    <div class="acct-list">
+      <div class="acct-row" role="group">
+        <span class="acct-mail" id="acctEmail">hugo@nexgent.com</span>
+        <span class="acct-badge">Primary</span>
+        <span class="go" aria-hidden="true">&hellip;</span>
+      </div>
+      <button class="acct-row" type="button">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></span>
+        <span class="tx"><b style="color:rgba(232,200,112,.85)">Add email address</b></span>
+      </button>
+    </div>
+
+    <span class="kp-lbl" style="display:block;margin:18px 0 9px">Security</span>
+    <div class="acct-list">
+      <button class="acct-row" type="button">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7.2-7 9-4-1.8-7-5-7-9V6z" stroke-linejoin="round"/></svg></span>
+        <span class="tx"><b>Password</b><i>Set a password or sign in with Google</i></span>
+        <span class="go" aria-hidden="true">&rsaquo;</span>
+      </button>
+      <button class="acct-row" type="button">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M9 20h6" stroke-linecap="round"/></svg></span>
+        <span class="tx"><b>Active devices</b><i>1 signed in</i></span>
+        <span class="go" aria-hidden="true">&rsaquo;</span>
+      </button>
+    </div>
+
+    <div class="acct-list acct-danger" style="margin-top:16px">
+      <button class="acct-row" type="button"><span class="tx"><b>Delete account</b></span></button>
+    </div>
+  </section>
 </div>
 
 <!-- Toast -->
@@ -781,6 +861,7 @@
 <script src="js/mentor/09-binary-clock-hh.js"></script>
 <script src="js/mentor/13-yc-application-pack.js"></script>
 <script src="js/mentor/14-forged-assets.js"></script>
+<script src="js/mentor/15-feedback.js"></script>
 <script src="js/mentor/10-hud-controller.js"></script>
 <script src="js/mentor/11-onboarding-tour.js"></script>
 <script src="js/mentor/12-kos-wheel.js"></script>

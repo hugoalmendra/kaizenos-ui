@@ -782,51 +782,147 @@
        white modal here; this is the same content in the app's skin. -->
   <section class="kpanel" id="panelAccount" aria-label="Manage account">
     <div class="kp-head">
+      <button class="acct-back" id="acctBack" type="button" aria-label="Back" hidden>&#8592;</button>
       <span class="tm-dot"></span>
-      <span class="kp-title">Manage Account</span>
+      <span class="kp-title" id="acctTitle">Manage Account</span>
       <button class="kp-close" data-close aria-label="Close">&#10005;</button>
     </div>
 
-    <div class="acct-card">
-      <span class="acct-avatar">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" stroke-linecap="round"/></svg>
-      </span>
-      <span class="acct-who">
-        <b id="acctName">Hugo Almendra</b>
-        <span id="acctPlan">Free tokens &middot; no plan yet</span>
-      </span>
-      <button class="kbtn" type="button" style="font-size:8px;padding:10px 12px">Edit</button>
-    </div>
-
-    <span class="kp-lbl" style="display:block;margin:18px 0 9px">Email addresses</span>
-    <div class="acct-list">
-      <div class="acct-row" role="group">
-        <span class="acct-mail" id="acctEmail">hugo@nexgent.com</span>
-        <span class="acct-badge">Primary</span>
-        <span class="go" aria-hidden="true">&hellip;</span>
+    <!-- ── root ── -->
+    <div class="acct-view" data-view="root">
+      <div class="acct-card">
+        <span class="acct-avatar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" stroke-linecap="round"/></svg>
+        </span>
+        <span class="acct-who">
+          <b id="acctName">Hugo Almendra</b>
+          <span id="acctPlan">Free tokens &middot; no plan yet</span>
+        </span>
+        <button class="kbtn" type="button" data-go="edit" style="font-size:8px;padding:10px 12px">Edit</button>
       </div>
-      <button class="acct-row" type="button">
-        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></span>
-        <span class="tx"><b style="color:rgba(232,200,112,.85)">Add email address</b></span>
-      </button>
+
+      <span class="kp-lbl" style="display:block;margin:18px 0 9px">Email addresses</span>
+      <div class="acct-list" id="acctEmails">
+        <div class="acct-row acct-row--static">
+          <span class="acct-mail">hugo@nexgent.com</span>
+          <span class="acct-badge">Primary</span>
+          <span class="acct-more">
+            <button class="acct-dots" type="button" aria-label="Email options" aria-haspopup="true" aria-expanded="false">&hellip;</button>
+            <span class="acct-pop" hidden>
+              <button type="button" data-act="primary" disabled>Already primary</button>
+              <button type="button" data-act="remove" class="danger">Remove address</button>
+            </span>
+          </span>
+        </div>
+        <button class="acct-row" type="button" data-go="add-email">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></span>
+          <span class="tx"><b style="color:rgba(232,200,112,.85)">Add email address</b></span>
+        </button>
+      </div>
+
+      <span class="kp-lbl" style="display:block;margin:18px 0 9px">Security</span>
+      <div class="acct-list">
+        <button class="acct-row" type="button" data-go="password">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7.2-7 9-4-1.8-7-5-7-9V6z" stroke-linejoin="round"/></svg></span>
+          <span class="tx"><b>Password</b><i id="acctPwdState">Set a password or sign in with Google</i></span>
+          <span class="go" aria-hidden="true">&rsaquo;</span>
+        </button>
+        <button class="acct-row" type="button" data-go="devices">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M9 20h6" stroke-linecap="round"/></svg></span>
+          <span class="tx"><b>Active devices</b><i>2 signed in</i></span>
+          <span class="go" aria-hidden="true">&rsaquo;</span>
+        </button>
+      </div>
+
+      <div class="acct-list acct-danger" style="margin-top:16px">
+        <button class="acct-row" type="button" data-go="delete"><span class="tx"><b>Delete account</b></span></button>
+      </div>
     </div>
 
-    <span class="kp-lbl" style="display:block;margin:18px 0 9px">Security</span>
-    <div class="acct-list">
-      <button class="acct-row" type="button">
-        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7.2-7 9-4-1.8-7-5-7-9V6z" stroke-linejoin="round"/></svg></span>
-        <span class="tx"><b>Password</b><i>Set a password or sign in with Google</i></span>
-        <span class="go" aria-hidden="true">&rsaquo;</span>
-      </button>
-      <button class="acct-row" type="button">
-        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M9 20h6" stroke-linecap="round"/></svg></span>
-        <span class="tx"><b>Active devices</b><i>1 signed in</i></span>
-        <span class="go" aria-hidden="true">&rsaquo;</span>
-      </button>
+    <!-- ── edit profile ── -->
+    <div class="acct-view" data-view="edit" hidden>
+      <div class="acct-card" style="margin-bottom:18px">
+        <span class="acct-avatar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" stroke-linecap="round"/></svg>
+        </span>
+        <span class="acct-who"><b>Profile photo</b><span>PNG or JPG, up to 2&nbsp;MB</span></span>
+        <button class="kbtn" type="button" data-toast="Choose an image to upload" style="font-size:8px;padding:10px 12px">Upload</button>
+      </div>
+      <label class="acct-field"><span class="kp-lbl">First name</span>
+        <input type="text" id="acctFirst" value="Hugo" autocomplete="given-name"></label>
+      <label class="acct-field"><span class="kp-lbl">Last name</span>
+        <input type="text" id="acctLast" value="Almendra" autocomplete="family-name"></label>
+      <div class="acct-actions">
+        <button class="kbtn" type="button" data-go="root">Cancel</button>
+        <button class="kbtn primary" type="button" data-save="profile">Save changes</button>
+      </div>
     </div>
 
-    <div class="acct-list acct-danger" style="margin-top:16px">
-      <button class="acct-row" type="button"><span class="tx"><b>Delete account</b></span></button>
+    <!-- ── add email ── -->
+    <div class="acct-view" data-view="add-email" hidden>
+      <p class="kp-sub">Add another address you can sign in with. We&rsquo;ll send a code to confirm it&rsquo;s yours.</p>
+      <label class="acct-field"><span class="kp-lbl">Email address</span>
+        <input type="email" id="acctNewEmail" placeholder="you@venture.com" autocomplete="email"></label>
+      <div class="acct-actions">
+        <button class="kbtn" type="button" data-go="root">Cancel</button>
+        <button class="kbtn primary" type="button" data-save="add-email">Send code</button>
+      </div>
+    </div>
+
+    <!-- ── verify email ── -->
+    <div class="acct-view" data-view="verify" hidden>
+      <p class="kp-sub">Enter the 6-digit code sent to <b id="acctVerifyTarget">your address</b>.</p>
+      <label class="acct-field"><span class="kp-lbl">Verification code</span>
+        <input type="text" id="acctCode" inputmode="numeric" maxlength="6" placeholder="000000" class="acct-code"></label>
+      <div class="acct-actions">
+        <button class="kbtn" type="button" data-toast="Code sent again">Resend</button>
+        <button class="kbtn primary" type="button" data-save="verify">Verify</button>
+      </div>
+    </div>
+
+    <!-- ── password ── -->
+    <div class="acct-view" data-view="password" hidden>
+      <p class="kp-sub">Set a password so you can sign in without Google.</p>
+      <label class="acct-field"><span class="kp-lbl">New password</span>
+        <input type="password" id="acctPwd1" placeholder="At least 8 characters" autocomplete="new-password"></label>
+      <label class="acct-field"><span class="kp-lbl">Confirm password</span>
+        <input type="password" id="acctPwd2" placeholder="Repeat it" autocomplete="new-password"></label>
+      <div class="acct-actions">
+        <button class="kbtn" type="button" data-go="root">Cancel</button>
+        <button class="kbtn primary" type="button" data-save="password">Set password</button>
+      </div>
+    </div>
+
+    <!-- ── active devices ── -->
+    <div class="acct-view" data-view="devices" hidden>
+      <p class="kp-sub">Sessions signed in to this account. Sign out anything you don&rsquo;t recognise.</p>
+      <div class="acct-list" id="acctDevices">
+        <div class="acct-row acct-row--static">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M9 20h6" stroke-linecap="round"/></svg></span>
+          <span class="tx"><b>MacBook Pro &middot; Chrome</b><i>Lisbon, Portugal &middot; active now</i></span>
+          <span class="acct-badge">This device</span>
+        </div>
+        <div class="acct-row acct-row--static">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2" stroke-linecap="round"/></svg></span>
+          <span class="tx"><b>iPhone &middot; Safari</b><i>Lisbon, Portugal &middot; 2 days ago</i></span>
+          <button class="kbtn" type="button" data-signout-device style="font-size:8px;padding:9px 11px">Sign out</button>
+        </div>
+      </div>
+      <div class="acct-actions"><button class="kbtn" type="button" data-go="root">Done</button></div>
+    </div>
+
+    <!-- ── delete account ── -->
+    <div class="acct-view" data-view="delete" hidden>
+      <div class="acct-warn">
+        <b>This cannot be undone.</b>
+        <span>Your sessions, your plan and every forged asset &mdash; the Executive Summary, Landing Page and Pitch Deck &mdash; are deleted with the account.</span>
+      </div>
+      <label class="acct-field"><span class="kp-lbl">Type DELETE to confirm</span>
+        <input type="text" id="acctDeleteConfirm" placeholder="DELETE" autocomplete="off"></label>
+      <div class="acct-actions">
+        <button class="kbtn" type="button" data-go="root">Keep my account</button>
+        <button class="kbtn danger" type="button" data-save="delete" id="acctDeleteBtn" disabled>Delete account</button>
+      </div>
     </div>
   </section>
 </div>
@@ -864,6 +960,7 @@
 <script src="js/mentor/13-yc-application-pack.js"></script>
 <script src="js/mentor/14-forged-assets.js"></script>
 <script src="js/mentor/15-feedback.js"></script>
+<script src="js/mentor/16-account.js"></script>
 <script src="js/mentor/10-hud-controller.js"></script>
 <script src="js/mentor/11-onboarding-tour.js"></script>
 <script src="js/mentor/12-kos-wheel.js"></script>

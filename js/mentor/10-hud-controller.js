@@ -85,6 +85,8 @@
       const panelAccount  = document.getElementById('panelAccount');
       if (panelFeedback) panelFeedback.classList.toggle('show', which === 'feedback');
       if (panelAccount)  panelAccount.classList.toggle('show', which === 'account');
+      // Reopening the account panel always starts at the top level.
+      if (which === 'account') window.dispatchEvent(new Event('kaiso:open-account'));
       if (which === 'plan') renderPlanDetail();
       if (which === 'yc' && window.kaisoYc) window.kaisoYc.render();
       modal.classList.add('open');

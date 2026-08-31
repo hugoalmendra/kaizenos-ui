@@ -111,3 +111,81 @@
   .acct-danger { border-color: rgba(232, 168, 112, 0.24); }
   .acct-danger .acct-row { color: #e8a870; }
   .acct-danger .acct-row:hover { background: rgba(232, 168, 112, 0.07); }
+
+  /* ── Account: view stack, forms, popover ─────────────────────── */
+  .acct-back {
+    background: transparent; border: 0; cursor: pointer;
+    color: rgba(232, 200, 112, 0.8); font: inherit; font-size: 16px;
+    line-height: 1; padding: 2px 8px 2px 0; margin-left: -2px;
+  }
+  .acct-back:hover { color: var(--gold-bright); }
+
+  .acct-field { display: block; margin-bottom: 14px; }
+  .acct-field .kp-lbl { display: block; margin-bottom: 7px; }
+  .acct-field input {
+    width: 100%;
+    background: rgba(234, 227, 200, 0.04);
+    border: 1px solid rgba(200, 168, 78, 0.22);
+    border-radius: 12px;
+    outline: none;
+    color: rgba(234, 227, 200, 0.95);
+    font: inherit; font-size: 15px;
+    padding: 13px 15px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .acct-field input:focus { border-color: rgba(232, 200, 112, 0.55); background: rgba(234, 227, 200, 0.06); }
+  .acct-field input::placeholder { color: rgba(234, 227, 200, 0.3); }
+  .acct-field input.invalid { border-color: rgba(232, 168, 112, 0.7); background: rgba(232, 168, 112, 0.06); }
+  .acct-code { letter-spacing: 0.5em; font-size: 19px !important; text-align: center; }
+
+  .acct-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .acct-actions .kbtn { flex: 1; }
+  .kbtn.danger {
+    border-color: rgba(232, 168, 112, 0.5);
+    color: #e8a870;
+  }
+  .kbtn.danger:hover { border-color: #e8a870; background: rgba(232, 168, 112, 0.08); color: #e8a870; }
+  .kbtn[disabled] { opacity: 0.4; pointer-events: none; }
+
+  /* rows that are not themselves buttons */
+  .acct-row--static { cursor: default; }
+  .acct-row--static:hover { background: transparent; }
+
+  .acct-more { position: relative; flex: 0 0 auto; display: inline-flex; }
+  .acct-dots {
+    background: transparent; border: 0; cursor: pointer; font: inherit;
+    color: rgba(234, 227, 200, 0.4); font-size: 15px; line-height: 1;
+    padding: 6px 4px; border-radius: 6px;
+  }
+  .acct-dots:hover { color: var(--gold-bright); }
+  .acct-pop {
+    position: absolute; top: calc(100% + 6px); right: 0; z-index: 4;
+    min-width: 170px; padding: 6px;
+    background: rgba(10, 9, 14, 0.97);
+    border: 1px solid rgba(200, 168, 78, 0.28);
+    border-radius: 12px;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.7);
+    display: flex; flex-direction: column;
+  }
+  .acct-pop button {
+    background: transparent; border: 0; cursor: pointer; font: inherit;
+    text-align: left; font-size: 12.5px; color: rgba(234, 227, 200, 0.8);
+    padding: 10px 11px; border-radius: 8px;
+  }
+  .acct-pop button:hover { background: rgba(200, 168, 78, 0.08); color: var(--gold-bright); }
+  .acct-pop button.danger { color: #e8a870; }
+  .acct-pop button.danger:hover { background: rgba(232, 168, 112, 0.08); }
+  .acct-pop button[disabled] { opacity: 0.4; pointer-events: none; }
+
+  .acct-warn {
+    border: 1px solid rgba(232, 168, 112, 0.3);
+    background: rgba(232, 168, 112, 0.05);
+    border-radius: 14px; padding: 14px 15px; margin-bottom: 18px;
+  }
+  .acct-warn b { display: block; font-size: 14px; color: #e8a870; font-weight: 600; margin-bottom: 5px; }
+  .acct-warn span { font-size: 12.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.6); }
+
+  /* An explicit display wins over the `hidden` attribute, so say it
+     back. Without this, a closed popover still paints. */
+  .acct-pop[hidden],
+  .acct-view[hidden] { display: none; }

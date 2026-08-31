@@ -274,9 +274,18 @@
     }
 
     async function render() {
-      fieldsEl.innerHTML = '<p class="kp-sub">Building your application pack…</p>';
-      const pack = await buildYcPack();
-      renderYcPanel(pack);
+      // Tier B goes out to the LLM, so this can sit for a few seconds.
+      const loading = window.KaisoLoader
+        ? window.KaisoLoader.into(fieldsEl, 'Building your pack')
+        : null;
+      try {
+        const pack = await buildYcPack();
+        if (loading) loading.close();
+        renderYcPanel(pack);
+      } catch (err) {
+        if (loading) loading.close();
+        fieldsEl.innerHTML = '<p class="kp-sub">Could not build the pack just now. Try again in a moment.</p>';
+      }
     }
 
     document.getElementById('ycOpenApplyBtn')?.addEventListener('click', () => {

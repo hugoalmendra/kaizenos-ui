@@ -111,9 +111,16 @@
     }
     async function startSession() {
       if (sessionId) return sessionId;
-      const r = await apiPost('/api/session/start', { mode: 'surfacing' });
-      sessionId = r.session_id;
-      return sessionId;
+      const loading = window.KaisoLoader
+        ? window.KaisoLoader.overlay('Waking Kaiso')
+        : null;
+      try {
+        const r = await apiPost('/api/session/start', { mode: 'surfacing' });
+        sessionId = r.session_id;
+        return sessionId;
+      } finally {
+        if (loading) loading.close();
+      }
     }
     async function endSession() {
       if (!sessionId) return;
@@ -1036,15 +1043,23 @@
           audioCtx.resume().catch(() => {});
         }
         // Now do the async work — mic capture (audio frames buffer locally
-        // until WS opens) and config fetch.
+        // until WS opens) and config fetch. Mic permission plus a config
+        // round-trip is a real, silent wait, so say something.
+        const loading = window.KaisoLoader
+          ? window.KaisoLoader.overlay('Opening the channel')
+          : null;
         try {
-          await startMicCapture();
-        } catch (e) {
-          appendErr('Mic capture failed: ' + (e.message || e.name));
-          throw e;
+          try {
+            await startMicCapture();
+          } catch (e) {
+            appendErr('Mic capture failed: ' + (e.message || e.name));
+            throw e;
+          }
+          const config = await fetchConfig();
+          openWs(config);
+        } finally {
+          if (loading) loading.close();
         }
-        const config = await fetchConfig();
-        openWs(config);
       }
       function disengage() {
         if (ws) {

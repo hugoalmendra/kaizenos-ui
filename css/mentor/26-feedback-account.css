@@ -189,3 +189,11 @@
      back. Without this, a closed popover still paints. */
   .acct-pop[hidden],
   .acct-view[hidden] { display: none; }
+
+  /* The email list clips its rows so the rounded corners hold, which
+     also clips a menu hanging below a row. While one is open the list
+     lets it through and the row rises above its neighbours. */
+  .acct-row { position: relative; }
+  .acct-list.pop-open { overflow: visible; }
+  .acct-row.pop-open { z-index: 20; }
+  .acct-pop { z-index: 21; }

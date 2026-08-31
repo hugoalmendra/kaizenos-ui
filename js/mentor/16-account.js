@@ -65,20 +65,30 @@
     window.addEventListener('kaiso:open-account', () => show('root'));
 
     /* ── the ⋯ menu on an email row ── */
+    // The list clips its rows to keep the rounded corners, which would
+    // also clip a menu hanging past the row. Both the list and the row
+    // are opened up only while a menu is showing.
     function closePops() {
       panel.querySelectorAll('.acct-pop').forEach((p) => { p.hidden = true; });
       panel.querySelectorAll('.acct-dots').forEach((d) => d.setAttribute('aria-expanded', 'false'));
+      panel.querySelectorAll('.pop-open').forEach((el) => el.classList.remove('pop-open'));
     }
-    panel.querySelectorAll('.acct-dots').forEach((dots) => {
+
+    function wireDots(dots, pop) {
       dots.addEventListener('click', (e) => {
         e.stopPropagation();
-        const pop = dots.parentElement.querySelector('.acct-pop');
         const opening = pop.hidden;
         closePops();
-        pop.hidden = !opening;
-        dots.setAttribute('aria-expanded', opening ? 'true' : 'false');
+        if (!opening) return;
+        pop.hidden = false;
+        dots.setAttribute('aria-expanded', 'true');
+        dots.closest('.acct-row')?.classList.add('pop-open');
+        dots.closest('.acct-list')?.classList.add('pop-open');
       });
-    });
+    }
+
+    panel.querySelectorAll('.acct-dots').forEach((dots) =>
+      wireDots(dots, dots.parentElement.querySelector('.acct-pop')));
     panel.querySelectorAll('.acct-pop [data-act]').forEach((b) => {
       b.addEventListener('click', () => {
         closePops();
@@ -210,18 +220,11 @@
         toast('Address removed');
       });
 
-      dots.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const opening = pop.hidden;
-        closePops();
-        pop.hidden = !opening;
-        dots.setAttribute('aria-expanded', opening ? 'true' : 'false');
-      });
-
       pop.append(makePrimary, remove);
       more.append(dots, pop);
       row.append(mail, more);
       list.insertBefore(row, addRow);
+      wireDots(dots, pop);
     }
 
     /* ── sign a device out ── */

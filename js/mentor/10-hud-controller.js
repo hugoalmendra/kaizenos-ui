@@ -81,6 +81,10 @@
       if (panelLanding) panelLanding.classList.toggle('show', which === 'landing');
       if (panelDeck) panelDeck.classList.toggle('show', which === 'deck');
       if (panelYcApply) panelYcApply.classList.toggle('show', which === 'yc');
+      const panelFeedback = document.getElementById('panelFeedback');
+      const panelAccount  = document.getElementById('panelAccount');
+      if (panelFeedback) panelFeedback.classList.toggle('show', which === 'feedback');
+      if (panelAccount)  panelAccount.classList.toggle('show', which === 'account');
       if (which === 'plan') renderPlanDetail();
       if (which === 'yc' && window.kaisoYc) window.kaisoYc.render();
       modal.classList.add('open');

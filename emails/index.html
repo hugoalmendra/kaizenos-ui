@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaiso — Transactional emails</title>
+<style>
+  body{margin:0;padding:40px 24px 60px;background:radial-gradient(ellipse at 50% 0%,#0a0817,#04030a 60%,#000);
+    color:#eae3c8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:1100px;margin:0 auto;}
+  h1{font-size:26px;font-weight:600;letter-spacing:-.01em;color:#f4ecd2;margin:0 0 6px;}
+  .sub{font-size:14px;color:rgba(234,227,200,.5);margin:0 0 34px;line-height:1.6;max-width:620px;}
+  h2{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:rgba(232,200,112,.7);margin:32px 0 14px;}
+  ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;}
+  a{display:block;border:1px solid rgba(200,168,78,.16);border-radius:14px;padding:15px 17px;
+    text-decoration:none;color:#f1e9cf;transition:border-color .18s ease,background .18s ease;}
+  a:hover{border-color:rgba(232,200,112,.45);background:rgba(200,168,78,.05);}
+  a b{display:block;font-size:14.5px;font-weight:600;margin-bottom:4px;}
+  a span{font-size:12px;color:rgba(234,227,200,.45);line-height:1.5;}
+</style></head>
+<body><div class="wrap">
+  <h1>Transactional emails</h1>
+  <p class="sub">The Must-Have set. Table-based and inline-styled like <code>report-email.html</code>, with
+  <code>{{merge}}</code> fields so any sender can bind them. Each file carries its subject line and plain-text
+  alternative as a comment at the foot.</p>
+  <h2>Account &amp; security</h2>
+  <ul>
+    <li><a href="verify-email.html"><b>verify-email</b><span>Your Kaiso verification code is {{code}}</span></a></li>
+    <li><a href="password-reset.html"><b>password-reset</b><span>Reset your Kaiso password</span></a></li>
+    <li><a href="password-changed.html"><b>password-changed</b><span>Your Kaiso password was changed</span></a></li>
+    <li><a href="new-signin.html"><b>new-signin</b><span>New sign-in to your Kaiso account</span></a></li>
+    <li><a href="email-added.html"><b>email-added</b><span>An email address was added to your Kaiso account</span></a></li>
+    <li><a href="email-removed.html"><b>email-removed</b><span>An email address was removed from your Kaiso account</span></a></li>
+    <li><a href="account-deleted.html"><b>account-deleted</b><span>Your Kaiso account has been deleted</span></a></li>
+  </ul>
+  <h2>Billing</h2>
+  <ul>
+    <li><a href="subscription-started.html"><b>subscription-started</b><span>Your Kaiso plan is active — receipt for {{amount}}</span></a></li>
+    <li><a href="renewal-receipt.html"><b>renewal-receipt</b><span>Kaiso renewed — receipt for {{amount}}</span></a></li>
+    <li><a href="payment-failed.html"><b>payment-failed</b><span>Kaiso could not take your payment</span></a></li>
+    <li><a href="subscription-cancelled.html"><b>subscription-cancelled</b><span>Your Kaiso plan has been cancelled</span></a></li>
+  </ul>
+</div></body></html>

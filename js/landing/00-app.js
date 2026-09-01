@@ -1,11 +1,15 @@
 (function () {
   'use strict';
 
-  const SCREEN_COUNT = document.querySelectorAll('.screen').length;
-  let current = 1;
+  // Screen ids are authored on the elements, not implied by count —
+  // the auth gate is screen 0, so the range has to be read, not assumed.
+  const IDS = [...document.querySelectorAll('.screen')].map((s) => +s.dataset.screen);
+  const MIN = Math.min.apply(null, IDS);
+  const MAX = Math.max.apply(null, IDS);
+  let current = MIN;
 
   function show(id) {
-    id = Math.max(1, Math.min(SCREEN_COUNT, id));
+    id = Math.max(MIN, Math.min(MAX, id));
     current = id;
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', +s.dataset.screen === id));
     try { history.replaceState(null, '', '?s=' + id); } catch (e) {}
@@ -24,7 +28,7 @@
 
   // Activate the requested screen immediately so the panel is visible even if later init fails.
   const startId = parseInt(new URLSearchParams(location.search).get('s'), 10);
-  show(Number.isFinite(startId) ? startId : 1);
+  show(Number.isFinite(startId) ? startId : MIN);
 
   const tpl = document.querySelector('#glyphTpl .glyph-g');
   if (tpl) {

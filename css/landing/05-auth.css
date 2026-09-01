@@ -1,0 +1,75 @@
+  /* ─── Auth gate (screen 0) ────────────────────────────────────
+     Sign in / create account, ahead of the founder intake. */
+  .auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding: 5px;
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+  }
+  .auth-tab {
+    min-height: 42px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: rgba(234, 227, 200, 0.55);
+    font: inherit;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .auth-tab:hover { color: var(--gold-bright); }
+  .auth-tab.sel {
+    background: rgba(200, 168, 78, 0.1);
+    color: #f4ecd2;
+    box-shadow: 0 0 0 1px rgba(232, 200, 112, 0.28) inset;
+  }
+
+  #authConfirmWrap[hidden] { display: none; }
+  .field input.invalid {
+    border-color: rgba(232, 168, 112, 0.7);
+    background: rgba(232, 168, 112, 0.06);
+  }
+
+  /* The signed-in identity, carried into the intake header. */
+  .auth-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 5px;
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+    font-size: 11px;
+    color: rgba(234, 227, 200, 0.6);
+    max-width: 100%;
+  }
+  .auth-chip i {
+    width: 20px; height: 20px; flex: 0 0 20px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-style: normal; font-size: 9px; font-weight: 700;
+    color: #140e04;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  }
+  .auth-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* The landing page had no toast; validation needs somewhere to speak. */
+  .ktoast {
+    position: fixed; bottom: 28px; left: 50%; z-index: 70;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(10, 9, 14, 0.95);
+    border: 1px solid rgba(200, 168, 78, 0.35);
+    border-radius: 999px;
+    padding: 11px 20px;
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--gold-bright);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .ktoast.show { opacity: 1; transform: translateX(-50%) translateY(0); }

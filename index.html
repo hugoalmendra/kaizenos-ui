@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/landing/02-chrome.css">
 <link rel="stylesheet" href="css/landing/03-stage-panel.css">
 <link rel="stylesheet" href="css/landing/04-intake-survey.css">
+<link rel="stylesheet" href="css/landing/05-auth.css">
 <link rel="stylesheet" href="css/shared/loader.css">
 </head>
 <body>
@@ -41,10 +42,50 @@
 
   <!-- ════════ FLOW 1 · LEAD MAGNET ════════ -->
 
-  <!-- 1. Founder intake survey -->
-  <section class="screen active" data-screen="1" data-flow="1">
+  <!-- 0. Sign in / sign up — the gate before anything else -->
+  <section class="screen active" data-screen="0" data-flow="1">
     <div class="panel">
-      <div class="ph"><span class="num">1</span><span class="nm">Founder Intake</span><span class="badge free">Free · no account</span></div>
+      <div class="ph"><span class="num">0</span><span class="nm" id="authKicker">Sign In</span><span class="badge free">Start here</span></div>
+
+      <h2 class="h center" style="margin-top:2px" id="authTitle">Welcome <span class="accent">back.</span></h2>
+      <p class="sub center" style="margin-bottom:20px" id="authSub">Sign in to pick up where you left off.</p>
+
+      <div class="auth-tabs" role="tablist" aria-label="Sign in or create an account">
+        <button class="auth-tab sel" type="button" role="tab" aria-selected="true" data-mode="in">Sign in</button>
+        <button class="auth-tab" type="button" role="tab" aria-selected="false" data-mode="up">Create account</button>
+      </div>
+
+      <button class="btn google" type="button" id="authGoogle">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.2a5.3 5.3 0 0 1-2.3 3.5v2.9h3.7c2.2-2 3.4-5 3.4-8.5z"/><path fill="#34A853" d="M12 23.5c3.1 0 5.7-1 7.6-2.7l-3.7-2.9c-1 .7-2.3 1.1-3.9 1.1-3 0-5.5-2-6.4-4.7H1.8v3A11.5 11.5 0 0 0 12 23.5z"/><path fill="#FBBC05" d="M5.6 14.3a6.9 6.9 0 0 1 0-4.4v-3H1.8a11.5 11.5 0 0 0 0 10.4z"/><path fill="#EA4335" d="M12 5.1c1.7 0 3.2.6 4.4 1.7l3.3-3.3A11.5 11.5 0 0 0 1.8 6.9l3.8 3a6.9 6.9 0 0 1 6.4-4.8z"/></svg>
+        <span id="authGoogleLabel">Continue with Google</span>
+      </button>
+
+      <div class="divider" style="margin:16px 0" id="authDivider">or sign in with email</div>
+
+      <span class="lbl">Email</span>
+      <div class="field"><input type="email" id="authEmail" placeholder="you@venture.com" autocomplete="email"></div>
+
+      <span class="lbl" style="display:block;margin-top:12px">Password</span>
+      <div class="field"><input type="password" id="authPwd" placeholder="••••••••" autocomplete="current-password"></div>
+
+      <div class="field" id="authConfirmWrap" hidden>
+        <span class="lbl" style="display:block;margin-bottom:8px">Confirm password</span>
+        <input type="password" id="authPwd2" placeholder="Repeat it" autocomplete="new-password">
+      </div>
+
+      <button class="btn primary" type="button" id="authSubmit" style="margin-top:18px">Sign in</button>
+
+      <p class="muted center" style="margin-top:14px" id="authSwitch">
+        New to Kaiso? <a class="link" role="button" tabindex="0" data-mode="up">Create an account</a>
+      </p>
+      <p class="muted center" style="margin-top:8px">By continuing you agree to Kaiso&rsquo;s Terms &amp; Privacy.</p>
+    </div>
+  </section>
+
+  <!-- 1. Founder intake survey -->
+  <section class="screen" data-screen="1" data-flow="1">
+    <div class="panel">
+      <div class="ph"><span class="num">1</span><span class="nm">Founder Intake</span><span class="badge free">Free</span></div>
       <div class="spread" style="margin-bottom:14px">
         <span class="lbl">Section <span id="intakeSecNum">1</span> of 4</span>
         <span class="lbl" id="intakePct">25%</span>
@@ -301,6 +342,9 @@
 <script src="js/landing/intake-schema.js"></script>
 <script src="js/landing/intake-report.js"></script>
 <script src="js/landing/intake-form.js"></script>
+<div class="ktoast" id="ktoast" role="status" aria-live="polite"></div>
+
+<script src="js/landing/auth.js"></script>
 <script src="js/landing/00-app.js"></script>
 </body>
 </html>

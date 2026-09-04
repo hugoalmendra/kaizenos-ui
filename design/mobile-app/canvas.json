@@ -1,0 +1,431 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "A1 · Launch",
+      "page": "page-1"
+    },
+    {
+      "file": "Offer.dc.html",
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "A2 · What Kaiso does",
+      "page": "page-1"
+    },
+    {
+      "file": "SignUp.dc.html",
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "A3 · Create account",
+      "page": "page-1"
+    },
+    {
+      "file": "SignIn.dc.html",
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "A4 · Sign in",
+      "page": "page-1"
+    },
+    {
+      "file": "ForgotPassword.dc.html",
+      "x": 1880,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "A5 · Reset password",
+      "page": "page-1"
+    },
+    {
+      "file": "Intake.dc.html",
+      "x": 0,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "A6 · Intake · Company",
+      "page": "page-1"
+    },
+    {
+      "file": "IntakeFounders.dc.html",
+      "x": 470,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "A7 · Intake · Founders",
+      "page": "page-1"
+    },
+    {
+      "file": "IntakeTraction.dc.html",
+      "x": 940,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "A8 · Intake · Traction",
+      "page": "page-1"
+    },
+    {
+      "file": "IntakeLegal.dc.html",
+      "x": 1410,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "A9 · Intake · Legal",
+      "page": "page-1"
+    },
+    {
+      "file": "VentureProfile.dc.html",
+      "x": 1880,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "A10 · Venture Profile",
+      "page": "page-1"
+    },
+    {
+      "file": "EmailOptIn.dc.html",
+      "x": 0,
+      "y": 1980,
+      "w": 390,
+      "h": 844,
+      "title": "A11 · Email opt-in",
+      "page": "page-1"
+    },
+    {
+      "file": "InboxSent.dc.html",
+      "x": 470,
+      "y": 1980,
+      "w": 390,
+      "h": 844,
+      "title": "A12 · Report sent",
+      "page": "page-1"
+    },
+    {
+      "file": "TokensGranted.dc.html",
+      "x": 940,
+      "y": 1980,
+      "w": 390,
+      "h": 844,
+      "title": "A13 · Free time granted",
+      "page": "page-1"
+    },
+    {
+      "file": "SneakPeek.dc.html",
+      "x": 1410,
+      "y": 1980,
+      "w": 390,
+      "h": 844,
+      "title": "A14 · Forming backstage",
+      "page": "page-1"
+    },
+    {
+      "file": "SessionIdle.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "B1 · Home · idle",
+      "page": "page-2"
+    },
+    {
+      "file": "SessionHome.dc.html",
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "B2 · Live · listening",
+      "page": "page-2"
+    },
+    {
+      "file": "KaisoSpeaking.dc.html",
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "B3 · Live · speaking",
+      "page": "page-2"
+    },
+    {
+      "file": "Scribe.dc.html",
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "B4 · Scribe sheet",
+      "page": "page-2"
+    },
+    {
+      "file": "AssetReady.dc.html",
+      "x": 1880,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "B5 · Asset ready",
+      "page": "page-2"
+    },
+    {
+      "file": "SessionRecap.dc.html",
+      "x": 0,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "B6 · Session recap",
+      "page": "page-2"
+    },
+    {
+      "file": "OutOfTokens.dc.html",
+      "x": 470,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "B7 · Time spent",
+      "page": "page-2"
+    },
+    {
+      "file": "SessionError.dc.html",
+      "x": 940,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "B8 · Connection lost",
+      "page": "page-2"
+    },
+    {
+      "file": "Offline.dc.html",
+      "x": 1410,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "B9 · Offline",
+      "page": "page-2"
+    },
+    {
+      "file": "PlanTab.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "C1 · Plan",
+      "page": "page-3"
+    },
+    {
+      "file": "KosPlan.dc.html",
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "C2 · Pillar · Company",
+      "page": "page-3"
+    },
+    {
+      "file": "NodeDetail.dc.html",
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "C3 · Node detail",
+      "page": "page-3"
+    },
+    {
+      "file": "Library.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "D1 · Library",
+      "page": "page-4"
+    },
+    {
+      "file": "LibraryEmpty.dc.html",
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "D2 · Library · first run",
+      "page": "page-4"
+    },
+    {
+      "file": "ExecSummary.dc.html",
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "D3 · Executive Summary",
+      "page": "page-4"
+    },
+    {
+      "file": "LandingAsset.dc.html",
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "D4 · Landing Page",
+      "page": "page-4"
+    },
+    {
+      "file": "PitchDeck.dc.html",
+      "x": 1880,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "D5 · Pitch Deck",
+      "page": "page-4"
+    },
+    {
+      "file": "YCPack.dc.html",
+      "x": 0,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "D6 · YC Application",
+      "page": "page-4"
+    },
+    {
+      "file": "YouTab.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "E1 · You",
+      "page": "page-5"
+    },
+    {
+      "file": "Profile.dc.html",
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "E2 · Manage account",
+      "page": "page-5"
+    },
+    {
+      "file": "PlanTokens.dc.html",
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "E3 · Plan & Tokens",
+      "page": "page-5"
+    },
+    {
+      "file": "Checkout.dc.html",
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "E4 · Purchase",
+      "page": "page-5"
+    },
+    {
+      "file": "Sessions.dc.html",
+      "x": 1880,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "E5 · Sessions",
+      "page": "page-5"
+    },
+    {
+      "file": "NotificationSettings.dc.html",
+      "x": 0,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "E6 · Notifications",
+      "page": "page-5"
+    },
+    {
+      "file": "Feedback.dc.html",
+      "x": 470,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "E7 · Feedback",
+      "page": "page-5"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "ia",
+      "x": 0,
+      "y": -430,
+      "w": 620,
+      "text": "KaizenOS mobile app — 390 × 844\n\nRestructured as a native app, not a port of the web build. The web version is one canvas with everything stacked on it as modals; that does not survive contact with a phone.\n\nFOUR TABS. Kaiso (the session), Plan, Library, You. Progress and outputs are destinations, not overlays — you can check either without covering the conversation, and get anywhere without going home first.\n\nTHE SESSION GOES IMMERSIVE. B1 is home, with the tab bar. The moment a session is live (B2, B3) the tab bar and chrome recede: one line of context up top, one control row at the bottom — mute, end, scribe. Nothing competes with the voice.\n\nTIME, NOT TOKENS. Everywhere a founder sees their balance it reads \"14 min left\". Tokens are the billing unit; minutes are what they are actually spending, and what they can act on.\n\nSafe areas reserved, not drawn: 59pt top, 34pt bottom.",
+      "page": "page-2"
+    },
+    {
+      "id": "session",
+      "x": 2350,
+      "y": 300,
+      "w": 320,
+      "text": "Session states\n\nB4 the scribe is a real sheet with a grabber, not a fixed 70% panel — it drags between peek and full.\n\nB5 replaces the old toast-plus-badge. A ready asset arrives as a banner with a View action, on screen long enough to act on. No badge to hunt down afterwards, which was the whole of KAIZ-117.\n\nB7 sells more time at the moment it runs out, and says plainly that nothing was lost. B8 and B9 make the same promise — that is the anxiety in a voice product.",
+      "page": "page-2"
+    },
+    {
+      "id": "plan",
+      "x": 0,
+      "y": -300,
+      "w": 470,
+      "text": "Plan\n\nThree levels: all nine pillars (C1), the nodes inside one (C2), then a single node (C3).\n\nC3 is the screen the web build has no equivalent for, and it is what makes the plan more than a progress bar: what Kaiso already has, what is still missing, the question it will ask next, and a button to go talk about exactly that. It turns a status list into a way in.\n\nPillar colours are the wheel’s own. Node names are the live build’s, including the deferred Virtue pillar.",
+      "page": "page-3"
+    },
+    {
+      "id": "firstrun",
+      "x": 0,
+      "y": -300,
+      "w": 470,
+      "text": "First run\n\nIntake is now a stepped native form — a nav bar with Step n of 4 and a Skip, one thin progress rule, a large title, and 44pt+ controls throughout. It was a scrolling card floating in space, which is a web layout.\n\nA10 is the profile Kaiso builds from the intake; A11 and A12 keep the emailed copy, since that is still how the report is delivered.\n\nDropped in this round: the standalone onboarding tour and the mic priming screen. Both were teaching a UI that no longer needs teaching — four labelled tabs and one Start talking button. Permission is asked at the first tap of Start talking, in context, where the OS prompt belongs.",
+      "page": "page-1"
+    },
+    {
+      "id": "library",
+      "x": -3,
+      "y": -324,
+      "w": 470,
+      "text": "Library\n\nA tab, not a modal. Assets are cards with real state; tapping opens a full-screen document with a nav bar and the system share sheet — not a card inside a card.\n\nD2 is the first-run state: an empty library is the most common thing a new user sees, so it explains what will appear and offers the one action that makes it happen.\n\n[YOUR RAISE AMOUNT] on D3 is a deliberate placeholder — do not ship it as written.",
+      "page": "page-4"
+    },
+    {
+      "id": "you",
+      "x": -2,
+      "y": -341,
+      "w": 470,
+      "text": "You\n\nReplaces the corner dropdown, which was a web pattern that hid five destinations behind one avatar.\n\nTime remaining is the first thing on the screen with an Add time action beside it, because running out mid-conversation is the failure this product has.\n\nE3 sells hours, not tokens. E4 is the platform subscription sheet — StoreKit / Play Billing, not the web card form.\n\nE2 is redrawn out of the default Clerk chrome.",
+      "page": "page-5"
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-2"
+  },
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "First run"
+    },
+    {
+      "id": "page-2",
+      "name": "Kaiso"
+    },
+    {
+      "id": "page-3",
+      "name": "Plan"
+    },
+    {
+      "id": "page-4",
+      "name": "Library"
+    },
+    {
+      "id": "page-5",
+      "name": "You"
+    }
+  ]
+}

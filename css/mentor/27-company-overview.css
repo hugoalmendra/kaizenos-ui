@@ -1,8 +1,8 @@
   /* ─── Your Company — the overview ─────────────────────────────
-     Everything Kaiso has captured about the venture, in one growing
-     document. Only captured nodes appear; nothing empty is drawn. It
-     fills in as the founder talks. Separate from the pillar dropdown,
-     which stays exactly as it was. */
+     Every node as a card, grouped by pillar. Captured nodes are lit;
+     the rest are drawn dimmed with the question Kaiso will ask, so the
+     founder can see the whole shape of what is coming and where they
+     are in it. Click a card to open it. */
   .co-surface {
     position: fixed; inset: 0; z-index: 80;
     display: none;
@@ -26,53 +26,112 @@
   }
   .co-back:hover { color: var(--gold-bright); }
   .co-top-title { font-size: 11px; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(232, 200, 112, 0.85); }
-  .co-top-meta { margin-left: auto; font-size: 12px; color: rgba(234, 227, 200, 0.4); }
+  .co-top-meta { margin-left: auto; font-size: 12px; color: rgba(234, 227, 200, 0.4); font-variant-numeric: tabular-nums; }
 
   .co-scroll { flex: 1; overflow-y: auto; min-height: 0; }
-  .co-body { max-width: 760px; margin: 0 auto; padding: 36px 32px 80px; }
+  .co-body { max-width: 780px; margin: 0 auto; padding: 36px 32px 90px; }
 
-  /* company header — the one thing always present once anything is captured */
-  .co-head { margin-bottom: 34px; }
+  .co-head { margin-bottom: 30px; }
   .co-eyebrow { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(232, 200, 112, 0.6); margin-bottom: 10px; }
   .co-name { font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #f4ecd2; margin: 0 0 8px; }
   .co-sub { font-size: 14px; color: rgba(234, 227, 200, 0.5); margin: 0; }
 
-  /* a pillar section appears only when it has at least one captured node */
-  .co-section { margin-bottom: 30px; }
-  .co-section-head {
-    display: flex; align-items: center; gap: 10px;
-    padding-bottom: 10px; margin-bottom: 12px;
-    border-bottom: 1px solid rgba(200, 168, 78, 0.12);
+  /* ── pillar section — staggers in when the surface opens ── */
+  .co-section {
+    margin-bottom: 28px;
+    animation: co-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 55ms);
   }
+  .settled .co-section { animation: none; }
+  @keyframes co-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .co-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .co-section-dot { width: 9px; height: 9px; border-radius: 50%; }
   .co-section-name { font-size: 11px; letter-spacing: 0.34em; text-transform: uppercase; font-weight: 600; }
-  .co-section-count { margin-left: auto; font-size: 11px; color: rgba(234, 227, 200, 0.35); }
+  .co-section-count { margin-left: auto; font-size: 11px; color: rgba(234, 227, 200, 0.35); font-variant-numeric: tabular-nums; }
+  .co-section-bar { height: 3px; border-radius: 999px; background: rgba(234, 227, 200, 0.07); overflow: hidden; margin-bottom: 12px; }
+  .co-section-bar > span {
+    display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    box-shadow: 0 0 8px rgba(232, 200, 112, 0.4);
+    transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
 
-  /* one captured node */
+  /* ── card ── */
   .co-card {
     border: 1px solid rgba(200, 168, 78, 0.14);
     border-radius: 16px;
-    padding: 18px 20px 16px;
-    margin-bottom: 10px;
-    transition: border-color 0.18s ease;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, background 0.2s ease, opacity 0.3s ease;
   }
-  .co-card:hover { border-color: rgba(200, 168, 78, 0.28); }
-  .co-card.editing { border-color: rgba(232, 200, 112, 0.5); }
-  .co-card.new { animation: co-card-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
-  @keyframes co-card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .co-card:hover { border-color: rgba(200, 168, 78, 0.3); }
+  .co-card.open { border-color: rgba(232, 200, 112, 0.42); background: rgba(200, 168, 78, 0.03); }
 
-  .co-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
-  .co-node { font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(232, 200, 112, 0.7); }
-  .co-edit {
-    margin-left: auto;
-    background: transparent; border: 1px solid rgba(200, 168, 78, 0.25); border-radius: 999px;
-    color: rgba(234, 227, 200, 0.6); font: inherit; font-size: 8.5px;
-    letter-spacing: 0.16em; text-transform: uppercase; padding: 7px 12px; cursor: pointer;
-    transition: border-color 0.18s ease, color 0.18s ease;
+  /* dimmed until captured — present, so the founder sees what is coming */
+  .co-card.ghost { opacity: 0.42; border-style: dashed; }
+  .co-card.ghost:hover, .co-card.ghost.open { opacity: 0.75; }
+  .co-card.ghost .co-node { color: rgba(234, 227, 200, 0.55); }
+  .co-card.ghost .co-preview { font-style: italic; }
+
+  /* the moment a node lands: the card lights up and opens itself */
+  .co-card.ignite { animation: co-ignite 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  @keyframes co-ignite {
+    0%   { opacity: 0.42; border-color: rgba(200, 168, 78, 0.14); box-shadow: 0 0 0 0 rgba(232, 200, 112, 0); }
+    30%  { opacity: 1; border-color: var(--gold-bright); box-shadow: 0 0 0 4px rgba(232, 200, 112, 0.18), 0 0 40px rgba(232, 200, 112, 0.35); }
+    100% { opacity: 1; border-color: rgba(232, 200, 112, 0.42); box-shadow: 0 0 0 0 rgba(232, 200, 112, 0); }
   }
-  .co-edit:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
 
-  .co-text { margin: 0; font-size: 15.5px; line-height: 1.65; color: rgba(234, 227, 200, 0.9); text-wrap: pretty; white-space: pre-wrap; }
+  .co-card-head {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; background: transparent; border: 0; font: inherit; text-align: left;
+    padding: 15px 18px; cursor: pointer; color: inherit;
+  }
+  .co-status {
+    width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%;
+    background: var(--gold-bright); box-shadow: 0 0 8px rgba(232, 200, 112, 0.6);
+  }
+  .co-card.ghost .co-status { background: transparent; border: 1px solid rgba(234, 227, 200, 0.35); box-shadow: none; }
+  .co-node { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(232, 200, 112, 0.8); white-space: nowrap; }
+  .co-preview {
+    flex: 1; min-width: 0; font-size: 13.5px; color: rgba(234, 227, 200, 0.6);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    transition: opacity 0.2s ease;
+  }
+  .co-card.open .co-preview { opacity: 0; }
+  .co-chev {
+    flex: 0 0 auto; color: rgba(234, 227, 200, 0.35); font-size: 15px;
+    transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.2s ease;
+  }
+  .co-card.open .co-chev { transform: rotate(90deg); color: var(--gold-bright); }
+
+  /* body opens with a real height animation, no fixed max-height guessing */
+  .co-card-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.34s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .co-card.open .co-card-body { grid-template-rows: 1fr; }
+  .co-card-inner { min-height: 0; overflow: hidden; }
+  .co-card-pad { padding: 2px 18px 18px; }
+
+  /* the question — the thing this was an answer to */
+  .co-q {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 14px; margin-bottom: 14px;
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 12px;
+    background: rgba(200, 168, 78, 0.04);
+  }
+  .co-q-mark {
+    flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
+    display: grid; place-items: center;
+    border: 1px solid rgba(200, 168, 78, 0.35); color: var(--gold-bright);
+    font-size: 11px; font-weight: 700;
+  }
+  .co-q-lbl { display: block; font-size: 8.5px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(232, 200, 112, 0.6); margin-bottom: 4px; }
+  .co-q p { margin: 0; font-size: 14px; line-height: 1.55; color: rgba(234, 227, 200, 0.8); font-style: italic; text-wrap: pretty; }
+
+  .co-text { margin: 0; font-size: 15.5px; line-height: 1.65; color: rgba(234, 227, 200, 0.92); text-wrap: pretty; white-space: pre-wrap; }
   .co-textarea {
     width: 100%; min-height: 110px; resize: vertical;
     background: rgba(234, 227, 200, 0.04);
@@ -82,26 +141,25 @@
   }
   .co-textarea:focus { border-color: rgba(232, 200, 112, 0.55); background: rgba(234, 227, 200, 0.06); }
 
-  /* provenance line */
-  .co-source { display: flex; align-items: center; gap: 10px; margin-top: 11px; font-size: 11.5px; color: rgba(234, 227, 200, 0.38); }
-  .co-source-tag {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-soft);
-  }
+  .co-source { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 11.5px; color: rgba(234, 227, 200, 0.38); }
+  .co-source-tag { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-soft); }
   .co-source-tag.mine { border-color: rgba(232, 200, 112, 0.45); color: rgba(232, 200, 112, 0.9); }
 
-  .co-card-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .co-card-actions { display: flex; gap: 8px; margin-top: 14px; }
   .co-card-actions .kbtn { font-size: 9px; padding: 9px 14px; }
 
-  /* nothing captured yet */
-  .co-empty {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; gap: 10px; padding: 80px 40px;
-  }
-  .co-empty h2 { margin: 12px 0 0; font-size: 22px; font-weight: 600; color: #f4ecd2; }
-  .co-empty p { margin: 0; font-size: 14.5px; line-height: 1.6; color: rgba(234, 227, 200, 0.5); max-width: 440px; text-wrap: pretty; }
+  /* the ghost's body is an invitation, not a form */
+  .co-ghost-note { margin: 0 0 2px; font-size: 13.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.5); }
 
+  @media (prefers-reduced-motion: reduce) {
+    .co-surface.open, .co-section, .co-card.ignite { animation: none; }
+    .co-card-body, .co-chev, .co-section-bar > span { transition: none; }
+  }
   @media (max-width: 640px) {
-    .co-body { padding: 24px 18px 60px; }
+    .co-body { padding: 24px 16px 60px; }
     .co-name { font-size: 27px; }
+    .co-preview { display: none; }
+    .co-chev { margin-left: auto; }
+    .co-top { gap: 12px; padding: 12px 16px; }
+    .co-top-title { display: none; }
   }

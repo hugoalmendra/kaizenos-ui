@@ -171,6 +171,7 @@
       pillars: PILLARS,
       steps: STEPS,
       overallReady,
+      state: stepState,   // per-node state, for any surface that reads the plan
       openPlan,
       closePlan,
       setStep(pillarId, nodeLabel) {

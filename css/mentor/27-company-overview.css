@@ -1,0 +1,107 @@
+  /* ─── Your Company — the overview ─────────────────────────────
+     Everything Kaiso has captured about the venture, in one growing
+     document. Only captured nodes appear; nothing empty is drawn. It
+     fills in as the founder talks. Separate from the pillar dropdown,
+     which stays exactly as it was. */
+  .co-surface {
+    position: fixed; inset: 0; z-index: 80;
+    display: none;
+    flex-direction: column;
+    background: radial-gradient(ellipse at 50% 0%, #0b0917 0%, #05040c 55%, #000 100%);
+  }
+  .co-surface.open { display: flex; animation: co-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  @keyframes co-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .co-top {
+    flex: 0 0 auto;
+    display: flex; align-items: center; gap: 18px;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+  }
+  .co-back {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: transparent; border: 0; cursor: pointer; font: inherit;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.75); padding: 8px 4px;
+  }
+  .co-back:hover { color: var(--gold-bright); }
+  .co-top-title { font-size: 11px; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(232, 200, 112, 0.85); }
+  .co-top-meta { margin-left: auto; font-size: 12px; color: rgba(234, 227, 200, 0.4); }
+
+  .co-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .co-body { max-width: 760px; margin: 0 auto; padding: 36px 32px 80px; }
+
+  /* company header — the one thing always present once anything is captured */
+  .co-head { margin-bottom: 34px; }
+  .co-eyebrow { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(232, 200, 112, 0.6); margin-bottom: 10px; }
+  .co-name { font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #f4ecd2; margin: 0 0 8px; }
+  .co-sub { font-size: 14px; color: rgba(234, 227, 200, 0.5); margin: 0; }
+
+  /* a pillar section appears only when it has at least one captured node */
+  .co-section { margin-bottom: 30px; }
+  .co-section-head {
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 10px; margin-bottom: 12px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.12);
+  }
+  .co-section-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .co-section-name { font-size: 11px; letter-spacing: 0.34em; text-transform: uppercase; font-weight: 600; }
+  .co-section-count { margin-left: auto; font-size: 11px; color: rgba(234, 227, 200, 0.35); }
+
+  /* one captured node */
+  .co-card {
+    border: 1px solid rgba(200, 168, 78, 0.14);
+    border-radius: 16px;
+    padding: 18px 20px 16px;
+    margin-bottom: 10px;
+    transition: border-color 0.18s ease;
+  }
+  .co-card:hover { border-color: rgba(200, 168, 78, 0.28); }
+  .co-card.editing { border-color: rgba(232, 200, 112, 0.5); }
+  .co-card.new { animation: co-card-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  @keyframes co-card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .co-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+  .co-node { font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(232, 200, 112, 0.7); }
+  .co-edit {
+    margin-left: auto;
+    background: transparent; border: 1px solid rgba(200, 168, 78, 0.25); border-radius: 999px;
+    color: rgba(234, 227, 200, 0.6); font: inherit; font-size: 8.5px;
+    letter-spacing: 0.16em; text-transform: uppercase; padding: 7px 12px; cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease;
+  }
+  .co-edit:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+
+  .co-text { margin: 0; font-size: 15.5px; line-height: 1.65; color: rgba(234, 227, 200, 0.9); text-wrap: pretty; white-space: pre-wrap; }
+  .co-textarea {
+    width: 100%; min-height: 110px; resize: vertical;
+    background: rgba(234, 227, 200, 0.04);
+    border: 1px solid rgba(200, 168, 78, 0.25); border-radius: 12px; outline: none;
+    color: rgba(234, 227, 200, 0.95); font: inherit; font-size: 15.5px; line-height: 1.65;
+    padding: 14px 16px;
+  }
+  .co-textarea:focus { border-color: rgba(232, 200, 112, 0.55); background: rgba(234, 227, 200, 0.06); }
+
+  /* provenance line */
+  .co-source { display: flex; align-items: center; gap: 10px; margin-top: 11px; font-size: 11.5px; color: rgba(234, 227, 200, 0.38); }
+  .co-source-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-soft);
+  }
+  .co-source-tag.mine { border-color: rgba(232, 200, 112, 0.45); color: rgba(232, 200, 112, 0.9); }
+
+  .co-card-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .co-card-actions .kbtn { font-size: 9px; padding: 9px 14px; }
+
+  /* nothing captured yet */
+  .co-empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; gap: 10px; padding: 80px 40px;
+  }
+  .co-empty h2 { margin: 12px 0 0; font-size: 22px; font-weight: 600; color: #f4ecd2; }
+  .co-empty p { margin: 0; font-size: 14.5px; line-height: 1.6; color: rgba(234, 227, 200, 0.5); max-width: 440px; text-wrap: pretty; }
+
+  @media (max-width: 640px) {
+    .co-body { padding: 24px 18px 60px; }
+    .co-name { font-size: 27px; }
+  }

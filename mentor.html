@@ -33,6 +33,7 @@
 <link rel="stylesheet" href="css/mentor/24-pitch-deck-forge.css">
 <link rel="stylesheet" href="css/mentor/25-mobile-hud.css">
 <link rel="stylesheet" href="css/mentor/26-feedback-account.css">
+<link rel="stylesheet" href="css/mentor/27-company-overview.css">
 <link rel="stylesheet" href="css/shared/loader.css">
 </head>
 <body>
@@ -391,6 +392,10 @@
   <button data-panel="plan">
     <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z" stroke-linejoin="round"/></svg></span>
     Plan &amp; Tokens
+  </button>
+  <button id="companyOverviewBtn" type="button">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11" stroke-linejoin="round"/><path d="M9 20v-6h6v6" stroke-linejoin="round"/></svg></span>
+    Your Company
   </button>
   <button data-panel="feedback">
     <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" stroke-linejoin="round"/></svg></span>
@@ -927,6 +932,16 @@
   </section>
 </div>
 
+<!-- ─── Your Company — everything captured, as one growing document ── -->
+<section class="co-surface" id="companySurface" aria-label="Your Company">
+  <div class="co-top">
+    <button class="co-back" id="coClose" type="button">&#8592; Back to Kaiso</button>
+    <span class="co-top-title">Your Company</span>
+    <span class="co-top-meta" id="coMeta"></span>
+  </div>
+  <div class="co-scroll"><div class="co-body" id="coBody"></div></div>
+</section>
+
 <!-- Toast -->
 <div class="ktoast" id="ktoast" role="status" aria-live="polite"></div>
 
@@ -964,6 +979,7 @@
 <script src="js/mentor/10-hud-controller.js"></script>
 <script src="js/mentor/11-onboarding-tour.js"></script>
 <script src="js/mentor/12-kos-wheel.js"></script>
+<script src="js/mentor/17-company-overview.js"></script>
 
 </body>
 </html>

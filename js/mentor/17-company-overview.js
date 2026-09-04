@@ -171,8 +171,10 @@
       return `<article class="${cls}" data-key="${esc(k)}">
         <button class="co-card-head" type="button" data-toggle="${esc(k)}" aria-expanded="${isOpen}">
           <span class="co-status"></span>
-          <span class="co-node">${esc(s.node)}</span>
-          <span class="co-preview">${c ? esc(c.text) : esc(q)}</span>
+          <span class="co-head-txt">
+            <span class="co-node">${esc(s.node)}</span>
+            <span class="co-preview">${c ? esc(c.text) : esc(q)}</span>
+          </span>
           <span class="co-chev">›</span>
         </button>
         <div class="co-card-body"><div class="co-card-inner"><div class="co-card-pad">${inner}</div></div></div>

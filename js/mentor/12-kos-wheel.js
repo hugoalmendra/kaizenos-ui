@@ -130,8 +130,6 @@
     }
 
     function openPlan() {
-      // The full Plan surface supersedes the small panel when present.
-      if (window.KaisoPlanSurface) { window.KaisoPlanSurface.open(); return; }
       if (!modal || !panelKos) return;
       modal.querySelectorAll('.kpanel').forEach((p) => p.classList.remove('show'));
       panelKos.classList.add('show');
@@ -153,7 +151,6 @@
 
     ind.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (window.KaisoPlanSurface) { window.KaisoPlanSurface.open(); return; }
       if (modal && modal.classList.contains('open') && panelKos && panelKos.classList.contains('show')) {
         closePlan();
       } else {
@@ -174,9 +171,6 @@
       pillars: PILLARS,
       steps: STEPS,
       overallReady,
-      // Per-node state, so any surface can render the plan without
-      // duplicating the progression rules.
-      state: stepState,
       openPlan,
       closePlan,
       setStep(pillarId, nodeLabel) {

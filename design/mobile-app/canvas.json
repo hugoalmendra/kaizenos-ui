@@ -350,6 +350,33 @@
       "h": 844,
       "title": "E7 · Feedback",
       "page": "page-5"
+    },
+    {
+      "file": "ElevatorPitch.dc.html",
+      "x": 470,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "D7 · Elevator Pitch",
+      "page": "page-4"
+    },
+    {
+      "file": "OrgChart.dc.html",
+      "x": 940,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "D8 · Org Chart",
+      "page": "page-4"
+    },
+    {
+      "file": "BrandKit.dc.html",
+      "x": 1410,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "D9 · Brand Kit",
+      "page": "page-4"
     }
   ],
   "annotations": [
@@ -390,7 +417,7 @@
       "x": -3,
       "y": -324,
       "w": 470,
-      "text": "Library\n\nA tab, not a modal. Assets are cards with real state; tapping opens a full-screen document with a nav bar and the system share sheet — not a card inside a card.\n\nD2 is the first-run state: an empty library is the most common thing a new user sees, so it explains what will appear and offers the one action that makes it happen.\n\n[YOUR RAISE AMOUNT] on D3 is a deliberate placeholder — do not ship it as written.",
+      "text": "Library\n\nA tab, not a modal. Assets are cards with real state; tapping opens a full-screen document with a nav bar and the system share sheet — not a card inside a card.\n\nD2 is the first-run state: an empty library is the most common thing a new user sees, so it explains what will appear and offers the one action that makes it happen.\n\n[YOUR RAISE AMOUNT] on D3 is a deliberate placeholder — do not ship it as written.\n\nD7–D9 are the three outputs added after the first round. The pitch is a segmented control rather than three stacked blocks — ninety seconds of spoken copy is a wall of text at 390pt. The org chart drops the branching tree for a grouped list, because a tree does not survive this width; state moves into a pill. The brand kit keeps the mark picker, since choosing a direction is the one thing a founder will actually do on a phone.",
       "page": "page-4"
     },
     {
@@ -404,7 +431,7 @@
   ],
   "launch": {
     "view": "canvas",
-    "page": "page-2"
+    "page": "page-4"
   },
   "pages": [
     {

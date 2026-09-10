@@ -240,81 +240,38 @@ h2.h .accent{color:var(--gold-bright);}
 .pillrow+.pillrow{border-top:1px solid rgba(200,168,78,.10);}
 .docnav{position:absolute;top:59px;left:0;right:0;height:48px;display:flex;align-items:center;
   padding:0 6px;border-bottom:1px solid rgba(200,168,78,.12);background:rgba(6,5,10,.72);backdrop-filter:blur(12px);}
+
+/* elevator pitch */
+.seg{display:flex;gap:4px;padding:4px;border:1px solid var(--line-soft);border-radius:999px;background:rgba(234,227,200,.03);}
+.seg .s{flex:1;min-height:44px;display:grid;place-items:center;border-radius:999px;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(234,227,200,.5);}
+.seg .s.on{color:#140e04;font-weight:600;background:linear-gradient(135deg,var(--gold-bright),var(--gold) 60%,var(--gold-soft));}
+.pline{font-size:17px;line-height:1.5;font-weight:600;color:#f5eed4;margin:0;text-wrap:pretty;}
+.pline em{font-style:normal;color:var(--gold-bright);}
+.pmeta{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(234,227,200,.38);}
+.pbody{font-size:14px;line-height:1.75;color:rgba(234,227,200,.84);margin:0;text-wrap:pretty;}
 </style>
 </helmet>
 <div class="scr"><div class="stars"></div>
-  <div class="big"><h1>Library</h1>
-  <span style="margin-left:auto;padding-bottom:5px"></span></div>
-  <div style="position:absolute;left:20px;right:20px;top:115px;bottom:90px;overflow:hidden">
-    <p class="sub" style="margin-bottom:16px">Forged as you talk. Yours, between sessions. <b>4 ready &middot; 3 forging</b></p>
-    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
-      <div style="border:1px solid rgba(232,200,112,.4);
-  border-radius:16px;overflow:hidden;background:rgba(200,168,78,.04)">
-  <div style="height:92px;display:grid;place-items:center;color:#fff;
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12 2l2.1 7.9L22 12l-7.9 2.1L12 22l-2.1-7.9L2 12l7.9-2.1z"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Executive Summary</b>
-    <span style="font-size:11.5px;color:rgba(232,200,112,.8)">Ready &middot; PDF</span>
-  </div></div>
-      <div style="border:1px solid rgba(232,200,112,.4);
-  border-radius:16px;overflow:hidden;background:rgba(200,168,78,.04)">
-  <div style="height:92px;display:grid;place-items:center;color:#fff;
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12 3C7 3 3 6.2 3 10.2c0 2.2 1.2 4.2 3.2 5.5L5.4 21l4.6-2.5c.6.1 1.3.2 2 .2 5 0 9-3.2 9-7.2S17 3 12 3z"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Elevator Pitch</b>
-    <span style="font-size:11.5px;color:rgba(232,200,112,.8)">Ready &middot; 3 lengths</span>
-  </div></div>
-      <div style="border:1px solid rgba(232,200,112,.4);
-  border-radius:16px;overflow:hidden;background:rgba(200,168,78,.04)">
-  <div style="height:92px;display:grid;place-items:center;color:#fff;
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12 1.5l4 4.2-4 4.2-4-4.2z"/><path d="M12 14.1l4 4.2-4 4.2-4-4.2z"/><path d="M5.7 7.8l4 4.2-4 4.2-4-4.2z"/><path d="M18.3 7.8l4 4.2-4 4.2-4-4.2z"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Pitch Deck</b>
-    <span style="font-size:11.5px;color:rgba(232,200,112,.8)">Ready &middot; 12 slides</span>
-  </div></div>
-      <div style="border:1px solid rgba(232,200,112,.4);
-  border-radius:16px;overflow:hidden;background:rgba(200,168,78,.04)">
-  <div style="height:92px;display:grid;place-items:center;color:#fff;
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><circle cx="9" cy="9" r="5.6" opacity=".95"/><circle cx="15.4" cy="12" r="5.6" opacity=".62"/><circle cx="10.4" cy="15.6" r="5.6" opacity=".42"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Brand Kit</b>
-    <span style="font-size:11.5px;color:rgba(232,200,112,.8)">Ready &middot; SVG + tokens</span>
-  </div></div>
-      <div style="border:1px solid var(--line-soft);
-  border-radius:16px;overflow:hidden;background:transparent">
-  <div style="height:92px;display:grid;place-items:center;color:rgba(232,200,112,.5);
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 2.5L21.5 12 12 21.5 2.5 12z"/><path d="M12 7.5L16.5 12 12 16.5 7.5 12z" fill="currentColor"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Landing Page</b>
-    <span style="font-size:11.5px;color:rgba(234,227,200,.42)">Forging &middot; 67%</span>
-    <span class="lib-prog" style="margin-top:9px"><span style="width:67%"></span></span>
-  </div></div>
-      <div style="border:1px solid var(--line-soft);
-  border-radius:16px;overflow:hidden;background:transparent">
-  <div style="height:92px;display:grid;place-items:center;color:rgba(232,200,112,.5);
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="8.6" y="2.6" width="6.8" height="5.2" rx="1.4"/><rect x="2.6" y="16.2" width="6.4" height="5.2" rx="1.4"/><rect x="15" y="16.2" width="6.4" height="5.2" rx="1.4"/><path d="M12 7.8v4.4M5.8 16.2v-4h12.4v4" stroke-linecap="round"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Org Chart</b>
-    <span style="font-size:11.5px;color:rgba(234,227,200,.42)">Forging &middot; 52%</span>
-    <span class="lib-prog" style="margin-top:9px"><span style="width:52%"></span></span>
-  </div></div>
-      <div style="border:1px solid var(--line-soft);
-  border-radius:16px;overflow:hidden;background:transparent">
-  <div style="height:92px;display:grid;place-items:center;color:rgba(232,200,112,.5);
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">YC Application</b>
-    <span style="font-size:11.5px;color:rgba(234,227,200,.42)">Forging &middot; 40%</span>
-    <span class="lib-prog" style="margin-top:9px"><span style="width:40%"></span></span>
-  </div></div>
+  <div class="docnav"><span class="tap"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5L7.5 12l7 7"/></svg></span>
+    <span class="ttl">Elevator Pitch</span>
+    <span style="margin-left:auto;display:flex"><span class="tap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8.5 6.5L12 3l3.5 3.5"/><path d="M6 12.5V20h12v-7.5"/></svg></span></span></div>
+  <div style="position:absolute;left:0;right:0;top:107px;bottom:112px;overflow:hidden;padding:18px 20px 0">
+    <div class="doc-eyebrow">One line</div>
+    <p class="pline" style="margin-top:9px">Helm is the <em>operations autopilot</em> for independent e-commerce brands &mdash; it runs the back office so the founder can run the business.</p>
+    <div class="seg" style="margin:20px 0 14px">
+      <span class="s on">30 sec</span><span class="s">60 sec</span><span class="s">90 sec</span>
     </div>
+    <div class="pmeta" style="margin-bottom:12px"><span>74 words</span><span>&middot;</span><span>~32s spoken</span>
+      <span style="margin-left:auto;text-transform:none;letter-spacing:0;font-size:11px;color:rgba(232,200,112,.7)">A lift</span></div>
+    <p class="pbody">Independent online stores lose twelve hours a week stitching inventory, fulfillment and support across tools that don&rsquo;t talk to each other. Hiring an ops manager costs six figures, so most brands under two million just absorb the work themselves. Helm is an AI operations layer that connects the tools a store already uses and runs the repetitive work on its own &mdash; reorder alerts, shipment triage, refunds, daily reporting. The founder approves. Helm executes.</p>
   </div>
-  <div class="tabbar">
-  <div class="tab"><svg viewBox="-36 -36 72 72" width="21" height="21" fill="currentColor">
-  <rect x="-24" y="-29" width="48" height="5" rx="1.6"/><rect x="-24" y="-18" width="48" height="5" rx="1.6"/><rect x="-24" y="-7" width="48" height="5" rx="1.6"/><rect x="-24" y="4" width="48" height="5" rx="1.6"/><rect x="-24" y="15" width="48" height="5" rx="1.6"/><rect x="-24" y="26" width="48" height="5" rx="1.6"/></svg><span>Kaiso</span></div><div class="tab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="3.1"/><path d="M12 3.4v5.5M12 15.1v5.5M3.4 12h5.5M15.1 12h5.5" stroke-linecap="round"/></svg><span>Plan</span></div><div class="tab on"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 5h5.5v14H4zM12.5 5H18v14h-5.5z"/></svg><span>Library</span></div><div class="tab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" stroke-linecap="round"/></svg><span>You</span></div>
-</div>
+  <div style="position:absolute;left:20px;right:20px;bottom:34px">
+    <div class="btn primary"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" stroke-linecap="round"/></svg>Copy this version</div>
+  </div>
 </div>
 </x-dc>
+
 <script data-dc-script data-props='{}'>
 class Component extends DCLogic {
   renderVals() { return {}; }

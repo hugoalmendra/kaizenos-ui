@@ -240,81 +240,59 @@ h2.h .accent{color:var(--gold-bright);}
 .pillrow+.pillrow{border-top:1px solid rgba(200,168,78,.10);}
 .docnav{position:absolute;top:59px;left:0;right:0;height:48px;display:flex;align-items:center;
   padding:0 6px;border-bottom:1px solid rgba(200,168,78,.12);background:rgba(6,5,10,.72);backdrop-filter:blur(12px);}
+
+/* brand kit */
+.block-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  height:124px;border-radius:14px;border:1px solid var(--line-soft);background:#10141c;}
+.blockmark{width:34px;height:34px;color:#f5f2ea;}
+.blockmark svg{width:100%;height:100%;display:block;}
+.bword{font-size:17px;font-weight:700;letter-spacing:.08em;color:#f5f2ea;}
+.mrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.mopt{min-height:60px;border:1px solid var(--line-soft);border-radius:12px;display:grid;place-items:center;
+  color:rgba(234,227,200,.6);background:transparent;}
+.mopt svg{width:26px;height:26px;}
+.mopt.on{border-color:rgba(232,200,112,.55);background:rgba(200,168,78,.08);color:#fff;}
+.sw{border:1px solid var(--line-soft);border-radius:11px;overflow:hidden;}
+.sw .chip{display:block;height:40px;}
+.sw .mt{display:block;padding:7px 9px 9px;}
+.sw .mt b{display:block;font-size:10.5px;color:#f1e9cf;font-weight:600;}
+.sw .mt span{display:block;font-size:9px;color:rgba(234,227,200,.45);font-family:ui-monospace,Menlo,monospace;margin-top:2px;}
+.tspec{display:flex;align-items:baseline;gap:11px;padding:9px 0;border-bottom:1px dashed rgba(200,168,78,.12);}
+.tspec i{font-style:normal;flex:0 0 74px;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(234,227,200,.4);}
 </style>
 </helmet>
 <div class="scr"><div class="stars"></div>
-  <div class="big"><h1>Library</h1>
-  <span style="margin-left:auto;padding-bottom:5px"></span></div>
-  <div style="position:absolute;left:20px;right:20px;top:115px;bottom:90px;overflow:hidden">
-    <p class="sub" style="margin-bottom:16px">Forged as you talk. Yours, between sessions. <b>4 ready &middot; 3 forging</b></p>
-    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
-      <div style="border:1px solid rgba(232,200,112,.4);
-  border-radius:16px;overflow:hidden;background:rgba(200,168,78,.04)">
-  <div style="height:92px;display:grid;place-items:center;color:#fff;
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12 2l2.1 7.9L22 12l-7.9 2.1L12 22l-2.1-7.9L2 12l7.9-2.1z"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Executive Summary</b>
-    <span style="font-size:11.5px;color:rgba(232,200,112,.8)">Ready &middot; PDF</span>
-  </div></div>
-      <div style="border:1px solid rgba(232,200,112,.4);
-  border-radius:16px;overflow:hidden;background:rgba(200,168,78,.04)">
-  <div style="height:92px;display:grid;place-items:center;color:#fff;
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12 3C7 3 3 6.2 3 10.2c0 2.2 1.2 4.2 3.2 5.5L5.4 21l4.6-2.5c.6.1 1.3.2 2 .2 5 0 9-3.2 9-7.2S17 3 12 3z"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Elevator Pitch</b>
-    <span style="font-size:11.5px;color:rgba(232,200,112,.8)">Ready &middot; 3 lengths</span>
-  </div></div>
-      <div style="border:1px solid rgba(232,200,112,.4);
-  border-radius:16px;overflow:hidden;background:rgba(200,168,78,.04)">
-  <div style="height:92px;display:grid;place-items:center;color:#fff;
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12 1.5l4 4.2-4 4.2-4-4.2z"/><path d="M12 14.1l4 4.2-4 4.2-4-4.2z"/><path d="M5.7 7.8l4 4.2-4 4.2-4-4.2z"/><path d="M18.3 7.8l4 4.2-4 4.2-4-4.2z"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Pitch Deck</b>
-    <span style="font-size:11.5px;color:rgba(232,200,112,.8)">Ready &middot; 12 slides</span>
-  </div></div>
-      <div style="border:1px solid rgba(232,200,112,.4);
-  border-radius:16px;overflow:hidden;background:rgba(200,168,78,.04)">
-  <div style="height:92px;display:grid;place-items:center;color:#fff;
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><circle cx="9" cy="9" r="5.6" opacity=".95"/><circle cx="15.4" cy="12" r="5.6" opacity=".62"/><circle cx="10.4" cy="15.6" r="5.6" opacity=".42"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Brand Kit</b>
-    <span style="font-size:11.5px;color:rgba(232,200,112,.8)">Ready &middot; SVG + tokens</span>
-  </div></div>
-      <div style="border:1px solid var(--line-soft);
-  border-radius:16px;overflow:hidden;background:transparent">
-  <div style="height:92px;display:grid;place-items:center;color:rgba(232,200,112,.5);
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 2.5L21.5 12 12 21.5 2.5 12z"/><path d="M12 7.5L16.5 12 12 16.5 7.5 12z" fill="currentColor"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Landing Page</b>
-    <span style="font-size:11.5px;color:rgba(234,227,200,.42)">Forging &middot; 67%</span>
-    <span class="lib-prog" style="margin-top:9px"><span style="width:67%"></span></span>
-  </div></div>
-      <div style="border:1px solid var(--line-soft);
-  border-radius:16px;overflow:hidden;background:transparent">
-  <div style="height:92px;display:grid;place-items:center;color:rgba(232,200,112,.5);
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="8.6" y="2.6" width="6.8" height="5.2" rx="1.4"/><rect x="2.6" y="16.2" width="6.4" height="5.2" rx="1.4"/><rect x="15" y="16.2" width="6.4" height="5.2" rx="1.4"/><path d="M12 7.8v4.4M5.8 16.2v-4h12.4v4" stroke-linecap="round"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">Org Chart</b>
-    <span style="font-size:11.5px;color:rgba(234,227,200,.42)">Forging &middot; 52%</span>
-    <span class="lib-prog" style="margin-top:9px"><span style="width:52%"></span></span>
-  </div></div>
-      <div style="border:1px solid var(--line-soft);
-  border-radius:16px;overflow:hidden;background:transparent">
-  <div style="height:92px;display:grid;place-items:center;color:rgba(232,200,112,.5);
-    background:radial-gradient(90% 120% at 30% 0%,rgba(120,90,160,.24),transparent 62%),linear-gradient(160deg,#161226,#0a0812)"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></svg></div>
-  <div style="padding:12px 13px;border-top:1px solid rgba(200,168,78,.12)">
-    <b style="display:block;font-size:14px;color:#f1e9cf;font-weight:600">YC Application</b>
-    <span style="font-size:11.5px;color:rgba(234,227,200,.42)">Forging &middot; 40%</span>
-    <span class="lib-prog" style="margin-top:9px"><span style="width:40%"></span></span>
-  </div></div>
+  <div class="docnav"><span class="tap"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5L7.5 12l7 7"/></svg></span>
+    <span class="ttl">Brand Kit</span>
+    <span style="margin-left:auto;display:flex"><span class="tap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8.5 6.5L12 3l3.5 3.5"/><path d="M6 12.5V20h12v-7.5"/></svg></span></span></div>
+  <div style="position:absolute;left:0;right:0;top:107px;bottom:0;overflow:hidden;padding:18px 20px 0">
+    <div class="block-lock">
+      <span class="blockmark"><svg viewBox="0 0 32 32" fill="currentColor"><rect x="3" y="6" width="26" height="4.6" rx="2.3"/><rect x="7" y="13.7" width="18" height="4.6" rx="2.3"/><rect x="11" y="21.4" width="10" height="4.6" rx="2.3"/></svg></span>
+      <span class="bword">HELM</span>
+      <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(234,227,200,.38)">Primary &middot; on hull</span>
+    </div>
+    <div class="doc-sec"><div class="doc-sec-t">Direction</div>
+      <div class="mrow" style="margin-top:10px">
+        <span class="mopt on"><svg viewBox="0 0 32 32" fill="currentColor"><rect x="3" y="6" width="26" height="4.6" rx="2.3"/><rect x="7" y="13.7" width="18" height="4.6" rx="2.3"/><rect x="11" y="21.4" width="10" height="4.6" rx="2.3"/></svg></span>
+        <span class="mopt"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="16" cy="16" r="11"/><path d="M19.4 16H25M17.7 18.9l2.8 4.9M14.3 18.9l-2.8 4.9M12.6 16H7M14.3 13.1l-2.8-4.9M17.7 13.1l2.8-4.9"/><circle cx="16" cy="16" r="1.9" fill="currentColor" stroke="none"/></svg></span>
+        <span class="mopt"><svg viewBox="0 0 32 32"><path d="M16 3 L23.5 16 L16 29 Z" fill="currentColor"/><path d="M16 3 L23.5 16 L16 29 L8.5 16 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></span>
+        <span class="mopt"><svg viewBox="0 0 32 32" fill="currentColor"><rect x="5" y="4.5" width="5.2" height="23" rx="2.6"/><rect x="21.8" y="4.5" width="5.2" height="23" rx="2.6"/><rect x="5" y="13.2" width="22" height="5.2" rx="2.6"/></svg></span>
+      </div>
+      <p class="doc-p" style="margin-top:10px;font-size:11.5px;color:rgba(234,227,200,.5)">Vector, so it recolours and holds at any size. Not a cleared trademark &mdash; check the register before it ships.</p>
+    </div>
+    <div class="doc-sec"><div class="doc-sec-t">Palette</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px">
+        <span class="sw"><span class="chip" style="background:#10141C"></span><span class="mt"><b>Hull</b><span>#10141C</span></span></span><span class="sw"><span class="chip" style="background:#2E6F7E"></span><span class="mt"><b>Tide</b><span>#2E6F7E</span></span></span><span class="sw"><span class="chip" style="background:#E8A33D"></span><span class="mt"><b>Signal</b><span>#E8A33D</span></span></span>
+      </div>
+    </div>
+    <div class="doc-sec"><div class="doc-sec-t">Typography</div>
+      <div class="tspec"><i>Display 40</i><span style="font-size:19px;font-weight:700;color:#f1e9cf">Run ops on autopilot</span></div>
+      <div class="tspec"><i>Body 16</i><span style="font-size:13px;color:rgba(234,227,200,.8)">Helm connects the tools your store already runs.</span></div>
     </div>
   </div>
-  <div class="tabbar">
-  <div class="tab"><svg viewBox="-36 -36 72 72" width="21" height="21" fill="currentColor">
-  <rect x="-24" y="-29" width="48" height="5" rx="1.6"/><rect x="-24" y="-18" width="48" height="5" rx="1.6"/><rect x="-24" y="-7" width="48" height="5" rx="1.6"/><rect x="-24" y="4" width="48" height="5" rx="1.6"/><rect x="-24" y="15" width="48" height="5" rx="1.6"/><rect x="-24" y="26" width="48" height="5" rx="1.6"/></svg><span>Kaiso</span></div><div class="tab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="3.1"/><path d="M12 3.4v5.5M12 15.1v5.5M3.4 12h5.5M15.1 12h5.5" stroke-linecap="round"/></svg><span>Plan</span></div><div class="tab on"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 5h5.5v14H4zM12.5 5H18v14h-5.5z"/></svg><span>Library</span></div><div class="tab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20.2a7.4 7.4 0 0 1 14.4 0" stroke-linecap="round"/></svg><span>You</span></div>
-</div>
 </div>
 </x-dc>
+
 <script data-dc-script data-props='{}'>
 class Component extends DCLogic {
   renderVals() { return {}; }

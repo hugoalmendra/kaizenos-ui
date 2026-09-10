@@ -1,6 +1,6 @@
 # KaizenOS Mobile App — screen designs
 
-39 native-app screens at 390 × 844 (iPhone points), grouped into five
+42 native-app screens at 390 × 844 (iPhone points), grouped into five
 pages that mirror the app's information architecture. This folder is
 the source of truth for the designs: every screen is a self-contained
 HTML file, and the canvas layout is `canvas.json`.
@@ -109,6 +109,9 @@ do nothing outside the canvas.
 | Library | D4 | Landing Page | `LandingAsset.dc.html` |
 | Library | D5 | Pitch Deck | `PitchDeck.dc.html` |
 | Library | D6 | YC Application | `YCPack.dc.html` |
+| Library | D7 | Elevator Pitch | `ElevatorPitch.dc.html` |
+| Library | D8 | Org Chart | `OrgChart.dc.html` |
+| Library | D9 | Brand Kit | `BrandKit.dc.html` |
 | You | E1 | You | `YouTab.dc.html` |
 | You | E2 | Manage account | `Profile.dc.html` |
 | You | E3 | Plan & Tokens | `PlanTokens.dc.html` |
@@ -151,10 +154,14 @@ missing, the question it will ask next, and a button to go talk about
 exactly that. Pillar colours are the wheel's own; node names match the
 live build.
 
-**Library.** A tab, not a modal. Assets are cards with real state;
+**Library.** Six outputs, four ready and two still forging in D1. A tab, not a modal. Assets are cards with real state;
 tapping opens a full-screen document with a nav bar and the system
 share sheet. D2 is the first-run empty state. `[YOUR RAISE AMOUNT]` on
-D3 is a deliberate placeholder; do not ship it as written.
+D3 is a deliberate placeholder; do not ship it as written. D7 to D9 are the
+outputs added in the second round: the elevator pitch uses a segmented
+control because ninety seconds of spoken copy is a wall of text on a phone,
+the org chart drops the branching tree for a grouped list, and the brand kit
+keeps the mark picker since that is the one choice worth making on mobile.
 
 **You.** Replaces the corner dropdown. Time remaining is first on the
 screen with an Add time action beside it. E3 sells hours, not tokens.

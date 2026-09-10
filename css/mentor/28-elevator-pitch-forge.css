@@ -1,0 +1,48 @@
+  /* ─── Forged elevator pitch ───────────────────────────────────
+     One refined line, then the same story at 30 / 60 / 90 seconds.
+     Spoken copy, so it is set larger and looser than the other
+     documents — the founder reads this off a screen out loud. */
+  .pitch-doc {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 16px; overflow: hidden;
+    background: linear-gradient(180deg, #0c0a12 0%, #06050a 100%);
+  }
+  .pitch-hero {
+    padding: 30px 26px 26px; text-align: center;
+    background: radial-gradient(120% 80% at 50% 0%, rgba(200, 168, 78, 0.12), transparent 60%);
+    border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+  }
+  .pitch-eyebrow {
+    font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--gold-bright); margin-bottom: 14px;
+  }
+  .pitch-co { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(234, 227, 200, 0.5); margin-bottom: 12px; }
+  .pitch-line {
+    font-size: 20px; line-height: 1.45; font-weight: 600; color: #f5eed4;
+    max-width: 520px; margin: 0 auto; text-wrap: pretty;
+  }
+  .pitch-line em { font-style: normal; color: var(--gold-bright); }
+
+  .pitch-block { padding: 22px 26px; border-bottom: 1px solid rgba(200, 168, 78, 0.1); }
+  .pitch-block:last-of-type { border-bottom: 0; }
+  .pitch-block-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+  .pitch-dur {
+    font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 600;
+    color: #140e04; background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    border-radius: 999px; padding: 5px 11px;
+  }
+  .pitch-when { font-size: 11px; color: rgba(234, 227, 200, 0.5); }
+  .pitch-count { margin-left: auto; font-size: 10px; color: rgba(234, 227, 200, 0.35); font-variant-numeric: tabular-nums; }
+  .pitch-body {
+    margin: 0; font-size: 14.5px; line-height: 1.72; color: rgba(234, 227, 200, 0.84);
+    text-wrap: pretty;
+  }
+  .pitch-body + .pitch-body { margin-top: 12px; }
+
+  .pitch-foot {
+    padding: 16px 26px; font-size: 10px; letter-spacing: 0.06em;
+    color: rgba(234, 227, 200, 0.4); text-align: center;
+  }
+  @media (max-width: 560px) {
+    .pitch-line { font-size: 17px; }
+    .pitch-body { font-size: 13.5px; }
+  }

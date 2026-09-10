@@ -1,6 +1,6 @@
   /* ─── Executive Summary one-pager ────────────────────────── */
   .kpanel-wide { max-width: 760px; }
-  .exec-actions { display: flex; justify-content: flex-end; margin: -4px 0 16px; }
+  .exec-actions { display: flex; justify-content: flex-end; gap: 8px; margin: -4px 0 16px; }
   .exec-actions .kbtn.primary { font-size: 10px; padding: 10px 16px; }
 
   .exec-doc {

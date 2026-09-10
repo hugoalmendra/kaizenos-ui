@@ -1,0 +1,87 @@
+  /* ─── Forged org chart ────────────────────────────────────────
+     Who is here, who is missing. Filled roles are solid; target
+     hires are dashed; a co-founder gap is drawn in amber so the
+     hole in the team is the thing you notice first. Nodes open on
+     click to say why the role exists and when it lands. */
+  .org-doc {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 16px; overflow: hidden;
+    background: linear-gradient(180deg, #0c0a12 0%, #06050a 100%);
+  }
+  .org-head {
+    padding: 24px 26px 20px; text-align: center;
+    background: radial-gradient(120% 80% at 50% 0%, rgba(90, 130, 160, 0.16), transparent 60%);
+    border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+  }
+  .org-eyebrow { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 10px; }
+  .org-co { font-size: 22px; font-weight: 700; color: #f5eed4; margin: 0 0 6px; }
+  .org-sub { font-size: 12px; color: rgba(234, 227, 200, 0.55); margin: 0; }
+
+  .org-tree { padding: 26px 22px 8px; }
+  .org-tier { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  /* founders sit side by side; .org-node is full-width inside a branch column */
+  .org-tier > .org-node { width: auto; flex: 1 1 240px; max-width: 320px; }
+
+  /* the spine that drops from the founders into the functions */
+  .org-spine { height: 22px; margin: 0 auto; width: 1px; background: rgba(200, 168, 78, 0.28); }
+  .org-rail {
+    height: 1px; background: rgba(200, 168, 78, 0.28);
+    margin: 0 auto; width: min(100%, 620px);
+  }
+  .org-branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 0; }
+  .org-branch { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+  .org-drop { height: 18px; width: 1px; background: rgba(200, 168, 78, 0.28); margin: 0 auto; }
+  .org-fn {
+    font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; text-align: center;
+    color: rgba(234, 227, 200, 0.5); margin-bottom: 2px;
+  }
+
+  .org-node {
+    display: block; width: 100%; text-align: left; font: inherit; cursor: pointer;
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 12px;
+    background: rgba(200, 168, 78, 0.05); color: inherit;
+    padding: 11px 13px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .org-node:hover { border-color: rgba(200, 168, 78, 0.4); background: rgba(200, 168, 78, 0.09); }
+  .org-node-top { display: flex; align-items: center; gap: 8px; }
+  .org-role { font-size: 12px; font-weight: 600; color: #f1e9cf; }
+  .org-tag {
+    margin-left: auto; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.75); border: 1px solid rgba(200, 168, 78, 0.28);
+    border-radius: 999px; padding: 3px 7px; white-space: nowrap;
+  }
+  .org-who { display: block; font-size: 11px; line-height: 1.5; color: rgba(234, 227, 200, 0.58); margin-top: 5px; }
+
+  /* target hire — not filled yet */
+  .org-node.open { border-style: dashed; background: transparent; }
+  .org-node.open .org-role { color: rgba(234, 227, 200, 0.72); }
+  /* the co-founder gap — the one hole worth flagging */
+  .org-node.gap { border-color: rgba(232, 168, 112, 0.45); border-style: dashed; background: rgba(232, 168, 112, 0.05); }
+  .org-node.gap .org-tag { color: #e8a870; border-color: rgba(232, 168, 112, 0.45); }
+
+  .org-detail {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .org-node.expanded .org-detail { grid-template-rows: 1fr; }
+  .org-detail-in { display: block; min-height: 0; overflow: hidden; }
+  .org-detail-p {
+    display: block; margin: 9px 0 0; padding-top: 9px; font-size: 11.5px; line-height: 1.6;
+    color: rgba(234, 227, 200, 0.7); border-top: 1px solid rgba(200, 168, 78, 0.14);
+  }
+
+  .org-legend {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    padding: 18px 26px 22px; border-top: 1px solid rgba(200, 168, 78, 0.1); margin-top: 18px;
+  }
+  .org-key { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; color: rgba(234, 227, 200, 0.5); }
+  .org-key i { width: 16px; height: 10px; border-radius: 3px; border: 1px solid rgba(200, 168, 78, 0.35); background: rgba(200, 168, 78, 0.12); }
+  .org-key.is-open i { border-style: dashed; background: transparent; }
+  .org-key.is-gap i { border-style: dashed; border-color: rgba(232, 168, 112, 0.5); background: rgba(232, 168, 112, 0.1); }
+
+  @media (max-width: 560px) {
+    .org-branches { grid-template-columns: 1fr; }
+    .org-tier > .org-node { flex-basis: 100%; max-width: none; }
+    .org-rail { display: none; }
+    .org-co { font-size: 19px; }
+  }

@@ -1,0 +1,88 @@
+  /* ─── Forged brand kit ────────────────────────────────────────
+     Palette, type and logo direction as a starter kit. Swatches
+     copy their hex on click; the whole thing exports as CSS custom
+     properties so a developer can paste it straight in. */
+  .brand-doc {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 16px; overflow: hidden;
+    background: linear-gradient(180deg, #0c0a12 0%, #06050a 100%);
+  }
+  .brand-head {
+    padding: 26px; border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+    background: radial-gradient(120% 80% at 50% 0%, rgba(160, 120, 90, 0.16), transparent 60%);
+  }
+  .brand-eyebrow { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 14px; }
+  .brand-lockups { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .brand-lock {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    border-radius: 12px; padding: 22px 16px; min-height: 118px;
+    border: 1px solid rgba(200, 168, 78, 0.16);
+  }
+  .brand-lock.on-dark { background: #08070d; }
+  .brand-lock.on-light { background: #f7f4ea; }
+  .brand-mark {
+    width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center;
+    font-size: 16px; font-weight: 700;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold) 60%, var(--gold-soft));
+    color: #140e04;
+  }
+  .brand-word { font-size: 17px; font-weight: 700; letter-spacing: 0.06em; }
+  .brand-lock.on-dark .brand-word { color: #f5eed4; }
+  .brand-lock.on-light .brand-word { color: #1a1a1a; }
+  .brand-lock small {
+    font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  .brand-lock.on-dark small { color: rgba(234, 227, 200, 0.4); }
+  .brand-lock.on-light small { color: rgba(26, 26, 26, 0.45); }
+
+  .brand-block { padding: 22px 26px; border-bottom: 1px solid rgba(200, 168, 78, 0.1); }
+  .brand-block:last-of-type { border-bottom: 0; }
+  .brand-lbl { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold-bright); margin: 0 0 12px; }
+  .brand-note { font-size: 12px; line-height: 1.6; color: rgba(234, 227, 200, 0.6); margin: 10px 0 0; }
+
+  .brand-swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 10px; }
+  .brand-swatch {
+    display: block; text-align: left; font: inherit; cursor: pointer; padding: 0; overflow: hidden;
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 12px; background: transparent; color: inherit;
+    transition: border-color 0.2s ease;
+  }
+  .brand-swatch:hover { border-color: rgba(232, 200, 112, 0.45); }
+  .brand-chip { display: block; height: 54px; }
+  .brand-swatch-meta { display: block; padding: 9px 11px 11px; }
+  .brand-swatch b { display: block; font-size: 11px; color: #f1e9cf; font-weight: 600; }
+  .brand-hex {
+    display: block; font-size: 10px; letter-spacing: 0.06em; margin-top: 3px;
+    color: rgba(234, 227, 200, 0.5); font-variant-numeric: tabular-nums;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase;
+  }
+  .brand-swatch.copied .brand-hex { color: var(--gold-bright); }
+
+  .brand-type-row {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    padding: 12px 0; border-bottom: 1px dashed rgba(200, 168, 78, 0.12);
+  }
+  .brand-type-row:last-child { border-bottom: 0; }
+  .brand-spec {
+    flex: 0 0 108px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.42);
+  }
+  .brand-sample { color: #f1e9cf; line-height: 1.25; }
+  .brand-sample.display { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand-sample.heading { font-size: 17px; font-weight: 600; }
+  .brand-sample.body { font-size: 13.5px; font-weight: 400; color: rgba(234, 227, 200, 0.8); line-height: 1.6; }
+  .brand-sample.caption { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(234, 227, 200, 0.55); }
+
+  .brand-voice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .brand-voice-col { border: 1px solid rgba(200, 168, 78, 0.14); border-radius: 12px; padding: 13px 15px; }
+  .brand-voice-col b { display: block; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 9px; }
+  .brand-voice-col.say b { color: var(--gold-bright); }
+  .brand-voice-col.avoid b { color: #e8a870; }
+  .brand-voice-col ul { margin: 0; padding-left: 16px; }
+  .brand-voice-col li { font-size: 12px; line-height: 1.6; color: rgba(234, 227, 200, 0.7); margin-bottom: 5px; }
+  .brand-voice-col li:last-child { margin-bottom: 0; }
+
+  .brand-foot { padding: 16px 26px; text-align: center; font-size: 10px; letter-spacing: 0.06em; color: rgba(234, 227, 200, 0.4); }
+
+  @media (max-width: 560px) {
+    .brand-lockups, .brand-voice { grid-template-columns: 1fr; }
+    .brand-spec { flex-basis: 100%; }
+  }

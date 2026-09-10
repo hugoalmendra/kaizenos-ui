@@ -1,6 +1,9 @@
   // ─── Forged assets — shared print + library open wiring ────────
   (function forgedAssets() {
-    const FORGE_PANEL = { exec: 'exec', landing: 'landing', deck: 'deck' };
+    const FORGE_PANEL = {
+      exec: 'exec', landing: 'landing', deck: 'deck',
+      pitch: 'pitch', org: 'org', brand: 'brand',
+    };
 
     document.querySelectorAll('.lib-item[data-output]').forEach((item) => {
       const btn = item.querySelector('.kbtn');
@@ -62,6 +65,41 @@
         .exec-sec-body, .exec-tag { color: #2a2a2a !important; }
         .exec-stat { background: #faf7ed !important; border: 0.5px solid #d8c98f !important; }
         .exec-sec, .exec-band, .exec-foot, .exec-banner { break-inside: avoid; page-break-inside: avoid; }
+      `,
+      org: BASE_PRINT + `
+        .org-doc { background: #fff !important; border: none !important; max-width: 860px; margin: 0 auto; }
+        .org-head { background: #faf7ed !important; border-bottom: 1px solid #d8c98f !important; }
+        .org-eyebrow, .org-fn { color: #8a6a1c !important; }
+        .org-co { color: #1a1a1a !important; }
+        .org-sub, .org-who, .org-key { color: #555 !important; }
+        .org-node { background: #fff !important; border-color: #d8c98f !important; }
+        .org-node.open { background: transparent !important; }
+        .org-node.gap { background: #fdf3e8 !important; border-color: #d09a5a !important; }
+        .org-role { color: #1a1a1a !important; }
+        .org-tag { color: #8a6a1c !important; border-color: #d8c98f !important; }
+        .org-node.gap .org-tag { color: #a86a20 !important; border-color: #d09a5a !important; }
+        .org-spine, .org-rail, .org-drop { background: #d8c98f !important; }
+        /* every role's reasoning prints — the page is the handout */
+        .org-detail { grid-template-rows: 1fr !important; }
+        .org-detail-p { color: #333 !important; border-top-color: #e4dcc2 !important; }
+        .org-key i { border-color: #d8c98f !important; background: #f3ecd8 !important; }
+        .org-key.is-open i { background: transparent !important; }
+        .org-key.is-gap i { border-color: #d09a5a !important; background: #fdf3e8 !important; }
+        .org-branch, .org-node, .org-legend { break-inside: avoid; page-break-inside: avoid; }
+      `,
+      brand: BASE_PRINT + `
+        .brand-doc { background: #fff !important; border: none !important; max-width: 860px; margin: 0 auto; }
+        .brand-head { background: #faf7ed !important; border-bottom: 1px solid #d8c98f !important; }
+        .brand-eyebrow, .brand-lbl { color: #8a6a1c !important; }
+        .brand-lock { border-color: #d8c98f !important; }
+        .brand-note, .brand-voice-col li { color: #333 !important; }
+        .brand-swatch, .brand-voice-col, .brand-type-row { border-color: #d8c98f !important; }
+        .brand-swatch b, .brand-sample { color: #1a1a1a !important; }
+        .brand-sample.body { color: #333 !important; }
+        .brand-sample.caption, .brand-hex, .brand-spec { color: #666 !important; }
+        .brand-voice-col.say b { color: #8a6a1c !important; }
+        .brand-voice-col.avoid b { color: #a86a20 !important; }
+        .brand-block, .brand-swatch, .brand-voice, .brand-lockups { break-inside: avoid; page-break-inside: avoid; }
       `,
       deck: BASE_PRINT + `
         .deck-doc { max-width: 720px; margin: 0 auto; gap: 0 !important; }

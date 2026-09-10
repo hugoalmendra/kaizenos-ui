@@ -34,6 +34,9 @@
 <link rel="stylesheet" href="css/mentor/25-mobile-hud.css">
 <link rel="stylesheet" href="css/mentor/26-feedback-account.css">
 <link rel="stylesheet" href="css/mentor/27-company-overview.css">
+<link rel="stylesheet" href="css/mentor/28-elevator-pitch-forge.css">
+<link rel="stylesheet" href="css/mentor/29-org-chart-forge.css">
+<link rel="stylesheet" href="css/mentor/30-brand-kit-forge.css">
 <link rel="stylesheet" href="css/shared/loader.css">
 </head>
 <body>
@@ -428,6 +431,15 @@
       <button class="kp-close" data-close aria-label="Close">✕</button>
     </div>
     <p class="kp-sub">Kaiso forges these as you talk — the more it learns, the closer each one gets to ready.</p>
+    <div class="lib-item locked" data-output="pitch" data-need="2">
+      <span class="lib-thumb">✧</span>
+      <span class="lib-meta">
+        <b>Elevator Pitch</b>
+        <span class="lib-status">Not started — talk with Kaiso to forge it</span>
+        <span class="lib-prog"><span class="lib-prog-fill"></span></span>
+      </span>
+      <button class="kbtn" id="pitchOpenBtn" disabled>Forging</button>
+    </div>
     <div class="lib-item locked" data-output="exec" data-need="3">
       <span class="lib-thumb">✦</span>
       <span class="lib-meta">
@@ -445,6 +457,24 @@
         <span class="lib-prog"><span class="lib-prog-fill"></span></span>
       </span>
       <button class="kbtn" id="landingOpenBtn" disabled>Forging</button>
+    </div>
+    <div class="lib-item locked" data-output="org" data-need="6">
+      <span class="lib-thumb">⬡</span>
+      <span class="lib-meta">
+        <b>Org Chart</b>
+        <span class="lib-status">Not started — talk with Kaiso to forge it</span>
+        <span class="lib-prog"><span class="lib-prog-fill"></span></span>
+      </span>
+      <button class="kbtn" id="orgOpenBtn" disabled>Forging</button>
+    </div>
+    <div class="lib-item locked" data-output="brand" data-need="7">
+      <span class="lib-thumb">◐</span>
+      <span class="lib-meta">
+        <b>Brand Kit</b>
+        <span class="lib-status">Not started — talk with Kaiso to forge it</span>
+        <span class="lib-prog"><span class="lib-prog-fill"></span></span>
+      </span>
+      <button class="kbtn" id="brandOpenBtn" disabled>Forging</button>
     </div>
     <div class="lib-item locked" data-output="deck" data-need="8">
       <span class="lib-thumb">❖</span>
@@ -745,6 +775,292 @@
     <p class="kp-note">12 slides forged from your session — print or export as PDF. Keep talking to sharpen each slide.</p>
   </section>
 
+  <!-- Elevator Pitch panel -->
+  <section class="kpanel kpanel-wide" id="panelPitch" aria-label="Elevator Pitch">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso &middot; Elevator Pitch</span>
+      <button class="kp-close" data-close aria-label="Close">&#10005;</button>
+    </div>
+    <div class="exec-actions">
+      <button class="kbtn" id="pitchCopyBtn" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="9" y="9" width="11" height="11" rx="2"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" stroke-linecap="round"/>
+        </svg>
+        Copy all
+      </button>
+      <button class="kbtn primary" id="pitchDownloadBtn" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 4v10" stroke-linecap="round"/><path d="M8 11l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke-linecap="round"/>
+        </svg>
+        Download .txt
+      </button>
+    </div>
+
+    <article class="pitch-doc" id="pitchPrintable">
+      <header class="pitch-hero">
+        <div class="pitch-eyebrow">Elevator Pitch</div>
+        <div class="pitch-co exec-co">Helm</div>
+        <p class="pitch-line">Helm is the <em>operations autopilot</em> for independent e-commerce brands &mdash; it runs the back office so the founder can run the business.</p>
+      </header>
+
+      <section class="pitch-block" data-pitch="30">
+        <div class="pitch-block-head">
+          <span class="pitch-dur">30 sec</span>
+          <span class="pitch-when">A lift, a conference badge scan</span>
+          <span class="pitch-count"></span>
+        </div>
+        <p class="pitch-body">Independent online stores lose twelve hours a week stitching inventory, fulfillment and support across tools that don&rsquo;t talk to each other. Hiring an ops manager costs six figures, so most brands under two million just absorb the work themselves. Helm is an AI operations layer that connects the tools a store already uses and runs the repetitive work on its own &mdash; reorder alerts, shipment triage, refunds, daily reporting. The founder approves. Helm executes.</p>
+      </section>
+
+      <section class="pitch-block" data-pitch="60">
+        <div class="pitch-block-head">
+          <span class="pitch-dur">60 sec</span>
+          <span class="pitch-when">A warm intro call, an investor at a demo day</span>
+          <span class="pitch-count"></span>
+        </div>
+        <p class="pitch-body">Independent online stores lose twelve hours a week stitching inventory, fulfillment and support across tools that don&rsquo;t talk to each other. Ninety percent of brands under two million can&rsquo;t afford an ops manager, so the founder is the ops manager.</p>
+        <p class="pitch-body">Helm is an AI operations layer. It connects the stack a store already runs &mdash; Shopify, the 3PL, the support desk &mdash; and handles the repetitive work autonomously: reorder alerts, shipment triage, refunds, daily reporting. Everything routes through a human-in-the-loop dashboard. The founder approves, Helm executes.</p>
+        <p class="pitch-body">Fourteen hundred brands are on the waitlist. The pilot cohort is at eighteen thousand MRR, growing nine percent week over week, at an NPS of sixty-two. We charge seventy-nine to three ninety-nine a month by order volume, plus usage on automated actions.</p>
+      </section>
+
+      <section class="pitch-block" data-pitch="90">
+        <div class="pitch-block-head">
+          <span class="pitch-dur">90 sec</span>
+          <span class="pitch-when">A partner meeting, the first ten minutes of a pitch</span>
+          <span class="pitch-count"></span>
+        </div>
+        <p class="pitch-body">Independent online stores lose twelve hours a week stitching inventory, fulfillment and support across tools that don&rsquo;t talk to each other. Ninety percent of brands under two million can&rsquo;t afford an ops manager, so the founder is the ops manager &mdash; and the business stops growing at exactly the point it should be compounding.</p>
+        <p class="pitch-body">Helm is an AI operations layer. It connects the stack a store already runs &mdash; Shopify, the 3PL, the support desk, the ad accounts &mdash; and handles the repetitive work autonomously: reorder alerts, shipment triage, refund handling, daily reporting. Everything routes through a human-in-the-loop dashboard, so the founder approves and Helm executes. Nothing happens to a customer that the founder didn&rsquo;t sign off on.</p>
+        <p class="pitch-body">This wasn&rsquo;t buildable eighteen months ago. Agentic models only just became reliable and cheap enough to run unattended operations, and at the same time a record number of solo founders are launching stores with no back-office staff at all.</p>
+        <p class="pitch-body">I spent eight years scaling DTC operations, the last of them at Shopify Plus. My co-founder led ML at two workflow-automation companies, both acquired. Fourteen hundred brands are on the waitlist, the pilot cohort is at eighteen thousand MRR growing nine percent week over week, and we&rsquo;re raising one and a half million to reach five thousand paying brands and a million in ARR over eighteen months.</p>
+      </section>
+
+      <footer class="pitch-foot">Forged by Kaiso &middot; hello@helm.app &middot; helm.app</footer>
+    </article>
+    <p class="kp-note">One line, then the same story at three lengths. Keep talking and Kaiso re-cuts them as the numbers change.</p>
+  </section>
+
+  <!-- Org Chart panel -->
+  <section class="kpanel kpanel-wide" id="panelOrg" aria-label="Org Chart">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso &middot; Org Chart</span>
+      <button class="kp-close" data-close aria-label="Close">&#10005;</button>
+    </div>
+    <div class="exec-actions">
+      <button class="kbtn primary" id="orgDownloadBtn" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 4v10" stroke-linecap="round"/><path d="M8 11l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke-linecap="round"/>
+        </svg>
+        Download as PDF
+      </button>
+    </div>
+
+    <article class="org-doc" id="orgPrintable">
+      <header class="org-head">
+        <div class="org-eyebrow">Org Chart &middot; Today and twelve months out</div>
+        <h1 class="org-co exec-co">Helm</h1>
+        <p class="org-sub">2 in seat &middot; 5 target hires &middot; 1 co-founder gap</p>
+      </header>
+
+      <div class="org-tree">
+        <div class="org-tier">
+          <button class="org-node" type="button">
+            <span class="org-node-top"><span class="org-role">Co-founder &amp; CEO</span><span class="org-tag">In seat</span></span>
+            <span class="org-who">8 years scaling DTC operations, ex-Shopify Plus.</span>
+            <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Owns fundraising, partnerships and the first fifty customer conversations. Carries sales until the founding AE lands.</span></span></span>
+          </button>
+          <button class="org-node" type="button">
+            <span class="org-node-top"><span class="org-role">Co-founder &amp; CTO</span><span class="org-tag">In seat</span></span>
+            <span class="org-who">Former ML lead, two prior exits in workflow automation.</span>
+            <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Owns the agent architecture and the integration layer &mdash; the reason automated actions are safe to run unattended.</span></span></span>
+          </button>
+        </div>
+
+        <div class="org-spine"></div>
+        <div class="org-rail"></div>
+
+        <div class="org-branches">
+          <div class="org-branch">
+            <div class="org-drop"></div>
+            <div class="org-fn">Engineering</div>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Integrations Engineer</span><span class="org-tag">Q3 hire</span></span>
+              <span class="org-who">Shopify, 3PL and support connectors.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">First hire out of the raise. The roadmap is integration-bound, not model-bound &mdash; every connector widens the addressable market.</span></span></span>
+            </button>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Agent Reliability Eng.</span><span class="org-tag">Q4 hire</span></span>
+              <span class="org-who">Evaluation harness and guardrails.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Owns the tests that decide whether an action is safe to run without a human. Blocks the move from approve-each to approve-by-exception.</span></span></span>
+            </button>
+          </div>
+
+          <div class="org-branch">
+            <div class="org-drop"></div>
+            <div class="org-fn">Operations</div>
+            <button class="org-node gap" type="button">
+              <span class="org-node-top"><span class="org-role">Head of Customer Ops</span><span class="org-tag">Gap</span></span>
+              <span class="org-who">Nobody on the team has run support at volume.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Flagged in the People pillar as co-founder shaped rather than a hire &mdash; a senior operator who has carried a support queue through a scale event, at equity level.</span></span></span>
+            </button>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Onboarding Specialist</span><span class="org-tag">Q4 hire</span></span>
+              <span class="org-who">Migrates a brand&rsquo;s workflows in week one.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Churn is decided in the first week. This role exists to make the first automated action happen inside a customer&rsquo;s first session.</span></span></span>
+            </button>
+          </div>
+
+          <div class="org-branch">
+            <div class="org-drop"></div>
+            <div class="org-fn">Growth</div>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Founding AE</span><span class="org-tag">Q3 hire</span></span>
+              <span class="org-who">Converts the 1,400-brand waitlist.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Reports to the CEO until there is a second seller. Hired against a proven motion, not to invent one.</span></span></span>
+            </button>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Content &amp; Lifecycle</span><span class="org-tag">Q1 2027</span></span>
+              <span class="org-who">Top of funnel once the motion repeats.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Deliberately late. Paid acquisition before the sales motion is repeatable buys churn, not growth.</span></span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="org-legend">
+        <span class="org-key"><i></i> In seat</span>
+        <span class="org-key is-open"><i></i> Target hire</span>
+        <span class="org-key is-gap"><i></i> Co-founder gap</span>
+      </div>
+    </article>
+    <p class="kp-note">Click any role to see why it exists and when it lands. Kaiso redraws this as the People pillar fills in.</p>
+  </section>
+
+  <!-- Brand Kit panel -->
+  <section class="kpanel kpanel-wide" id="panelBrand" aria-label="Brand Kit">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso &middot; Brand Kit</span>
+      <button class="kp-close" data-close aria-label="Close">&#10005;</button>
+    </div>
+    <div class="exec-actions">
+      <button class="kbtn" id="brandTokensBtn" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M8 8l-4 4 4 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 8l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Export tokens
+      </button>
+      <button class="kbtn primary" id="brandDownloadBtn" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 4v10" stroke-linecap="round"/><path d="M8 11l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke-linecap="round"/>
+        </svg>
+        Download as PDF
+      </button>
+    </div>
+
+    <article class="brand-doc" id="brandPrintable">
+      <header class="brand-head">
+        <div class="brand-eyebrow">Brand Kit &middot; Starter direction</div>
+        <div class="brand-lockups">
+          <div class="brand-lock on-dark">
+            <span class="brand-mark">&#9776;</span>
+            <span class="brand-word exec-co">HELM</span>
+            <small>Primary &middot; on hull</small>
+          </div>
+          <div class="brand-lock on-light">
+            <span class="brand-mark">&#9776;</span>
+            <span class="brand-word">HELM</span>
+            <small>Reversed &middot; on sail</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="brand-block">
+        <h2 class="brand-lbl">Logo direction</h2>
+        <p class="brand-note">Three stacked bars &mdash; a waterline and a helm at once. Reads at 16px in a browser tab, which is where most of a store&rsquo;s customers will meet it. Wordmark set in the display face at heavy weight, wide tracking, always uppercase. Mark may run alone; the wordmark may not run without clear space equal to the bar height on all sides.</p>
+      </section>
+
+      <section class="brand-block">
+        <h2 class="brand-lbl">Palette</h2>
+        <div class="brand-swatches">
+          <button class="brand-swatch" type="button" data-hex="#10141C" data-token="hull">
+            <span class="brand-chip" style="background:#10141C"></span>
+            <span class="brand-swatch-meta"><b>Hull</b><span class="brand-hex">#10141C</span></span>
+          </button>
+          <button class="brand-swatch" type="button" data-hex="#2E6F7E" data-token="tide">
+            <span class="brand-chip" style="background:#2E6F7E"></span>
+            <span class="brand-swatch-meta"><b>Tide</b><span class="brand-hex">#2E6F7E</span></span>
+          </button>
+          <button class="brand-swatch" type="button" data-hex="#E8A33D" data-token="signal">
+            <span class="brand-chip" style="background:#E8A33D"></span>
+            <span class="brand-swatch-meta"><b>Signal</b><span class="brand-hex">#E8A33D</span></span>
+          </button>
+          <button class="brand-swatch" type="button" data-hex="#3F7D58" data-token="kelp">
+            <span class="brand-chip" style="background:#3F7D58"></span>
+            <span class="brand-swatch-meta"><b>Kelp</b><span class="brand-hex">#3F7D58</span></span>
+          </button>
+          <button class="brand-swatch" type="button" data-hex="#6B7683" data-token="slate">
+            <span class="brand-chip" style="background:#6B7683"></span>
+            <span class="brand-swatch-meta"><b>Slate</b><span class="brand-hex">#6B7683</span></span>
+          </button>
+          <button class="brand-swatch" type="button" data-hex="#F5F2EA" data-token="sail">
+            <span class="brand-chip" style="background:#F5F2EA"></span>
+            <span class="brand-swatch-meta"><b>Sail</b><span class="brand-hex">#F5F2EA</span></span>
+          </button>
+        </div>
+        <p class="brand-note">Hull carries the product chrome, Sail the document surfaces. Tide is the only colour used for a primary action. Signal is reserved for things that need a human &mdash; a stuck shipment, a low-stock alert &mdash; so it must never appear decoratively. Kelp confirms an automated action completed.</p>
+      </section>
+
+      <section class="brand-block">
+        <h2 class="brand-lbl">Typography</h2>
+        <div class="brand-type-row">
+          <span class="brand-spec">Display &middot; 40 / 700</span>
+          <span class="brand-sample display">Run ops on autopilot</span>
+        </div>
+        <div class="brand-type-row">
+          <span class="brand-spec">Heading &middot; 20 / 600</span>
+          <span class="brand-sample heading">Everything the back office does</span>
+        </div>
+        <div class="brand-type-row">
+          <span class="brand-spec">Body &middot; 16 / 400 / 1.6</span>
+          <span class="brand-sample body">Helm connects the tools your store already runs and handles the repetitive work, with you approving rather than doing.</span>
+        </div>
+        <div class="brand-type-row">
+          <span class="brand-spec">Caption &middot; 11 / 500</span>
+          <span class="brand-sample caption">Trusted by 1,400 brands</span>
+        </div>
+        <p class="brand-note">Bricolage Grotesque for display and headings &mdash; it has enough character to hold a logo lockup. IBM Plex Sans for body, IBM Plex Mono for order numbers, SKUs and anything a founder will read back over the phone. All three are open-licensed, so nothing here needs a foundry invoice before launch.</p>
+      </section>
+
+      <section class="brand-block">
+        <h2 class="brand-lbl">Voice</h2>
+        <div class="brand-voice">
+          <div class="brand-voice-col say">
+            <b>Say</b>
+            <ul>
+              <li>Plain operator language &mdash; &ldquo;reorder alert&rdquo;, not &ldquo;intelligent replenishment signal&rdquo;.</li>
+              <li>Name the hours saved before naming the technology.</li>
+              <li>Talk to the founder who is still doing the work tonight.</li>
+            </ul>
+          </div>
+          <div class="brand-voice-col avoid">
+            <b>Avoid</b>
+            <ul>
+              <li>&ldquo;Revolutionary&rdquo;, &ldquo;seamless&rdquo;, &ldquo;game-changing&rdquo;.</li>
+              <li>AI as the headline &mdash; it is the method, not the promise.</li>
+              <li>Enterprise tone. These are one- and two-person teams.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer class="brand-foot">Forged by Kaiso &middot; palette, type and voice from your session</footer>
+    </article>
+    <p class="kp-note">Click a swatch to copy its hex, or export the whole palette as CSS custom properties.</p>
+  </section>
+
   <!-- YC Application Pack panel -->
   <section class="kpanel kpanel-wide" id="panelYcApply" aria-label="YC Application Pack">
     <div class="kp-head">
@@ -980,6 +1296,7 @@
 <script src="js/mentor/11-onboarding-tour.js"></script>
 <script src="js/mentor/12-kos-wheel.js"></script>
 <script src="js/mentor/17-company-overview.js"></script>
+<script src="js/mentor/18-forge-extras.js"></script>
 
 </body>
 </html>

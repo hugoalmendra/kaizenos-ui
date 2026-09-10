@@ -13,6 +13,9 @@
     const panelExec    = document.getElementById('panelExec');
     const panelLanding = document.getElementById('panelLanding');
     const panelDeck    = document.getElementById('panelDeck');
+    const panelPitch   = document.getElementById('panelPitch');
+    const panelOrg     = document.getElementById('panelOrg');
+    const panelBrand   = document.getElementById('panelBrand');
     const panelYcApply = document.getElementById('panelYcApply');
     const planDetail   = document.getElementById('planDetail');
     const toast        = document.getElementById('ktoast');
@@ -80,6 +83,9 @@
       if (panelExec) panelExec.classList.toggle('show', which === 'exec');
       if (panelLanding) panelLanding.classList.toggle('show', which === 'landing');
       if (panelDeck) panelDeck.classList.toggle('show', which === 'deck');
+      if (panelPitch) panelPitch.classList.toggle('show', which === 'pitch');
+      if (panelOrg) panelOrg.classList.toggle('show', which === 'org');
+      if (panelBrand) panelBrand.classList.toggle('show', which === 'brand');
       if (panelYcApply) panelYcApply.classList.toggle('show', which === 'yc');
       const panelFeedback = document.getElementById('panelFeedback');
       const panelAccount  = document.getElementById('panelAccount');
@@ -111,7 +117,7 @@
       if (e.key === 'Escape' && modal.classList.contains('open')) { e.stopPropagation(); closeModal(); }
     }, true);
 
-    // ─ Forged assets (exec, landing, deck) ─────────────────────
+    // ─ Forged assets (exec, pitch, landing, org, brand, deck) ──
     const execDateEl = document.getElementById('execDate');
     if (execDateEl) {
       execDateEl.textContent = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -120,7 +126,7 @@
     function printForge(docId, titlePrefix, styleKey) {
       const docEl = document.getElementById(docId);
       if (!docEl || !window.kaisoPrint) return;
-      const coName = (docEl.querySelector('.exec-co, .land-logo, .deck-title') || {}).textContent || 'Venture';
+      const coName = (docEl.querySelector('.exec-co, .land-logo, .deck-title, .brand-word') || {}).textContent || 'Venture';
       const dateStr = new Date().toISOString().slice(0, 10);
       const ok = window.kaisoPrint(
         docEl,
@@ -136,6 +142,8 @@
       else showToast('Export failed — open the landing page first');
     });
     document.getElementById('deckDownloadBtn')?.addEventListener('click', () => printForge('deckPrintable', 'Pitch Deck', 'deck'));
+    document.getElementById('orgDownloadBtn')?.addEventListener('click', () => printForge('orgPrintable', 'Org Chart', 'org'));
+    document.getElementById('brandDownloadBtn')?.addEventListener('click', () => printForge('brandPrintable', 'Brand Kit', 'brand'));
 
     // ─ Plan selection ────────────────────────────────────────
     panelPlan.querySelectorAll('[data-plan]').forEach((c) =>

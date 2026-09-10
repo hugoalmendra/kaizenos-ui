@@ -99,7 +99,20 @@
         .brand-sample.caption, .brand-hex, .brand-spec { color: #666 !important; }
         .brand-voice-col.say b { color: #8a6a1c !important; }
         .brand-voice-col.avoid b { color: #a86a20 !important; }
-        .brand-block, .brand-swatch, .brand-voice, .brand-lockups { break-inside: avoid; page-break-inside: avoid; }
+        .brand-lock.on-dark { background: #10141c !important; }
+        .brand-lock.on-dark .brand-mark { color: #f5f2ea !important; }
+        .brand-lock.on-light .brand-mark { color: #10141c !important; }
+        .mo-art { color: #10141c !important; }
+        .brand-mark-opt { border-color: #d8c98f !important; background: #fff !important; }
+        .brand-mark-opt.sel { background: #faf7ed !important; border-color: #8a6a1c !important; }
+        .mo-meta b { color: #1a1a1a !important; }
+        .mo-meta span { color: #555 !important; }
+        .brand-mark-foot { background: #fdf3e8 !important; border-color: #d09a5a !important; }
+        .brand-clear { color: #333 !important; }
+        .brand-clear b { color: #a86a20 !important; }
+        /* the download control is chrome, not part of the document */
+        .brand-mark-foot .kbtn { display: none !important; }
+        .brand-block, .brand-swatch, .brand-voice, .brand-lockups, .brand-mark-opt { break-inside: avoid; page-break-inside: avoid; }
       `,
       deck: BASE_PRINT + `
         .deck-doc { max-width: 720px; margin: 0 auto; gap: 0 !important; }

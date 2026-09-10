@@ -965,12 +965,12 @@
         <div class="brand-eyebrow">Brand Kit &middot; Starter direction</div>
         <div class="brand-lockups">
           <div class="brand-lock on-dark">
-            <span class="brand-mark">&#9776;</span>
+            <span class="brand-mark" id="brandMarkDark"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><rect x="3" y="6" width="26" height="4.6" rx="2.3"/><rect x="7" y="13.7" width="18" height="4.6" rx="2.3"/><rect x="11" y="21.4" width="10" height="4.6" rx="2.3"/></svg></span>
             <span class="brand-word exec-co">HELM</span>
             <small>Primary &middot; on hull</small>
           </div>
           <div class="brand-lock on-light">
-            <span class="brand-mark">&#9776;</span>
+            <span class="brand-mark" id="brandMarkLight"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><rect x="3" y="6" width="26" height="4.6" rx="2.3"/><rect x="7" y="13.7" width="18" height="4.6" rx="2.3"/><rect x="11" y="21.4" width="10" height="4.6" rx="2.3"/></svg></span>
             <span class="brand-word">HELM</span>
             <small>Reversed &middot; on sail</small>
           </div>
@@ -979,7 +979,35 @@
 
       <section class="brand-block">
         <h2 class="brand-lbl">Logo direction</h2>
-        <p class="brand-note">Three stacked bars &mdash; a waterline and a helm at once. Reads at 16px in a browser tab, which is where most of a store&rsquo;s customers will meet it. Wordmark set in the display face at heavy weight, wide tracking, always uppercase. Mark may run alone; the wordmark may not run without clear space equal to the bar height on all sides.</p>
+        <p class="brand-note">Four directions, drawn as vectors so they recolour from the palette, stay sharp at any size and open in Figma. Pick one to set the lockups above.</p>
+        <div class="brand-marks">
+          <button class="brand-mark-opt sel" type="button" data-mark="waterline" aria-pressed="true">
+            <span class="mo-art"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><rect x="3" y="6" width="26" height="4.6" rx="2.3"/><rect x="7" y="13.7" width="18" height="4.6" rx="2.3"/><rect x="11" y="21.4" width="10" height="4.6" rx="2.3"/></svg></span>
+            <span class="mo-meta"><b>Waterline</b><span>Three operations stacked and receding. Abstract enough to own, and the only one here that says nothing literal about boats.</span></span>
+          </button>
+          <button class="brand-mark-opt" type="button" data-mark="helm" aria-pressed="false">
+            <span class="mo-art"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M19.4 16H25M17.7 18.9l2.8 4.9M14.3 18.9l-2.8 4.9M12.6 16H7M14.3 13.1l-2.8-4.9M17.7 13.1l2.8-4.9"/><circle cx="16" cy="16" r="1.9" fill="currentColor" stroke="none"/></svg></span>
+            <span class="mo-meta"><b>Helm</b><span>The name drawn literally. Highest recognition, lowest distinctiveness, and the spokes close up at favicon size.</span></span>
+          </button>
+          <button class="brand-mark-opt" type="button" data-mark="bearing" aria-pressed="false">
+            <span class="mo-art"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 L23.5 16 L16 29 Z" fill="currentColor"/><path d="M16 3 L23.5 16 L16 29 L8.5 16 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></span>
+            <span class="mo-meta"><b>Bearing</b><span>A needle holding course. Speaks to the autopilot rather than to commerce.</span></span>
+          </button>
+          <button class="brand-mark-opt" type="button" data-mark="monogram" aria-pressed="false">
+            <span class="mo-art"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><rect x="5" y="4.5" width="5.2" height="23" rx="2.6"/><rect x="21.8" y="4.5" width="5.2" height="23" rx="2.6"/><rect x="5" y="13.2" width="22" height="5.2" rx="2.6"/></svg></span>
+            <span class="mo-meta"><b>Monogram</b><span>A plain geometric H, heavily rounded. Safest at 16px, weakest running without the wordmark.</span></span>
+          </button>
+        </div>
+        <div class="brand-mark-foot">
+          <p class="brand-clear"><b>Direction, not a finished logo.</b> Run a trademark clearance check before this goes on anything commercial &mdash; a generated mark can land on one someone already owns, and that is a separate problem from who owns the file.</p>
+          <button class="kbtn" id="brandSvgBtn" type="button">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M12 4v10" stroke-linecap="round"/><path d="M8 11l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke-linecap="round"/>
+            </svg>
+            Download SVG
+          </button>
+        </div>
+        <p class="brand-note">Wordmark set in the display face at heavy weight, wide tracking, always uppercase. The mark may run alone; the wordmark may not run without clear space equal to the bar height on all sides. Minimum size 16px for the mark, 80px wide for the lockup.</p>
       </section>
 
       <section class="brand-block">

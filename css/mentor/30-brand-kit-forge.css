@@ -19,12 +19,12 @@
   }
   .brand-lock.on-dark { background: #08070d; }
   .brand-lock.on-light { background: #f7f4ea; }
-  .brand-mark {
-    width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center;
-    font-size: 16px; font-weight: 700;
-    background: linear-gradient(135deg, var(--gold-bright), var(--gold) 60%, var(--gold-soft));
-    color: #140e04;
-  }
+  /* the mark is the venture's own, so it takes the venture's colours —
+     never Kaiso's gold, which would follow every founder's brand around */
+  .brand-mark { display: block; width: 36px; height: 36px; }
+  .brand-mark svg { display: block; width: 100%; height: 100%; }
+  .brand-lock.on-dark .brand-mark { color: #f5f2ea; }
+  .brand-lock.on-light .brand-mark { color: #10141c; }
   .brand-word { font-size: 17px; font-weight: 700; letter-spacing: 0.06em; }
   .brand-lock.on-dark .brand-word { color: #f5eed4; }
   .brand-lock.on-light .brand-word { color: #1a1a1a; }
@@ -33,6 +33,32 @@
   }
   .brand-lock.on-dark small { color: rgba(234, 227, 200, 0.4); }
   .brand-lock.on-light small { color: rgba(26, 26, 26, 0.45); }
+
+
+  /* ── generated directions ── */
+  .brand-marks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 14px 0 12px; }
+  .brand-mark-opt {
+    display: flex; flex-direction: column; gap: 10px; text-align: left; font: inherit; cursor: pointer;
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 12px; padding: 14px 13px 13px;
+    background: transparent; color: inherit;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .brand-mark-opt:hover { border-color: rgba(200, 168, 78, 0.38); background: rgba(200, 168, 78, 0.04); }
+  .brand-mark-opt.sel { border-color: rgba(232, 200, 112, 0.55); background: rgba(200, 168, 78, 0.07); }
+  .mo-art { display: grid; place-items: center; height: 52px; color: #f5f2ea; }
+  .mo-art svg { width: 40px; height: 40px; }
+  .brand-mark-opt.sel .mo-art { color: #fff; }
+  .mo-meta b { display: block; font-size: 11px; color: #f1e9cf; font-weight: 600; margin-bottom: 5px; }
+  .mo-meta span { display: block; font-size: 10.5px; line-height: 1.5; color: rgba(234, 227, 200, 0.5); }
+
+  .brand-mark-foot {
+    display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap;
+    border: 1px solid rgba(232, 168, 112, 0.28); border-radius: 12px;
+    background: rgba(232, 168, 112, 0.05); padding: 13px 15px; margin-bottom: 14px;
+  }
+  .brand-clear { flex: 1; min-width: 220px; margin: 0; font-size: 11.5px; line-height: 1.6; color: rgba(234, 227, 200, 0.66); }
+  .brand-clear b { color: #e8a870; font-weight: 600; }
+  .brand-mark-foot .kbtn { flex: 0 0 auto; font-size: 9px; padding: 9px 14px; }
 
   .brand-block { padding: 22px 26px; border-bottom: 1px solid rgba(200, 168, 78, 0.1); }
   .brand-block:last-of-type { border-bottom: 0; }
@@ -84,5 +110,6 @@
 
   @media (max-width: 560px) {
     .brand-lockups, .brand-voice { grid-template-columns: 1fr; }
+    .brand-marks { grid-template-columns: 1fr 1fr; }
     .brand-spec { flex-basis: 100%; }
   }

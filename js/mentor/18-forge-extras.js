@@ -146,6 +146,48 @@
         });
       });
 
+      /* Logo direction. The mark is generated as SVG rather than as a
+         raster image: it has to recolour from the palette, stay sharp at
+         a 16px favicon and open in Figma, none of which a PNG does. The
+         founder picks a direction, the lockups follow, and the file that
+         leaves is monochrome so it can be recoloured downstream. */
+      const opts = Array.from(brandDoc.querySelectorAll('.brand-mark-opt'));
+      const lockDark = document.getElementById('brandMarkDark');
+      const lockLight = document.getElementById('brandMarkLight');
+      let markName = 'waterline';
+
+      function selectMark(btn) {
+        markName = btn.dataset.mark || 'mark';
+        const art = btn.querySelector('.mo-art svg');
+        if (!art) return;
+        opts.forEach((o) => {
+          o.classList.toggle('sel', o === btn);
+          o.setAttribute('aria-pressed', o === btn ? 'true' : 'false');
+        });
+        if (lockDark) lockDark.innerHTML = art.outerHTML;
+        if (lockLight) lockLight.innerHTML = art.outerHTML;
+      }
+
+      opts.forEach((btn) => btn.addEventListener('click', () => selectMark(btn)));
+
+      document.getElementById('brandSvgBtn')?.addEventListener('click', () => {
+        const sel = brandDoc.querySelector('.brand-mark-opt.sel .mo-art svg');
+        if (!sel) { toast('Pick a direction first'); return; }
+        const co = ventureName();
+        // currentColor only resolves inside a page; a standalone file needs
+        // a real value, so it ships in the palette's ink colour.
+        const ink = (brandDoc.querySelector('.brand-swatch[data-token="hull"]') || {}).dataset?.hex || '#10141C';
+        const body = sel.outerHTML
+          .replace(/\s*aria-hidden="true"/g, '')
+          .replace(/currentColor/g, ink);
+        const svg = '<?xml version="1.0" encoding="UTF-8"?>\n'
+          + '<!-- ' + co + ' — ' + markName + ' mark. Direction, not a cleared trademark. -->\n'
+          + '<!-- Monochrome by design: recolour by replacing ' + ink + '. -->\n'
+          + body.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" ') + '\n';
+        download(svg, 'kaiso_mark_' + slug(co) + '_' + markName + '_' + today() + '.svg', 'image/svg+xml');
+        toast('Mark downloaded as SVG');
+      });
+
       document.getElementById('brandTokensBtn')?.addEventListener('click', () => {
         const co = ventureName();
         const lines = [

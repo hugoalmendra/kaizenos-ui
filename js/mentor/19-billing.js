@@ -9,19 +9,24 @@
   // every state around the payment, and the balance update are ours.
   //
   // Prototype: nothing is charged and nothing reaches Stripe. The slot
-  // holds an outcome picker so every branch can be walked, and prices
-  // are SAMPLE values — in production they come from Stripe.
+  // holds an outcome picker so every branch can be walked. The billing
+  // rules below are decided (KAIZ-31); in production the prices are read
+  // from Stripe rather than from this file.
   (function billing() {
     const panel = document.getElementById('panelPlan');
     const acct  = document.getElementById('panelAccount');
     const T = window.KaisoTime;
     if (!panel || !T) return;
 
-    // SAMPLE catalogue. Stripe Prices is the source of truth in production.
+    // The plan is the best value per hour. Top-ups cost more per hour —
+    // the pay-as-you-go premium — with a small discount for larger packs,
+    // and never undercut the plan. Prices include tax.
     const PLAN = { tokens: 500, price: '$29' };
-    const PACKS = { 100: '$6', 250: '$12', 600: '$24' };
-    // SAMPLE. The real grace period follows Stripe's retry schedule.
-    const GRACE_DAYS = 7;
+    const PACKS = { 100: '$9', 250: '$19', 600: '$39' };
+    // Matches Stripe's recommended retry window: 8 tries over 2 weeks.
+    const GRACE_DAYS = 14;
+    const TOPUP_MONTHS = 12;
+    const fmtLong = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
     const $  = (sel, root) => (root || panel).querySelector(sel);
     const $$ = (sel, root) => Array.from((root || panel).querySelectorAll(sel));
@@ -120,9 +125,9 @@
       $('#coItem').textContent = it.label;
       $('#coPrice').textContent = it.kind === 'plan' ? it.price + ' / mo' : it.price;
       $('#coTerms').textContent = it.kind === 'plan'
-        ? 'Adds ' + T.fmtAllowance(it.tokens) + ' now, and tops your balance back up each month. Next renewal ' +
+        ? T.fmtAllowance(it.tokens) + ' each month, starting now. Plan time resets at each renewal and doesn’t roll over. Next renewal ' +
           fmtDate(addMonths(new Date(), 1)) + '. Cancel any time.'
-        : 'One-off payment. Adds ' + T.fmtAllowance(it.tokens) + ' to your balance.';
+        : 'One-off payment. Adds ' + T.fmtAllowance(it.tokens) + ', usable for 12 months, after any plan time.';
     }
 
     const OUTCOMES = {
@@ -189,8 +194,12 @@
       clearTimeout(pendTimer);
       const it = item();
       const now = new Date();
-      T.credit(it.tokens);
-      if (it.kind === 'plan') T.setPlan({ renewsAt: addMonths(now, 1), cancelAt: null, pastDue: false });
+      if (it.kind === 'plan') {
+        T.setPlanTime(it.tokens);
+        T.setPlan({ renewsAt: addMonths(now, 1), cancelAt: null, pastDue: false });
+      } else {
+        T.addTopUp(it.tokens, addMonths(now, TOPUP_MONTHS));
+      }
       cardOnFile = true;
       history.unshift({
         date: now, label: it.kind === 'plan' ? 'Monthly plan' : 'Top up',
@@ -245,6 +254,20 @@
       const { balance, plan } = T.state();
 
       q('#billPlanName').textContent = plan ? 'Monthly plan' : 'Pay as you go';
+
+      // Which time resets and which carries over is the question founders
+      // ask, so the two are shown apart.
+      const st = T.state();
+      q('#billPlanTimeRow').hidden = !plan;
+      q('#billPlanTime').textContent = T.fmtLeft(st.planTokens);
+      q('#billPlanTimeSub').textContent = !plan ? ''
+        : plan.pastDue ? 'Still usable during the grace period'
+        : plan.cancelAt ? 'Ends ' + fmtDate(plan.cancelAt)
+        : 'Resets to ' + T.fmtAllowance(PLAN.tokens) + ' on ' + fmtDate(plan.renewsAt);
+      q('#billExtraTime').textContent = T.fmtLeft(st.extraTokens);
+      q('#billExtraTimeSub').textContent = st.extraExpiresAt
+        ? 'Top-ups and free time · oldest expires ' + fmtLong(st.extraExpiresAt)
+        : 'Free time · used after plan time';
       q('#billPlanSub').textContent = !plan ? 'No subscription'
         : plan.pastDue ? PLAN.price + ' / month · payment failed'
         : plan.cancelAt ? 'Cancelled · active until ' + fmtDate(plan.cancelAt)
@@ -329,13 +352,13 @@
 
       q('#billFixCard').addEventListener('click', (e) => {
         busy(e.currentTarget, 1300, () => {
-          const { plan, balance } = T.state();
+          const { plan } = T.state();
           // The retried payment settles the renewal that failed, so it can
           // never be dated before that renewal was due.
           const paidOn = new Date(Math.max(Date.now(), plan.renewsAt.getTime()));
-          // A renewal tops the balance back up to the allowance; it does not
-          // take away time the founder bought on top.
-          T.credit(Math.max(0, PLAN.tokens - balance));
+          // The new month's allowance replaces the old one. Top-ups are
+          // separate and untouched.
+          T.setPlanTime(PLAN.tokens);
           T.setPlan({ renewsAt: addMonths(plan.renewsAt, 1), cancelAt: null, pastDue: false });
           history.unshift({ date: paidOn, label: 'Monthly plan · renewal', detail: T.fmtAllowance(PLAN.tokens), amount: PLAN.price, receipt: true });
           renderBilling();

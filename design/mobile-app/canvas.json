@@ -377,6 +377,15 @@
       "h": 844,
       "title": "D9 · Brand Kit",
       "page": "page-4"
+    },
+    {
+      "file": "PlanWebBilled.dc.html",
+      "x": 940,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "E8 · Plan · billed on web",
+      "page": "page-5"
     }
   ],
   "annotations": [
@@ -425,13 +434,13 @@
       "x": -2,
       "y": -341,
       "w": 470,
-      "text": "You\n\nReplaces the corner dropdown, which was a web pattern that hid five destinations behind one avatar.\n\nTime remaining is the first thing on the screen with an Add time action beside it, because running out mid-conversation is the failure this product has.\n\nE3 sells hours, not tokens. E4 is the platform subscription sheet — StoreKit / Play Billing, not the web card form.\n\nE2 is redrawn out of the default Clerk chrome.",
+      "text": "You\n\nReplaces the corner dropdown, which was a web pattern that hid five destinations behind one avatar.\n\nTime remaining is the first thing on the screen with an Add time action beside it, because running out mid-conversation is the failure this product has.\n\nE3 sells hours, not tokens. E4 is the platform subscription sheet — StoreKit / Play Billing, not the web card form.\n\nE2 is redrawn out of the default Clerk chrome.\n\nE8 is the state web billing creates. A founder who subscribed by card on the web and then opens the app must not be offered a store subscription on top — that is a double charge. The plan shows as active, the subscribe action is gone, and top-ups stay available through the store. Check the \"change or cancel on the web\" wording with App Review before shipping; it is management, not purchase, but the stores are strict about pointing elsewhere.",
       "page": "page-5"
     }
   ],
   "launch": {
     "view": "canvas",
-    "page": "page-4"
+    "page": "page-5"
   },
   "pages": [
     {

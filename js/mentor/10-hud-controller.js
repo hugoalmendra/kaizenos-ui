@@ -1,4 +1,4 @@
-  // ─── Session HUD: token spend, library, plan & sign out ─────
+  // ─── Session HUD: session time, library, plan & sign out ────
   (function sessionHud() {
     const meter   = document.getElementById('tokenMeter');
     const countEl = document.getElementById('tokCount');
@@ -17,27 +17,68 @@
     const panelOrg     = document.getElementById('panelOrg');
     const panelBrand   = document.getElementById('panelBrand');
     const panelYcApply = document.getElementById('panelYcApply');
-    const planDetail   = document.getElementById('planDetail');
     const toast        = document.getElementById('ktoast');
     if (!meter || !accountBtn) return;
 
     // ─ State ─────────────────────────────────────────────────
-    let balance = 48, total = 60, planActive = false;
-    let selectedPlan = 'monthly', selectedPack = 250;
-    const PACKS = [{ t: 100, p: '$6' }, { t: 250, p: '$12' }, { t: 600, p: '$24' }];
+    // Tokens stay the billing unit; the founder only ever sees time
+    // (KAIZ-159). MIN_PER_TOKEN is a PLACEHOLDER, picked so the plan's
+    // 500 tokens reads as the ≈ 8 h its copy promises. Replace it with
+    // the rate measured from real sessions.
+    const MIN_PER_TOKEN = 0.96;
+    let balance = 48, total = 60;
+    let plan = null;        // { renewsAt, cancelAt, pastDue } once subscribed
+    let warnedLow = false;
+
+    const minutesOf = (t) => Math.round(t * MIN_PER_TOKEN);
+
+    // A balance is exact: a founder shown "5 min" must not run out in two.
+    function fmtLeft(t) {
+      const m = minutesOf(t);
+      if (m < 60) return m + ' min';
+      const h = Math.floor(m / 60), r = m % 60;
+      return r ? h + ' h ' + r + ' min' : h + ' h';
+    }
+
+    // An allowance is a promise about the future, so it rounds to the
+    // half hour rather than pretending to a precision it does not have.
+    function fmtAllowance(t) {
+      const half = Math.round((t * MIN_PER_TOKEN) / 30) / 2;
+      const whole = Math.floor(half);
+      return '≈ ' + (half % 1 ? (whole || '') + '½' : whole) + ' h';
+    }
+
+    const isLow = () => balance > 0 && balance <= total * 0.2;
+
+    const api = {
+      MIN_PER_TOKEN, minutesOf, fmtLeft, fmtAllowance,
+      state: () => ({ balance, total, low: isLow(), plan: plan && Object.assign({}, plan) }),
+      credit(tokens) {
+        balance += tokens;
+        total = Math.max(total, balance);
+        warnedLow = false;
+        render();
+      },
+      setPlan(next) { plan = next ? Object.assign({}, next) : null; render(); },
+    };
+    window.KaisoTime = api;
 
     function render() {
-      countEl.textContent = balance;
-      totalEl.textContent = planActive ? '∞' : total;
-      const pct = planActive ? 100 : Math.max(0, Math.min(100, (balance / total) * 100));
-      barEl.style.width = pct + '%';
-      const low = !planActive && balance <= total * 0.2;
-      meter.classList.toggle('low', low && balance > 0);
-      meter.classList.toggle('plan', planActive);
-      rateEl.textContent = planActive ? 'Monthly plan · active'
-        : balance === 0 ? 'Out of tokens · add more'
-        : low ? 'Running low · top up'
+      const low = isLow();
+      countEl.textContent = fmtLeft(balance);
+      totalEl.textContent = 'left';
+      barEl.style.width = Math.max(0, Math.min(100, (balance / Math.max(total, 1)) * 100)) + '%';
+      meter.classList.toggle('low', low);
+      meter.classList.toggle('plan', !!plan);
+      meter.classList.toggle('empty', balance === 0);
+      meter.setAttribute('aria-label', fmtLeft(balance) + ' of session time left. Open Plan and Tokens.');
+      rateEl.textContent = balance === 0 ? 'Paused · add time to resume'
+        : plan && plan.pastDue ? 'Payment failed · update card'
+        : low ? 'Running low · add time'
+        : plan ? 'Monthly plan · live session'
         : 'Spending · live session';
+      document.body.classList.toggle('time-paused', balance === 0);
+      window.dispatchEvent(new CustomEvent('kaiso:time', { detail: api.state() }));
     }
 
     let toastTimer = null;
@@ -48,12 +89,27 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
     }
 
+    // A plan is an allowance, not unlimited time, so it spends too.
     function spend(n) {
-      if (planActive || balance <= 0) return;
+      if (balance <= 0) return;
       balance = Math.max(0, balance - n);
       render();
-      if (balance === 0) { showToast('Free tokens spent — add more time'); openPanel('plan'); }
+      if (balance === 0) {
+        // Paused, not ended: the session is held and resumes on top-up.
+        showToast('Out of time — Kaiso paused, nothing is lost');
+        openPanel('plan', 'paused');
+      } else if (!warnedLow && isLow()) {
+        warnedLow = true;
+        window.dispatchEvent(new CustomEvent('kaiso:time-low', { detail: api.state() }));
+      }
     }
+
+    meter.setAttribute('role', 'button');
+    meter.setAttribute('tabindex', '0');
+    meter.addEventListener('click', () => openPanel('plan'));
+    meter.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel('plan'); }
+    });
 
     // Live voice spend — ticks down while Kaiso is engaged.
     setInterval(() => { if (document.body.classList.contains('active')) spend(1); }, 4500);
@@ -70,7 +126,7 @@
       b.addEventListener('click', () => { accountMenu.classList.remove('open'); openPanel(b.dataset.panel); }));
 
     // ─ Modal ─────────────────────────────────────────────────
-    function openPanel(which) {
+    function openPanel(which, context) {
       panelLibrary.classList.toggle('show', which === 'library');
       panelPlan.classList.toggle('show', which === 'plan');
       const panelKos = document.getElementById('panelKos');
@@ -93,11 +149,12 @@
       if (panelAccount)  panelAccount.classList.toggle('show', which === 'account');
       // Reopening the account panel always starts at the top level.
       if (which === 'account') window.dispatchEvent(new Event('kaiso:open-account'));
-      if (which === 'plan') renderPlanDetail();
+      if (which === 'plan') window.dispatchEvent(new CustomEvent('kaiso:open-plan', { detail: { context: context || 'menu' } }));
       if (which === 'yc' && window.kaisoYc) window.kaisoYc.render();
       modal.classList.add('open');
     }
     function closeModal() { modal.classList.remove('open'); }
+    window.KaisoPanels = { open: openPanel, close: closeModal };
     modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeModal));
 
     window.addEventListener('kaiso:open-forge', (e) => {
@@ -144,42 +201,6 @@
     document.getElementById('deckDownloadBtn')?.addEventListener('click', () => printForge('deckPrintable', 'Pitch Deck', 'deck'));
     document.getElementById('orgDownloadBtn')?.addEventListener('click', () => printForge('orgPrintable', 'Org Chart', 'org'));
     document.getElementById('brandDownloadBtn')?.addEventListener('click', () => printForge('brandPrintable', 'Brand Kit', 'brand'));
-
-    // ─ Plan selection ────────────────────────────────────────
-    panelPlan.querySelectorAll('[data-plan]').forEach((c) =>
-      c.addEventListener('click', () => {
-        panelPlan.querySelectorAll('[data-plan]').forEach((x) => x.classList.remove('sel'));
-        c.classList.add('sel');
-        selectedPlan = c.dataset.plan;
-        renderPlanDetail();
-      }));
-
-    function renderPlanDetail() {
-      if (selectedPlan === 'monthly') {
-        planDetail.innerHTML =
-          '<div class="kp-lbl">Monthly plan</div>' +
-          '<p class="kp-sub" style="margin:8px 0 14px">500 tokens every month, auto-renews. Cancel anytime — best for ongoing work with Kaiso.</p>' +
-          '<button class="kbtn primary block" id="confirmPlan">Enroll · $29 / month</button>';
-        planDetail.querySelector('#confirmPlan').addEventListener('click', () => {
-          planActive = true; balance = 500; total = 500; render(); closeModal();
-          showToast('Monthly plan active · 500 tokens');
-        });
-      } else {
-        const chips = PACKS.map((p) =>
-          '<button class="pack' + (p.t === selectedPack ? ' sel' : '') + '" data-pack="' + p.t + '">' +
-          '<b>+' + p.t + '</b><span>' + p.p + '</span></button>').join('');
-        planDetail.innerHTML =
-          '<div class="kp-lbl">Buy tokens</div>' +
-          '<div class="pack-grid">' + chips + '</div>' +
-          '<button class="kbtn primary block" id="confirmBuy" style="margin-top:14px">Add tokens</button>';
-        planDetail.querySelectorAll('[data-pack]').forEach((b) =>
-          b.addEventListener('click', () => { selectedPack = +b.dataset.pack; renderPlanDetail(); }));
-        planDetail.querySelector('#confirmBuy').addEventListener('click', () => {
-          balance += selectedPack; total = Math.max(total, balance); render(); closeModal();
-          showToast('Added ' + selectedPack + ' tokens');
-        });
-      }
-    }
 
     // ─ Sign out ──────────────────────────────────────────────
     document.getElementById('signOutBtn').addEventListener('click', () => {

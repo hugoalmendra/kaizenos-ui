@@ -18,7 +18,11 @@
       'password': 'Password',
       'devices': 'Active Devices',
       'delete': 'Delete Account',
+      'billing': 'Plan & Billing',
+      'cancel-plan': 'Cancel Plan',
     };
+    // Where Back goes from a view that is not one level below the root.
+    const PARENT = { 'verify': 'add-email', 'cancel-plan': 'billing' };
 
     let current = 'root';
 
@@ -55,7 +59,7 @@
     }
 
     /* ── navigation ── */
-    backBtn.addEventListener('click', () => show(current === 'verify' ? 'add-email' : 'root'));
+    backBtn.addEventListener('click', () => show(PARENT[current] || 'root'));
     panel.querySelectorAll('[data-go]').forEach((b) =>
       b.addEventListener('click', () => show(b.dataset.go)));
     panel.querySelectorAll('[data-toast]').forEach((b) =>
@@ -63,6 +67,7 @@
 
     // Opening the panel from the menu always starts at the top.
     window.addEventListener('kaiso:open-account', () => show('root'));
+    window.KaisoAccount = { show };
 
     /* ── the ⋯ menu on an email row ── */
     // The list clips its rows to keep the rounded corners, which would

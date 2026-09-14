@@ -278,6 +278,23 @@ EMAILS['subscription-started'] = {
   }),
 };
 
+EMAILS['topup-receipt'] = {
+  subject: 'Kaiso receipt — {{minutes}} added',
+  text: `You added {{minutes}} of session time.\n\nAmount: {{amount}}\nDate: {{paidAt}}\nCard: ending {{cardLast4}}\nReceipt: {{receiptUrl}}\n\nYour balance is now {{balance}}. This was a one-off payment and nothing renews.`,
+  html: shell({
+    title: 'Top-up receipt',
+    badge: 'Receipt',
+    preheader: '{{minutes}} added. Receipt for {{amount}}.',
+    eyebrow: 'Receipt',
+    headline: 'Time added.',
+    body: p('You added <strong style="color:#f4ecd2;">{{minutes}}</strong> of session time. Your balance is now <strong style="color:#f4ecd2;">{{balance}}</strong>.') +
+      facts([['Added', '{{minutes}}'], ['Amount', '{{amount}}'], ['Paid', '{{paidAt}}'], ['Card', 'Ending {{cardLast4}}']]) +
+      '<div style="height:22px;"></div>' + btn('Back to Kaiso', '{{appUrl}}') +
+      small('A full receipt is available <a href="{{receiptUrl}}" style="color:#e8c870;text-decoration:none;">here</a>. This was a one-off payment &mdash; nothing renews.'),
+    footer: 'You are receiving this because you bought session time from Kaiso.',
+  }),
+};
+
 EMAILS['renewal-receipt'] = {
   subject: 'Kaiso renewed — receipt for {{amount}}',
   text: `Your Kaiso plan renewed.\n\nAmount: {{amount}}\nDate: {{paidAt}}\nNext renewal: {{renewsAt}}\nInvoice: {{invoiceUrl}}\n\nYour balance is topped back up to {{minutes}}.`,
@@ -349,7 +366,7 @@ for (const name of names) {
 /* an index so the set can be reviewed in one place */
 const GROUPS = [
   ['Account &amp; security', ['verify-email', 'password-reset', 'password-changed', 'new-signin', 'email-added', 'email-removed', 'account-deleted']],
-  ['Billing', ['subscription-started', 'renewal-receipt', 'payment-failed', 'subscription-cancelled']],
+  ['Billing', ['topup-receipt', 'subscription-started', 'renewal-receipt', 'payment-failed', 'subscription-cancelled']],
 ];
 writeFileSync('index.html', `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

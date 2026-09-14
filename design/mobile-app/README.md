@@ -1,6 +1,6 @@
 # KaizenOS Mobile App — screen designs
 
-42 native-app screens at 390 × 844 (iPhone points), grouped into five
+43 native-app screens at 390 × 844 (iPhone points), grouped into five
 pages that mirror the app's information architecture. This folder is
 the source of truth for the designs: every screen is a self-contained
 HTML file, and the canvas layout is `canvas.json`.
@@ -119,6 +119,7 @@ do nothing outside the canvas.
 | You | E5 | Sessions | `Sessions.dc.html` |
 | You | E6 | Notifications | `NotificationSettings.dc.html` |
 | You | E7 | Feedback | `Feedback.dc.html` |
+| You | E8 | Plan · billed on web | `PlanWebBilled.dc.html` |
 
 ## Design decisions (from the canvas notes)
 
@@ -166,7 +167,10 @@ keeps the mark picker since that is the one choice worth making on mobile.
 **You.** Replaces the corner dropdown. Time remaining is first on the
 screen with an Add time action beside it. E3 sells hours, not tokens.
 E4 is the platform subscription sheet (StoreKit / Play Billing), not the
-web card form. E2 is redrawn out of the default Clerk chrome.
+web card form. E2 is redrawn out of the default Clerk chrome. E8 covers a founder
+who pays on the web by card: the plan shows as active, there is no store
+subscribe button to double-charge them, and top-ups still go through the
+store.
 
 ## Tokens
 

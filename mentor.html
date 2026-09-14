@@ -37,6 +37,7 @@
 <link rel="stylesheet" href="css/mentor/28-elevator-pitch-forge.css">
 <link rel="stylesheet" href="css/mentor/29-org-chart-forge.css">
 <link rel="stylesheet" href="css/mentor/30-brand-kit-forge.css">
+<link rel="stylesheet" href="css/mentor/31-billing.css">
 <link rel="stylesheet" href="css/shared/loader.css">
 </head>
 <body>
@@ -357,11 +358,11 @@
 <!-- ─── Session HUD: top-right rail — tokens · readiness · account ─── -->
 <div class="hud-top" id="hudTop">
   <!-- Token spend meter -->
-  <div class="token-meter" id="tokenMeter" role="status" aria-label="Token usage">
+  <div class="token-meter" id="tokenMeter" aria-label="Session time">
     <div class="tm-top">
       <span class="tm-dot"></span>
-      <span class="tm-label">Tokens</span>
-      <span class="tm-count"><b id="tokCount">48</b> / <span id="tokTotal">60</span></span>
+      <span class="tm-label">Time</span>
+      <span class="tm-count"><b id="tokCount">46 min</b> <span id="tokTotal">left</span></span>
     </div>
     <div class="tm-track"><span id="tokBar"></span></div>
     <div class="tm-rate" id="tokRate">Spending · live session</div>
@@ -386,6 +387,12 @@
       <path d="M5 19.5c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6" stroke-linecap="round"/>
     </svg>
   </button>
+</div>
+<div class="time-banner" id="timeBanner" role="status" hidden>
+  <span class="tb-dot" aria-hidden="true"></span>
+  <span class="tb-txt"><b id="tbLeft">12 min left</b> &mdash; add time so Kaiso doesn&rsquo;t stop mid-thought.</span>
+  <button class="kbtn primary" id="tbAdd" type="button">Add time</button>
+  <button class="tb-x" id="tbClose" type="button" aria-label="Dismiss">&#10005;</button>
 </div>
 <nav class="account-menu" id="accountMenu" aria-label="Account">
   <button data-panel="library">
@@ -510,25 +517,132 @@
   <!-- Plan & Tokens panel -->
   <section class="kpanel" id="panelPlan" aria-label="Plan and tokens">
     <div class="kp-head">
+      <button class="acct-back" id="buyBack" type="button" aria-label="Back" hidden>&#8592;</button>
       <span class="tm-dot"></span>
-      <span class="kp-title">Plan &amp; Tokens</span>
-      <button class="kp-close" data-close aria-label="Close">✕</button>
+      <span class="kp-title" id="buyTitle">Plan &amp; Tokens</span>
+      <button class="kp-close" data-close aria-label="Close">&#10005;</button>
     </div>
-    <p class="kp-sub">Keep the conversation going. Enroll monthly or top up tokens à la carte.</p>
-    <div class="plan-grid">
-      <div class="plan-card sel" data-plan="monthly">
-        <span class="pc-name">Monthly Plan</span>
-        <span class="pc-sub">Recurring</span>
-        <span class="pc-price">$29<small> / mo</small></span>
+
+    <!-- ── choose ── -->
+    <div class="buy-view" data-bview="choose">
+      <div class="buy-paused" id="buyPaused" hidden>
+        <b>Kaiso is paused.</b> Your session is held exactly where it stopped. Add time and it picks straight back up &mdash; nothing is lost.
       </div>
-      <div class="plan-card" data-plan="tokens">
-        <span class="pc-name">Buy Tokens</span>
-        <span class="pc-sub">À la carte</span>
-        <span class="pc-price">from $6</span>
+      <div class="buy-balance">
+        <span class="kp-lbl">Session time</span>
+        <b data-left>46 min</b>
+        <span id="buyPlanLine">Pay as you go</span>
+      </div>
+
+      <div class="plan-grid" role="radiogroup" aria-label="How to add time">
+        <button class="plan-card sel" type="button" role="radio" aria-checked="true" data-kind="plan">
+          <span class="pc-name">Monthly plan</span>
+          <span class="pc-sub" data-allow="500">&asymp; 8 h every month</span>
+          <span class="pc-price" data-price="plan">$29<small> / mo</small></span>
+        </button>
+        <button class="plan-card" type="button" role="radio" aria-checked="false" data-kind="pack">
+          <span class="pc-name">Top up</span>
+          <span class="pc-sub">One-off &middot; no subscription</span>
+          <span class="pc-price">from $6</span>
+        </button>
+      </div>
+
+      <div class="buy-detail" data-detail="plan">
+        <ul class="buy-points">
+          <li>Your balance is topped back up each month</li>
+          <li>Cancel any time &mdash; you keep the time you&rsquo;ve paid for</li>
+        </ul>
+        <div class="buy-current" id="buyCurrent" hidden>You&rsquo;re on this plan &middot; renews <span data-renews></span></div>
+      </div>
+
+      <div class="buy-detail" data-detail="pack" hidden>
+        <div class="pack-grid" role="radiogroup" aria-label="Amount of time">
+          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="100"><b data-allow="100">&asymp; 1&frac12; h</b><span>$6</span></button>
+          <button class="pack sel" type="button" role="radio" aria-checked="true" data-pack="250"><b data-allow="250">&asymp; 4 h</b><span>$12</span></button>
+          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="600"><b data-allow="600">&asymp; 9&frac12; h</b><span>$24</span></button>
+        </div>
+      </div>
+
+      <button class="kbtn primary block" id="buyContinue" type="button">Continue &middot; $29 / month</button>
+      <p class="kp-note"><b>Buys session time</b> &mdash; not an instant unlock. Keep talking so Kaiso can finish your work.</p>
+    </div>
+
+    <!-- ── checkout: our summary, Stripe's form ── -->
+    <div class="buy-view" data-bview="checkout" hidden>
+      <div class="buy-summary">
+        <div class="buy-sum-row"><span id="coItem">Top up &middot; &asymp; 4 h</span><b id="coPrice">$12</b></div>
+        <p class="buy-sum-sub" id="coTerms">One-off payment. Adds &asymp; 4 h to your balance.</p>
+        <p class="buy-sum-sub">Any tax is shown before you pay. Receipt to <span data-email>hugo@nexgent.com</span>.</p>
+      </div>
+
+      <div class="stripe-slot">
+        <div class="stripe-head"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"/><path d="M8.5 10.5V7.8a3.5 3.5 0 0 1 7 0v2.7" stroke-linecap="round"/></svg><b>Secure payment by Stripe</b></div>
+        <p class="stripe-copy">Card or wallet. Kaiso never sees or stores your card number.</p>
+        <div class="stripe-sim">
+          <span class="stripe-sim-lbl">Prototype &middot; pick what happens</span>
+          <div class="stripe-sim-grid">
+            <button class="kbtn primary" type="button" data-outcome="success">Payment succeeds</button>
+            <button class="kbtn" type="button" data-outcome="verify">Bank asks to verify</button>
+            <button class="kbtn" type="button" data-outcome="declined">Card declined</button>
+            <button class="kbtn" type="button" data-outcome="pending">Connection drops</button>
+          </div>
+          <span class="stripe-sim-note">In production, Stripe&rsquo;s embedded checkout renders in this space, with its own Pay button.</span>
+        </div>
       </div>
     </div>
-    <div id="planDetail"></div>
-    <p class="kp-note"><b>Buys more session time</b> — not an instant unlock. Keep talking so Kaiso can finish your work.</p>
+
+    <!-- ── bank verification (3D Secure) ── -->
+    <div class="buy-view" data-bview="verify" hidden>
+      <div class="buy-state">
+        <span class="buy-ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"/><path d="M8.5 10.5V7.8a3.5 3.5 0 0 1 7 0v2.7" stroke-linecap="round"/></svg></span>
+        <h3>Your bank wants to confirm it&rsquo;s you</h3>
+        <p>Approve the payment in your banking app, or in the window your bank opens. It&rsquo;s a standard security step for many cards.</p>
+      </div>
+      <button class="kbtn primary block" type="button" data-verify="approve">I&rsquo;ve approved it</button>
+      <button class="kbtn block buy-gap" type="button" data-verify="cancel">Cancel payment</button>
+      <p class="stripe-sim-note buy-center">Prototype &middot; in production Stripe hands over to your bank&rsquo;s own confirmation screen.</p>
+    </div>
+
+    <!-- ── processing ── -->
+    <div class="buy-view" data-bview="processing" hidden>
+      <div class="buy-state">
+        <div class="buy-loader" id="procLoader"></div>
+        <h3 id="procTitle">Confirming payment</h3>
+        <p id="procSub">Keep this window open &mdash; it only takes a moment.</p>
+      </div>
+    </div>
+
+    <!-- ── declined ── -->
+    <div class="buy-view" data-bview="declined" hidden>
+      <div class="buy-state">
+        <span class="buy-ic warn"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5" stroke-linecap="round"/><circle cx="12" cy="16.4" r=".9" fill="currentColor" stroke="none"/></svg></span>
+        <h3>Your card was declined</h3>
+        <p>You weren&rsquo;t charged, and your balance hasn&rsquo;t changed. Banks decline payments for all sorts of reasons &mdash; try again, or use a different card.</p>
+      </div>
+      <button class="kbtn primary block" type="button" data-buy-go="checkout">Try again</button>
+      <button class="kbtn block buy-gap" type="button" data-buy-go="choose">Choose something else</button>
+    </div>
+
+    <!-- ── payment outcome unknown ── -->
+    <div class="buy-view" data-bview="pending" hidden>
+      <div class="buy-state">
+        <div class="buy-loader" id="pendLoader"></div>
+        <h3>Confirming your payment</h3>
+        <p>The connection dropped before Stripe answered. If the payment went through, your time appears here within a minute &mdash; you won&rsquo;t be charged twice.</p>
+      </div>
+      <button class="kbtn block" type="button" id="pendCheck">Check again</button>
+    </div>
+
+    <!-- ── done ── -->
+    <div class="buy-view" data-bview="success" hidden>
+      <div class="buy-state">
+        <span class="buy-ic ok"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.3l2.7 2.7L16.2 9.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <h3 id="okTitle">&asymp; 4 h added</h3>
+        <p><b data-left>4 h 46 min</b> of session time. Receipt sent to <span data-email>hugo@nexgent.com</span>.</p>
+      </div>
+      <button class="kbtn primary block" type="button" id="okPrimary">Back to Kaiso</button>
+      <button class="kbtn block buy-gap" type="button" id="okBilling">View billing</button>
+    </div>
   </section>
 
   <section class="kpanel kpanel-wide" id="panelExec" aria-label="Executive Summary">
@@ -1169,6 +1283,15 @@
         </button>
       </div>
 
+      <span class="kp-lbl" style="display:block;margin:18px 0 9px">Billing</span>
+      <div class="acct-list">
+        <button class="acct-row" type="button" data-go="billing">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.2"/><path d="M3 10h18M7 15h3" stroke-linecap="round"/></svg></span>
+          <span class="tx"><b>Plan &amp; billing</b><i id="acctBillLine">Pay as you go</i></span>
+          <span class="go" aria-hidden="true">&rsaquo;</span>
+        </button>
+      </div>
+
       <span class="kp-lbl" style="display:block;margin:18px 0 9px">Security</span>
       <div class="acct-list">
         <button class="acct-row" type="button" data-go="password">
@@ -1261,6 +1384,53 @@
     </div>
 
     <!-- ── delete account ── -->
+    <!-- ── plan & billing ── -->
+    <div class="acct-view" data-view="billing" hidden>
+      <div class="bill-alert" id="billPastDue" hidden>
+        <b>We couldn&rsquo;t charge your card.</b>
+        <span>Your plan stays active until <b data-grace></b>. Update your payment method to keep it &mdash; everything you&rsquo;ve forged stays yours either way.</span>
+        <button class="kbtn primary" type="button" id="billFixCard">Update payment method</button>
+      </div>
+
+      <span class="kp-lbl" style="display:block;margin:4px 0 9px">Plan</span>
+      <div class="acct-list">
+        <div class="acct-row acct-row--static">
+          <span class="tx"><b id="billPlanName">Pay as you go</b><i id="billPlanSub">No subscription</i></span>
+          <span class="bill-left" data-left>46 min</span>
+        </div>
+        <button class="acct-row" type="button" id="billAddTime"><span class="tx"><b class="bill-gold">Add time</b></span><span class="go" aria-hidden="true">&rsaquo;</span></button>
+        <button class="acct-row" type="button" id="billCancel" data-go="cancel-plan" hidden><span class="tx"><b>Cancel plan</b></span><span class="go" aria-hidden="true">&rsaquo;</span></button>
+        <button class="acct-row" type="button" id="billResume" hidden><span class="tx"><b class="bill-gold">Keep my plan</b><i>Stop the cancellation</i></span></button>
+      </div>
+
+      <div id="billMethod" hidden>
+        <span class="kp-lbl" style="display:block;margin:18px 0 9px">Payment method</span>
+        <div class="acct-list">
+          <div class="acct-row acct-row--static">
+            <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.2"/><path d="M3 10h18M7 15h3" stroke-linecap="round"/></svg></span>
+            <span class="tx"><b>Card &bull;&bull;&bull;&bull; 4242</b><i>Expires 08/28</i></span>
+            <button class="kbtn" type="button" id="billUpdateCard" style="font-size:8px;padding:10px 12px">Update</button>
+          </div>
+        </div>
+      </div>
+
+      <span class="kp-lbl" style="display:block;margin:18px 0 9px">History</span>
+      <div class="acct-list" id="billHistory"></div>
+
+      <p class="kp-note">Invoices and card details are handled by Stripe. <button class="bill-link" type="button" id="billPortal">Open billing portal</button></p>
+      <button class="bill-sim" type="button" id="billSimFail" hidden>Prototype &middot; simulate a failed renewal</button>
+    </div>
+
+    <!-- ── cancel plan ── -->
+    <div class="acct-view" data-view="cancel-plan" hidden>
+      <p class="kp-sub">Your plan stays active until <b data-renews></b>, and you keep the time you&rsquo;ve already paid for.</p>
+      <p class="kp-sub" style="margin-top:10px">After that, sessions stop until you add time. Everything in your Library stays yours.</p>
+      <div class="acct-actions">
+        <button class="kbtn" type="button" data-go="billing">Keep my plan</button>
+        <button class="kbtn danger" type="button" id="billConfirmCancel">Cancel plan</button>
+      </div>
+    </div>
+
     <div class="acct-view" data-view="delete" hidden>
       <div class="acct-warn">
         <b>This cannot be undone.</b>
@@ -1325,6 +1495,7 @@
 <script src="js/mentor/12-kos-wheel.js"></script>
 <script src="js/mentor/17-company-overview.js"></script>
 <script src="js/mentor/18-forge-extras.js"></script>
+<script src="js/mentor/19-billing.js"></script>
 
 </body>
 </html>

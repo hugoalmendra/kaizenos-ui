@@ -543,13 +543,14 @@
         <button class="plan-card" type="button" role="radio" aria-checked="false" data-kind="pack">
           <span class="pc-name">Top up</span>
           <span class="pc-sub">One-off &middot; no subscription</span>
-          <span class="pc-price">from $6</span>
+          <span class="pc-price">from $9</span>
         </button>
       </div>
 
       <div class="buy-detail" data-detail="plan">
         <ul class="buy-points">
-          <li>Your balance is topped back up each month</li>
+          <li>The lowest price per hour</li>
+          <li>Resets each month &mdash; unused plan time doesn&rsquo;t roll over</li>
           <li>Cancel any time &mdash; you keep the time you&rsquo;ve paid for</li>
         </ul>
         <div class="buy-current" id="buyCurrent" hidden>You&rsquo;re on this plan &middot; renews <span data-renews></span></div>
@@ -557,10 +558,11 @@
 
       <div class="buy-detail" data-detail="pack" hidden>
         <div class="pack-grid" role="radiogroup" aria-label="Amount of time">
-          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="100"><b data-allow="100">&asymp; 1&frac12; h</b><span>$6</span></button>
-          <button class="pack sel" type="button" role="radio" aria-checked="true" data-pack="250"><b data-allow="250">&asymp; 4 h</b><span>$12</span></button>
-          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="600"><b data-allow="600">&asymp; 9&frac12; h</b><span>$24</span></button>
+          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="100"><b data-allow="100">&asymp; 1&frac12; h</b><span>$9</span></button>
+          <button class="pack sel" type="button" role="radio" aria-checked="true" data-pack="250"><b data-allow="250">&asymp; 4 h</b><span>$19</span></button>
+          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="600"><b data-allow="600">&asymp; 9&frac12; h</b><span>$39</span></button>
         </div>
+        <p class="buy-pack-note">Top-up time lasts 12 months and is used after any plan time.</p>
       </div>
 
       <button class="kbtn primary block" id="buyContinue" type="button">Continue &middot; $29 / month</button>
@@ -570,9 +572,9 @@
     <!-- ── checkout: our summary, Stripe's form ── -->
     <div class="buy-view" data-bview="checkout" hidden>
       <div class="buy-summary">
-        <div class="buy-sum-row"><span id="coItem">Top up &middot; &asymp; 4 h</span><b id="coPrice">$12</b></div>
-        <p class="buy-sum-sub" id="coTerms">One-off payment. Adds &asymp; 4 h to your balance.</p>
-        <p class="buy-sum-sub">Any tax is shown before you pay. Receipt to <span data-email>hugo@nexgent.com</span>.</p>
+        <div class="buy-sum-row"><span id="coItem">Top up &middot; &asymp; 4 h</span><b id="coPrice">$19</b></div>
+        <p class="buy-sum-sub" id="coTerms">One-off payment. Adds &asymp; 4 h, usable for 12 months, after any plan time.</p>
+        <p class="buy-sum-sub">Price includes tax. Changed your mind? Unused time can be refunded within 14 days. Receipt to <span data-email>hugo@nexgent.com</span>.</p>
       </div>
 
       <div class="stripe-slot">
@@ -586,7 +588,7 @@
             <button class="kbtn" type="button" data-outcome="declined">Card declined</button>
             <button class="kbtn" type="button" data-outcome="pending">Connection drops</button>
           </div>
-          <span class="stripe-sim-note">In production, Stripe&rsquo;s embedded checkout renders in this space, with its own Pay button.</span>
+          <span class="stripe-sim-note">In production, Stripe&rsquo;s embedded checkout renders in this space, with its own Pay button and an unticked box asking the founder to start using the time straight away.</span>
         </div>
       </div>
     </div>
@@ -1396,11 +1398,22 @@
       <div class="acct-list">
         <div class="acct-row acct-row--static">
           <span class="tx"><b id="billPlanName">Pay as you go</b><i id="billPlanSub">No subscription</i></span>
-          <span class="bill-left" data-left>46 min</span>
         </div>
         <button class="acct-row" type="button" id="billAddTime"><span class="tx"><b class="bill-gold">Add time</b></span><span class="go" aria-hidden="true">&rsaquo;</span></button>
         <button class="acct-row" type="button" id="billCancel" data-go="cancel-plan" hidden><span class="tx"><b>Cancel plan</b></span><span class="go" aria-hidden="true">&rsaquo;</span></button>
         <button class="acct-row" type="button" id="billResume" hidden><span class="tx"><b class="bill-gold">Keep my plan</b><i>Stop the cancellation</i></span></button>
+      </div>
+
+      <span class="kp-lbl" style="display:block;margin:18px 0 9px">Time left &middot; <span data-left>46 min</span></span>
+      <div class="acct-list">
+        <div class="acct-row acct-row--static" id="billPlanTimeRow" hidden>
+          <span class="tx"><b>Plan time</b><i id="billPlanTimeSub">Resets each month</i></span>
+          <span class="bill-left" id="billPlanTime">0 min</span>
+        </div>
+        <div class="acct-row acct-row--static">
+          <span class="tx"><b>Top-up time</b><i id="billExtraTimeSub">Free time &middot; used after plan time</i></span>
+          <span class="bill-left" id="billExtraTime">46 min</span>
+        </div>
       </div>
 
       <div id="billMethod" hidden>
@@ -1424,7 +1437,7 @@
     <!-- ── cancel plan ── -->
     <div class="acct-view" data-view="cancel-plan" hidden>
       <p class="kp-sub">Your plan stays active until <b data-renews></b>, and you keep the time you&rsquo;ve already paid for.</p>
-      <p class="kp-sub" style="margin-top:10px">After that, sessions stop until you add time. Everything in your Library stays yours.</p>
+      <p class="kp-sub" style="margin-top:10px">After that, plan time ends. Any top-up time stays yours to use, and so does everything in your Library.</p>
       <div class="acct-actions">
         <button class="kbtn" type="button" data-go="billing">Keep my plan</button>
         <button class="kbtn danger" type="button" id="billConfirmCancel">Cancel plan</button>

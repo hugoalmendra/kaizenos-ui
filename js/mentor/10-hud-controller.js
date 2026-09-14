@@ -23,12 +23,23 @@
     // ─ State ─────────────────────────────────────────────────
     // Tokens stay the billing unit; the founder only ever sees time
     // (KAIZ-159). MIN_PER_TOKEN is a PLACEHOLDER, picked so the plan's
-    // 500 tokens reads as the ≈ 8 h its copy promises. Replace it with
-    // the rate measured from real sessions.
+    // 500 tokens reads as the ≈ 8 h its copy promises. The real rate is
+    // the 75th percentile of measured tokens per minute — a busier-than-
+    // average minute — so a balance never runs out sooner than it says.
     const MIN_PER_TOKEN = 0.96;
-    let balance = 48, total = 60;
+
+    // Two kinds of time. Plan time is the month's allowance: it resets
+    // at each renewal and never rolls over. Extra time is the free grant
+    // and top-ups: it carries across months, top-ups for 12 months each.
+    // Spend draws plan time first, then the oldest extra time.
+    let planTokens = 0;
+    let extra = [{ tokens: 48, expiresAt: null, kind: 'free' }];
+    let total = 60;
     let plan = null;        // { renewsAt, cancelAt, pastDue } once subscribed
     let warnedLow = false;
+
+    const extraTokens = () => extra.reduce((n, lot) => n + lot.tokens, 0);
+    const balanceOf = () => planTokens + extraTokens();
 
     const minutesOf = (t) => Math.round(t * MIN_PER_TOKEN);
 
@@ -48,22 +59,42 @@
       return '≈ ' + (half % 1 ? (whole || '') + '½' : whole) + ' h';
     }
 
-    const isLow = () => balance > 0 && balance <= total * 0.2;
+    const isLow = () => { const b = balanceOf(); return b > 0 && b <= total * 0.2; };
+
+    function refilled() {
+      total = Math.max(total, balanceOf());
+      warnedLow = false;
+      render();
+    }
 
     const api = {
       MIN_PER_TOKEN, minutesOf, fmtLeft, fmtAllowance,
-      state: () => ({ balance, total, low: isLow(), plan: plan && Object.assign({}, plan) }),
-      credit(tokens) {
-        balance += tokens;
-        total = Math.max(total, balance);
-        warnedLow = false;
-        render();
+      state() {
+        const dated = extra.filter((l) => l.expiresAt && l.tokens > 0);
+        return {
+          balance: balanceOf(), total, low: isLow(),
+          planTokens, extraTokens: extraTokens(),
+          extraExpiresAt: dated.length ? dated[0].expiresAt : null,
+          plan: plan && Object.assign({}, plan),
+        };
+      },
+      // A top-up is its own lot with its own expiry.
+      addTopUp(tokens, expiresAt) {
+        extra.push({ tokens, expiresAt, kind: 'topup' });
+        refilled();
+      },
+      // Start or renew the plan: the allowance replaces what was left of
+      // last month's, it is not added to it.
+      setPlanTime(tokens) {
+        planTokens = tokens;
+        refilled();
       },
       setPlan(next) { plan = next ? Object.assign({}, next) : null; render(); },
     };
     window.KaisoTime = api;
 
     function render() {
+      const balance = balanceOf();
       const low = isLow();
       countEl.textContent = fmtLeft(balance);
       totalEl.textContent = 'left';
@@ -91,10 +122,20 @@
 
     // A plan is an allowance, not unlimited time, so it spends too.
     function spend(n) {
-      if (balance <= 0) return;
-      balance = Math.max(0, balance - n);
+      if (balanceOf() <= 0) return;
+      let left = n;
+      const fromPlan = Math.min(planTokens, left);
+      planTokens -= fromPlan;
+      left -= fromPlan;
+      for (const lot of extra) {
+        if (!left) break;
+        const take = Math.min(lot.tokens, left);
+        lot.tokens -= take;
+        left -= take;
+      }
+      extra = extra.filter((lot) => lot.tokens > 0);
       render();
-      if (balance === 0) {
+      if (balanceOf() === 0) {
         // Paused, not ended: the session is held and resumes on top-up.
         showToast('Out of time — Kaiso paused, nothing is lost');
         openPanel('plan', 'paused');

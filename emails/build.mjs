@@ -280,7 +280,7 @@ EMAILS['subscription-started'] = {
 
 EMAILS['topup-receipt'] = {
   subject: 'Kaiso receipt — {{minutes}} added',
-  text: `You added {{minutes}} of session time.\n\nAmount: {{amount}}\nDate: {{paidAt}}\nCard: ending {{cardLast4}}\nReceipt: {{receiptUrl}}\n\nYour balance is now {{balance}}. This was a one-off payment and nothing renews.`,
+  text: `You added {{minutes}} of session time.\n\nAmount: {{amount}}\nDate: {{paidAt}}\nCard: ending {{cardLast4}}\nReceipt: {{receiptUrl}}\n\nYour balance is now {{balance}}. This time is yours to use until {{expiresAt}}, after any plan time. It was a one-off payment and nothing renews. Unused time can be refunded within 14 days of purchase.`,
   html: shell({
     title: 'Top-up receipt',
     badge: 'Receipt',
@@ -288,23 +288,23 @@ EMAILS['topup-receipt'] = {
     eyebrow: 'Receipt',
     headline: 'Time added.',
     body: p('You added <strong style="color:#f4ecd2;">{{minutes}}</strong> of session time. Your balance is now <strong style="color:#f4ecd2;">{{balance}}</strong>.') +
-      facts([['Added', '{{minutes}}'], ['Amount', '{{amount}}'], ['Paid', '{{paidAt}}'], ['Card', 'Ending {{cardLast4}}']]) +
+      facts([['Added', '{{minutes}}'], ['Use by', '{{expiresAt}}'], ['Amount', '{{amount}}'], ['Paid', '{{paidAt}}'], ['Card', 'Ending {{cardLast4}}']]) +
       '<div style="height:22px;"></div>' + btn('Back to Kaiso', '{{appUrl}}') +
-      small('A full receipt is available <a href="{{receiptUrl}}" style="color:#e8c870;text-decoration:none;">here</a>. This was a one-off payment &mdash; nothing renews.'),
+      small('A full receipt is available <a href="{{receiptUrl}}" style="color:#e8c870;text-decoration:none;">here</a>. This was a one-off payment &mdash; nothing renews. Changed your mind? Unused time can be refunded within 14 days of purchase.'),
     footer: 'You are receiving this because you bought session time from Kaiso.',
   }),
 };
 
 EMAILS['renewal-receipt'] = {
   subject: 'Kaiso renewed — receipt for {{amount}}',
-  text: `Your Kaiso plan renewed.\n\nAmount: {{amount}}\nDate: {{paidAt}}\nNext renewal: {{renewsAt}}\nInvoice: {{invoiceUrl}}\n\nYour balance is topped back up to {{minutes}}.`,
+  text: `Your Kaiso plan renewed.\n\nAmount: {{amount}}\nDate: {{paidAt}}\nNext renewal: {{renewsAt}}\nInvoice: {{invoiceUrl}}\n\nYour plan time is reset to {{minutes}} for the month. Any top-up time you have is unchanged.`,
   html: shell({
     title: 'Renewal receipt',
     badge: 'Receipt',
     preheader: 'Your plan renewed. Receipt for {{amount}}.',
     eyebrow: 'Receipt',
     headline: 'Your plan renewed.',
-    body: p('Your balance is topped back up to <strong style="color:#f4ecd2;">{{minutes}}</strong>.') +
+    body: p('Your plan time is reset to <strong style="color:#f4ecd2;">{{minutes}}</strong> for the month. Plan time does not roll over; any top-up time you have is unchanged.') +
       facts([['Plan', '{{planName}}'], ['Amount', '{{amount}}'], ['Paid', '{{paidAt}}'], ['Renews', '{{renewsAt}}']]) +
       small('A full invoice is available <a href="{{invoiceUrl}}" style="color:#e8c870;text-decoration:none;">here</a>. Manage or cancel from Plan &amp; Tokens.'),
     footer: BILLING_FOOTER,
@@ -323,14 +323,14 @@ EMAILS['payment-failed'] = {
     body: p('The charge for <strong style="color:#f4ecd2;">{{amount}}</strong> did not go through. Cards expire, banks decline — it is usually quick to fix.') +
       facts([['Plan', '{{planName}}'], ['Amount', '{{amount}}'], ['Card', '{{cardLast4}}'], ['We retry', '{{nextAttemptAt}}']]) +
       '<div style="height:22px;"></div>' + btn('Update payment method', '{{billingUrl}}') +
-      warn('Your plan stays active until <strong style="color:#e8a870;">{{graceEndsAt}}</strong>. After that, sessions stop — everything you have already forged stays yours.'),
+      warn('Your plan stays active until <strong style="color:#e8a870;">{{graceEndsAt}}</strong>, and you can keep using the plan time you have. After that, plan time ends. Top-up time and everything you have forged stay yours.'),
     footer: BILLING_FOOTER,
   }),
 };
 
 EMAILS['subscription-cancelled'] = {
   subject: 'Your Kaiso plan has been cancelled',
-  text: `Your Kaiso plan is cancelled.\n\nYou keep full access until {{accessEndsAt}}. After that, sessions stop and everything you have forged stays in your Library.\n\nChanged your mind? {{resubscribeUrl}}`,
+  text: `Your Kaiso plan is cancelled.\n\nYou keep your plan time until {{accessEndsAt}}. After that, plan time ends. Any top-up time stays yours to use, and everything you have forged stays in your Library.\n\nChanged your mind? {{resubscribeUrl}}`,
   html: shell({
     title: 'Plan cancelled',
     badge: 'Billing',
@@ -339,7 +339,7 @@ EMAILS['subscription-cancelled'] = {
     headline: 'Your plan is cancelled.',
     body: p('No further payment will be taken.') +
       facts([['Plan', '{{planName}}'], ['Cancelled', '{{cancelledAt}}'], ['Access until', '{{accessEndsAt}}']]) +
-      p('<br>You keep everything you have already forged — the Executive Summary, Landing Page and Pitch Deck stay in your Library whether you have a plan or not. Only new sessions stop.') +
+      p('<br>After that date your plan time ends. Any top-up time stays yours to use, and everything you have already forged stays in your Library whether you have a plan or not.') +
       '<div style="height:6px;"></div>' + btn('Change my mind', '{{resubscribeUrl}}'),
     footer: BILLING_FOOTER,
   }),

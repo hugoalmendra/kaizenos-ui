@@ -20,9 +20,10 @@
       'delete': 'Delete Account',
       'billing': 'Plan & Billing',
       'cancel-plan': 'Cancel Plan',
+      'refund': 'Refund',
     };
     // Where Back goes from a view that is not one level below the root.
-    const PARENT = { 'verify': 'add-email', 'cancel-plan': 'billing' };
+    const PARENT = { 'verify': 'add-email', 'cancel-plan': 'billing', 'refund': 'billing' };
 
     let current = 'root';
 

@@ -18,11 +18,16 @@
     const T = window.KaisoTime;
     if (!panel || !T) return;
 
-    // The plan is the best value per hour. Top-ups cost more per hour —
-    // the pay-as-you-go premium — with a small discount for larger packs,
-    // and never undercut the plan. Prices include tax.
+    // The plan has to win for anyone who talks to Kaiso regularly, so two
+    // rules hold: every top-up is smaller than the plan's monthly time, and
+    // every top-up costs noticeably more per hour. The largest pack costs
+    // more than the plan and gives less — it exists to make that visible.
+    // Token counts are chosen so each pack is a round number of hours at
+    // the conversion rate. Prices include tax.
     const PLAN = { tokens: 500, price: '$29' };
-    const PACKS = { 100: '$9', 250: '$19', 600: '$39' };
+    const PACKS = { 125: '$12', 250: '$22', 375: '$30' };
+    const dollars = (p) => parseFloat(p.replace('$', ''));
+    const perHour = (price, tokens) => '$' + (dollars(price) / (T.minutesOf(tokens) / 60)).toFixed(2);
     // Matches Stripe's recommended retry window: 8 tries over 2 weeks.
     const GRACE_DAYS = 14;
     const TOPUP_MONTHS = 12;
@@ -99,6 +104,9 @@
         b.setAttribute('aria-checked', String(on));
       });
       $('#buyCurrent').hidden = !(plan && !plan.cancelAt && !plan.pastDue);
+      // Choosing a top-up without a plan is the moment to show what the
+      // plan would give instead.
+      $('#buyNudge').hidden = !!plan;
 
       // The plan card never sells a second subscription to a subscriber.
       const btn = $('#buyContinue');
@@ -111,6 +119,7 @@
 
     $$('.plan-card').forEach((c) => c.addEventListener('click', () => { kind = c.dataset.kind; renderChoose(); }));
     $$('.pack').forEach((b) => b.addEventListener('click', () => { pack = +b.dataset.pack; renderChoose(); }));
+    $('#buyNudgeSwitch').addEventListener('click', () => { kind = 'plan'; renderChoose(); });
 
     $('#buyContinue').addEventListener('click', () => {
       const { plan } = T.state();
@@ -377,6 +386,17 @@
       if (view === 'choose') renderChoose();
       renderBilling();
     });
+
+    // Every price-per-hour and comparison is computed from the catalogue,
+    // so changing a price cannot leave a stale claim behind.
+    $$('[data-per-hour]').forEach((el) => {
+      const t = +el.dataset.perHour;
+      el.textContent = perHour(t === PLAN.tokens ? PLAN.price : PACKS[t], t) + ' / h';
+    });
+    const biggest = Math.max(...Object.keys(PACKS).map(Number));
+    $('#buyNudgeText').textContent = 'The monthly plan gives ' + T.fmtAllowance(PLAN.tokens).replace('≈ ', '') +
+      ' for ' + PLAN.price + ' — more time than the ' + T.fmtAllowance(biggest).replace('≈ ', '') +
+      ' top-up, for less.';
 
     // Allowances come from the one conversion, so copy cannot drift from it.
     $$('[data-allow]').forEach((el) => {

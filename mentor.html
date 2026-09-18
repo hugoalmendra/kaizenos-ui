@@ -543,13 +543,13 @@
         <button class="plan-card" type="button" role="radio" aria-checked="false" data-kind="pack">
           <span class="pc-name">Top up</span>
           <span class="pc-sub">One-off &middot; no subscription</span>
-          <span class="pc-price">from $9</span>
+          <span class="pc-price">from $12</span>
         </button>
       </div>
 
       <div class="buy-detail" data-detail="plan">
         <ul class="buy-points">
-          <li>The lowest price per hour</li>
+          <li>The lowest price &mdash; <b data-per-hour="500">$3.63 / h</b></li>
           <li>Resets each month &mdash; unused plan time doesn&rsquo;t roll over</li>
           <li>Cancel any time &mdash; you keep the time you&rsquo;ve paid for</li>
         </ul>
@@ -558,9 +558,13 @@
 
       <div class="buy-detail" data-detail="pack" hidden>
         <div class="pack-grid" role="radiogroup" aria-label="Amount of time">
-          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="100"><b data-allow="100">&asymp; 1&frac12; h</b><span>$9</span></button>
-          <button class="pack sel" type="button" role="radio" aria-checked="true" data-pack="250"><b data-allow="250">&asymp; 4 h</b><span>$19</span></button>
-          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="600"><b data-allow="600">&asymp; 9&frac12; h</b><span>$39</span></button>
+          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="125"><b data-allow="125">&asymp; 2 h</b><span>$12</span><i data-per-hour="125">$6.00 / h</i></button>
+          <button class="pack sel" type="button" role="radio" aria-checked="true" data-pack="250"><b data-allow="250">&asymp; 4 h</b><span>$22</span><i data-per-hour="250">$5.50 / h</i></button>
+          <button class="pack" type="button" role="radio" aria-checked="false" data-pack="375"><b data-allow="375">&asymp; 6 h</b><span>$30</span><i data-per-hour="375">$5.00 / h</i></button>
+        </div>
+        <div class="buy-nudge" id="buyNudge">
+          <span id="buyNudgeText">The monthly plan gives 8 h for $29 &mdash; more time than the 6 h top-up, for less.</span>
+          <button class="bill-link" type="button" id="buyNudgeSwitch">Switch to the plan</button>
         </div>
         <p class="buy-pack-note">Top-up time lasts 12 months and is used after any plan time.</p>
       </div>
@@ -572,7 +576,7 @@
     <!-- ── checkout: our summary, Stripe's form ── -->
     <div class="buy-view" data-bview="checkout" hidden>
       <div class="buy-summary">
-        <div class="buy-sum-row"><span id="coItem">Top up &middot; &asymp; 4 h</span><b id="coPrice">$19</b></div>
+        <div class="buy-sum-row"><span id="coItem">Top up &middot; &asymp; 4 h</span><b id="coPrice">$22</b></div>
         <p class="buy-sum-sub" id="coTerms">One-off payment. Adds &asymp; 4 h, usable for 12 months, after any plan time.</p>
         <p class="buy-sum-sub">Price includes tax. Changed your mind? Unused time can be refunded within 14 days. Receipt to <span data-email>hugo@nexgent.com</span>.</p>
       </div>

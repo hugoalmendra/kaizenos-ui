@@ -46,6 +46,9 @@
     let cardOnFile = false;
     const joined = new Date();
     const history = [];       // newest first; the free grant is always last
+    let dispute = null;       // the history entry whose payment is disputed
+    let planEnded = null;     // when a plan stopped after its grace period ran out
+    const REFUND_DAYS = 14;
 
     function toast(msg) {
       const el = document.getElementById('ktoast');
@@ -87,7 +90,7 @@
     function renderChoose() {
       const { balance, plan } = T.state();
       $('#buyPaused').hidden = !(context === 'paused' && balance === 0);
-      $('#buyPlanLine').textContent = !plan ? 'Pay as you go'
+      $('#buyPlanLine').textContent = !plan ? (planEnded ? 'Plan ended ' + fmtDate(planEnded) : 'Pay as you go')
         : plan.pastDue ? 'Monthly plan · payment failed'
         : plan.cancelAt ? 'Monthly plan · ends ' + fmtDate(plan.cancelAt)
         : 'Monthly plan · renews ' + fmtDate(plan.renewsAt);
@@ -115,6 +118,10 @@
       else if (kind === 'plan' && plan && plan.cancelAt) btn.textContent = 'Keep my plan';
       else if (kind === 'plan' && plan) { btn.textContent = 'You’re on this plan'; btn.disabled = true; }
       else btn.textContent = 'Continue · ' + (kind === 'plan' ? PLAN.price + ' / month' : PACKS[pack]);
+
+      // A disputed payment pauses buying until the bank decides.
+      $('#buyBlocked').hidden = !dispute;
+      if (dispute) { btn.disabled = true; btn.textContent = 'Purchases paused'; }
     }
 
     $$('.plan-card').forEach((c) => c.addEventListener('click', () => { kind = c.dataset.kind; renderChoose(); }));
@@ -203,16 +210,19 @@
       clearTimeout(pendTimer);
       const it = item();
       const now = new Date();
+      let lot = null;
       if (it.kind === 'plan') {
         T.setPlanTime(it.tokens);
         T.setPlan({ renewsAt: addMonths(now, 1), cancelAt: null, pastDue: false });
+        planEnded = null;
       } else {
-        T.addTopUp(it.tokens, addMonths(now, TOPUP_MONTHS));
+        lot = T.addTopUp(it.tokens, addMonths(now, TOPUP_MONTHS));
       }
       cardOnFile = true;
       history.unshift({
         date: now, label: it.kind === 'plan' ? 'Monthly plan' : 'Top up',
         detail: T.fmtAllowance(it.tokens), amount: it.price, receipt: true,
+        price: dollars(it.price), tokens: it.tokens, lot, plan: it.kind === 'plan',
       });
 
       $('#okTitle').textContent = it.kind === 'plan' ? 'Your plan is active' : T.fmtAllowance(it.tokens) + ' added';
@@ -235,6 +245,7 @@
       const { plan } = T.state();
       // Out of time, or already subscribed: the answer is a top-up.
       if (context === 'paused' || context === 'low' || (plan && !plan.cancelAt && !plan.pastDue)) kind = 'pack';
+      if (context === 'restart') kind = 'plan';
       go('choose');
     });
 
@@ -274,9 +285,10 @@
         : plan.cancelAt ? 'Ends ' + fmtDate(plan.cancelAt)
         : 'Resets to ' + T.fmtAllowance(PLAN.tokens) + ' on ' + fmtDate(plan.renewsAt);
       q('#billExtraTime').textContent = T.fmtLeft(st.extraTokens);
-      q('#billExtraTimeSub').textContent = st.extraExpiresAt
+      q('#billExtraTimeSub').textContent = (st.extraExpiresAt
         ? 'Top-ups and free time · oldest expires ' + fmtLong(st.extraExpiresAt)
-        : 'Free time · used after plan time';
+        : 'Free time · used after plan time') +
+        (st.frozenTokens ? ' · ' + T.fmtLeft(st.frozenTokens) + ' on hold' : '');
       q('#billPlanSub').textContent = !plan ? 'No subscription'
         : plan.pastDue ? PLAN.price + ' / month · payment failed'
         : plan.cancelAt ? 'Cancelled · active until ' + fmtDate(plan.cancelAt)
@@ -286,6 +298,12 @@
       q('#billPastDue').hidden = !(plan && plan.pastDue);
       q('#billMethod').hidden = !cardOnFile;
       q('#billSimFail').hidden = !plan || !!plan.pastDue || !!plan.cancelAt;
+      q('#billEnded').hidden = !(planEnded && !plan);
+      if (planEnded) q('[data-ended]').textContent = fmtDate(planEnded);
+      q('#billDispute').hidden = !dispute;
+      if (dispute) q('[data-dispute-item]').textContent = dispute.detail + ' top-up';
+      q('#billSimDispute').hidden = !!dispute ||
+        !history.some((h) => h.lot && !h.refunded && !h.disputed && h.lot.tokens > 0);
       if (plan && plan.pastDue) q('[data-grace]').textContent = fmtDate(plan.graceEndsAt);
 
       document.querySelectorAll('[data-renews]').forEach((el) => {
@@ -293,14 +311,17 @@
       });
 
       const rows = history.concat([{ date: joined, label: 'Free time', detail: T.fmtAllowance(60), amount: 'Free' }]);
-      q('#billHistory').innerHTML = rows.map((h) =>
-        '<div class="acct-row acct-row--static bill-row' + (h.failed ? ' failed' : '') + '">' +
+      q('#billHistory').innerHTML = rows.map((h, i) =>
+        '<div class="acct-row acct-row--static bill-row' + (h.failed ? ' failed' : '') + (h.refunded ? ' refunded' : '') + '">' +
           '<span class="tx"><b>' + h.label + '</b><i>' + fmtDate(h.date) + ' · ' + h.detail + '</i></span>' +
           '<span class="bill-amt">' + h.amount + '</span>' +
-          (h.receipt ? '<button class="bill-link" type="button" data-receipt>Receipt</button>' : '') +
+          (h.refunded ? '<span class="bill-status">' + (h.reversed ? 'Reversed by bank' : 'Refunded ' + h.refundAmount) + '</span>' : '') +
+          (h.disputed ? '<span class="bill-status warn">Disputed</span>' : '') +
+          (refundable(h) ? '<button class="bill-link" type="button" data-refund="' + i + '">Refund</button>' : '') +
+          (h.receipt && !h.refunded ? '<button class="bill-link" type="button" data-receipt>Receipt</button>' : '') +
         '</div>').join('');
 
-      const line = !plan ? (history.length ? 'Pay as you go' : 'Free time · no plan yet')
+      const line = !plan ? (planEnded ? 'Plan ended · pay as you go' : history.length ? 'Pay as you go' : 'Free time · no plan yet')
         : plan.pastDue ? 'Monthly plan · payment failed'
         : plan.cancelAt ? 'Monthly plan · ends ' + fmtDate(plan.cancelAt)
         : 'Monthly plan · renews ' + fmtDate(plan.renewsAt);
@@ -308,6 +329,44 @@
       if (acctPlan) acctPlan.textContent = line;
       const billLine = document.getElementById('acctBillLine');
       if (billLine) billLine.textContent = line + ' · ' + T.fmtLeft(balance) + ' left';
+    }
+
+    /* ── refunds: the unused part, within 14 days ── */
+    // Renewals and failed payments are not withdrawals, so only a first
+    // plan payment or a top-up can be refunded here. Support handles the rest.
+    function unusedOf(h) {
+      if (h.lot) return h.lot.frozen ? 0 : h.lot.tokens;
+      if (h.plan) { const st = T.state(); return st.plan ? st.planTokens : 0; }
+      return 0;
+    }
+    function refundable(h) {
+      if (!h.receipt || h.refunded || h.failed || h.renewal || h.disputed || !h.tokens) return false;
+      if (Date.now() - h.date.getTime() > REFUND_DAYS * 864e5) return false;
+      return unusedOf(h) > 0;
+    }
+    const refundOf = (h) => '$' + (h.price * unusedOf(h) / h.tokens).toFixed(2);
+
+    let refundEntry = null;
+    function openRefund(h) {
+      refundEntry = h;
+      fillRefund(h);
+      window.KaisoAccount.show('refund');
+    }
+    // Kept live while the screen is open, so the amount on the button is
+    // always the amount that gets refunded.
+    function fillRefund(h) {
+      const unused = unusedOf(h);
+      q('#rfItem').textContent = h.label + ' · ' + h.detail;
+      q('#rfBought').textContent = 'Bought ' + fmtDate(h.date);
+      q('#rfPaid').textContent = h.amount;
+      q('#rfUnused').textContent = T.fmtLeft(unused);
+      q('#rfUsedLine').textContent = unused >= h.tokens ? 'Nothing used yet'
+        : T.fmtLeft(h.tokens - unused) + ' used of ' + T.fmtAllowance(h.tokens);
+      q('#rfAmount').textContent = refundOf(h);
+      q('#rfConfirm').textContent = 'Refund ' + refundOf(h);
+      q('#rfEffect').textContent = h.plan
+        ? 'Your plan stops now and its unused time comes off your balance. Top-up time stays. The money reaches your card in 5 to 10 business days.'
+        : 'The unused time comes off your balance straight away. The money reaches your card in 5 to 10 business days.';
     }
 
     function busy(btn, ms, done) {
@@ -346,8 +405,65 @@
       q('#billUpdateCard').addEventListener('click', () => toast('Opens Stripe’s billing portal to update the card'));
       q('#billPortal').addEventListener('click', () => toast('Opens Stripe’s billing portal'));
       q('#billHistory').addEventListener('click', (e) => {
+        const r = e.target.closest('[data-refund]');
+        if (r) { openRefund(history[+r.dataset.refund]); return; }
         if (e.target.closest('[data-receipt]')) toast('Opens the receipt from Stripe');
       });
+
+      q('#rfConfirm').addEventListener('click', (e) => {
+        const h = refundEntry;
+        if (!h || !refundable(h)) return;
+        busy(e.currentTarget, 900, () => {
+          // Priced at the moment of confirming: time keeps being spent while
+          // the screen is open.
+          const money = refundOf(h);
+          if (h.lot) T.removeLot(h.lot);
+          else if (h.plan) { T.setPlanTime(0); T.setPlan(null); }
+          h.refunded = true;
+          h.refundAmount = money;
+          renderBilling();
+          window.KaisoAccount.show('billing');
+          toast('Refund of ' + money + ' is on its way to your card');
+        });
+      });
+
+      /* ── disputes ── */
+      q('#billSimDispute').addEventListener('click', () => {
+        const h = history.find((x) => x.lot && !x.refunded && !x.disputed && x.lot.tokens > 0);
+        if (!h) return;
+        T.freezeLot(h.lot, true);
+        h.disputed = true;
+        dispute = h;
+        renderBilling();
+        acct.scrollTop = 0;
+        toast('Payment disputed — its time is on hold');
+      });
+      q('#billDisputeWon').addEventListener('click', () => {
+        T.freezeLot(dispute.lot, false);
+        dispute.disputed = false;
+        dispute = null;
+        renderBilling();
+        toast('The bank upheld the payment — the time is back');
+      });
+      q('#billDisputeLost').addEventListener('click', () => {
+        T.removeLot(dispute.lot);
+        Object.assign(dispute, { disputed: false, refunded: true, reversed: true });
+        dispute = null;
+        renderBilling();
+        toast('The bank reversed the payment — its time was removed');
+      });
+
+      /* ── retries exhausted ── */
+      q('#billSimGraceEnd').addEventListener('click', () => {
+        const { plan } = T.state();
+        planEnded = plan.graceEndsAt;
+        T.setPlanTime(0);
+        T.setPlan(null);
+        renderBilling();
+        acct.scrollTop = 0;
+        toast('Grace period over — the plan has ended');
+      });
+      q('#billRestart').addEventListener('click', () => window.KaisoPanels.open('plan', 'restart'));
 
       q('#billSimFail').addEventListener('click', () => {
         const { plan } = T.state();
@@ -369,7 +485,7 @@
           // separate and untouched.
           T.setPlanTime(PLAN.tokens);
           T.setPlan({ renewsAt: addMonths(plan.renewsAt, 1), cancelAt: null, pastDue: false });
-          history.unshift({ date: paidOn, label: 'Monthly plan · renewal', detail: T.fmtAllowance(PLAN.tokens), amount: PLAN.price, receipt: true });
+          history.unshift({ date: paidOn, label: 'Monthly plan · renewal', detail: T.fmtAllowance(PLAN.tokens), amount: PLAN.price, receipt: true, renewal: true });
           renderBilling();
           toast('Payment went through — your plan continues');
         });
@@ -385,6 +501,7 @@
       }
       if (view === 'choose') renderChoose();
       renderBilling();
+      if (refundEntry && acct && !q('[data-view="refund"]').hidden && refundable(refundEntry)) fillRefund(refundEntry);
     });
 
     // Every price-per-hour and comparison is computed from the catalogue,

@@ -38,7 +38,9 @@
     let plan = null;        // { renewsAt, cancelAt, pastDue } once subscribed
     let warnedLow = false;
 
-    const extraTokens = () => extra.reduce((n, lot) => n + lot.tokens, 0);
+    // A disputed purchase's time is frozen: still owned, not spendable.
+    const extraTokens = () => extra.reduce((n, lot) => n + (lot.frozen ? 0 : lot.tokens), 0);
+    const frozenTokens = () => extra.reduce((n, lot) => n + (lot.frozen ? lot.tokens : 0), 0);
     const balanceOf = () => planTokens + extraTokens();
 
     const minutesOf = (t) => Math.round(t * MIN_PER_TOKEN);
@@ -70,18 +72,30 @@
     const api = {
       MIN_PER_TOKEN, minutesOf, fmtLeft, fmtAllowance,
       state() {
-        const dated = extra.filter((l) => l.expiresAt && l.tokens > 0);
+        const dated = extra.filter((l) => l.expiresAt && l.tokens > 0 && !l.frozen);
         return {
           balance: balanceOf(), total, low: isLow(),
-          planTokens, extraTokens: extraTokens(),
+          planTokens, extraTokens: extraTokens(), frozenTokens: frozenTokens(),
           extraExpiresAt: dated.length ? dated[0].expiresAt : null,
           plan: plan && Object.assign({}, plan),
         };
       },
-      // A top-up is its own lot with its own expiry.
+      // A top-up is its own lot with its own expiry. The lot is returned so
+      // a refund or a dispute can act on exactly that purchase later.
       addTopUp(tokens, expiresAt) {
-        extra.push({ tokens, expiresAt, kind: 'topup' });
+        const lot = { tokens, bought: tokens, expiresAt, kind: 'topup', frozen: false };
+        extra.push(lot);
         refilled();
+        return lot;
+      },
+      // Refund: the unspent time from that purchase comes off the balance.
+      removeLot(lot) {
+        extra = extra.filter((l) => l !== lot);
+        render();
+      },
+      freezeLot(lot, frozen) {
+        lot.frozen = !!frozen;
+        render();
       },
       // Start or renew the plan: the allowance replaces what was left of
       // last month's, it is not added to it.
@@ -129,6 +143,7 @@
       left -= fromPlan;
       for (const lot of extra) {
         if (!left) break;
+        if (lot.frozen) continue;
         const take = Math.min(lot.tokens, left);
         lot.tokens -= take;
         left -= take;

@@ -24,9 +24,9 @@
       { sel: '#accountBtn', round: true, pad: 6,
         title: 'Library, plan & account',
         body: 'Open your account for the Library of generated outputs, Plan & Tokens, and Sign out.' },
-      { sel: '#scrollToggle', round: true, pad: 6,
-        title: 'The Scribe',
-        body: 'Prefer to read or type? Open the Scribe to follow the transcript and message Kaiso in text.' },
+      { sel: '#scrollToggle', sel2: '#captionToggle', pad: 6,
+        title: 'Reading along',
+        body: 'The Scribe keeps the full transcript and lets you type instead of talk. Beside it, CC puts the last sentence said on screen while you speak — leave it on, or turn it off here.' },
       { sel: '.sacred', round: true, pad: -28,
         title: 'You\u2019re ready',
         body: 'Tap the sigil whenever you\u2019re ready and start building your Pitch Deck, Landing Page & Executive Summary.' },
@@ -39,13 +39,21 @@
       const step = STEPS[i];
       const el = document.querySelector(step.sel);
       if (!el) return;
-      const r = el.getBoundingClientRect();
+      let r = el.getBoundingClientRect();
+      // Some steps cover a pair of neighbouring controls: spotlight both.
+      const el2 = step.sel2 ? document.querySelector(step.sel2) : null;
+      if (el2) {
+        const r2 = el2.getBoundingClientRect();
+        const left = Math.min(r.left, r2.left), top = Math.min(r.top, r2.top);
+        r = new DOMRect(left, top, Math.max(r.right, r2.right) - left,
+                                   Math.max(r.bottom, r2.bottom) - top);
+      }
       const pad = (step.pad != null) ? step.pad : 10;
       spot.style.width  = (r.width  + pad * 2) + 'px';
       spot.style.height = (r.height + pad * 2) + 'px';
       spot.style.top    = (r.top  - pad) + 'px';
       spot.style.left   = (r.left - pad) + 'px';
-      spot.style.borderRadius = step.round ? '50%' : '16px';
+      spot.style.borderRadius = (step.round || step.sel2) ? (step.sel2 ? '999px' : '50%') : '16px';
 
       stepEl.textContent = 'Step ' + (i + 1) + ' of ' + STEPS.length;
       titleEl.textContent = step.title;

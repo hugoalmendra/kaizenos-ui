@@ -1,0 +1,30 @@
+  /* ─── Scribe — session dividers and times ─────────────────────
+     Quiet by design: the scribe is read after a session, not during
+     one, so the marks stay out of the way while the founder talks. */
+  .scribe-sep {
+    display: flex; align-items: center; gap: 10px;
+    margin: 10px 0 2px;
+  }
+  .scribe-sep::before, .scribe-sep::after {
+    content: ""; flex: 1; height: 1px;
+    background: rgba(200, 168, 78, 0.16);
+  }
+  .scribe-sep:first-child { margin-top: 0; }
+  .scribe-sep-label {
+    font-size: 8.5px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.38); white-space: nowrap;
+  }
+  /* the session still running */
+  .scribe-sep.live::before, .scribe-sep.live::after { background: rgba(200, 168, 78, 0.28); }
+  .scribe-sep.live .scribe-sep-label { color: rgba(232, 200, 112, 0.75); }
+
+  /* a time on the turn, only after a pause */
+  .msg .who { display: flex; align-items: baseline; gap: 8px; }
+  .msg.user .who { flex-direction: row-reverse; }
+  .msg .at {
+    font-size: 9px; letter-spacing: 0.08em; font-variant-numeric: tabular-nums;
+    color: rgba(234, 227, 200, 0.3);
+  }
+
+  /* earlier sessions sit back from the live one */
+  .msg.seeded .body { opacity: 0.82; }

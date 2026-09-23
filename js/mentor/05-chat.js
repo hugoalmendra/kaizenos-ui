@@ -81,6 +81,8 @@
       else body.textContent = text || '';
       el.appendChild(label);
       el.appendChild(body);
+      // Session divider and time, if this turn earns one.
+      if (window.KaisoScribe) window.KaisoScribe.beforeMessage(el, who);
       log.appendChild(el);
       log.scrollTop = log.scrollHeight;
       return el;

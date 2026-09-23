@@ -651,6 +651,8 @@
       const caret = document.createElement('span');
       caret.className = 'caret';
       b.appendChild(caret);
+      // The stage shows the same words, one line at a time.
+      if (window.KaisoCaption) window.KaisoCaption.say('you', text);
       log.scrollTop = log.scrollHeight;
     }
     function commitLive(text) {
@@ -661,6 +663,10 @@
       liveEl.querySelector('.body').textContent = text;
       liveEl = null;
       liveInterim = '';
+      if (window.KaisoCaption) {
+        window.KaisoCaption.say('you', text);
+        window.KaisoCaption.done();
+      }
     }
     micBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -717,7 +723,11 @@
     let currentAudioUrl = null;
 
     async function speak(text) {
-      if (!cfg.ttsEnabled || !text) return;
+      if (!cfg.ttsEnabled || !text) {
+        // Voice off, caption still on: it paces itself through the reply.
+        if (text && window.KaisoCaption) window.KaisoCaption.speech(text, null);
+        return;
+      }
       cancelSpeech();
       setKaisoSpeaking(true);
       try {
@@ -733,13 +743,17 @@
         const blob = await r.blob();
         currentAudioUrl = URL.createObjectURL(blob);
         currentAudio = new Audio(currentAudioUrl);
+        // The caption shares the clip's duration out across the sentences.
+        if (window.KaisoCaption) window.KaisoCaption.speech(text, currentAudio);
         currentAudio.addEventListener('ended', () => {
           if (currentAudioUrl) { URL.revokeObjectURL(currentAudioUrl); currentAudioUrl = null; }
           currentAudio = null;
           setKaisoSpeaking(false);
+          if (window.KaisoCaption) window.KaisoCaption.done();
         });
         currentAudio.addEventListener('error', () => {
           setKaisoSpeaking(false);
+          if (window.KaisoCaption) window.KaisoCaption.done();
         });
         await currentAudio.play();
       } catch (e) {
@@ -751,6 +765,7 @@
             if (pickedVoice) { u.voice = pickedVoice; u.lang = pickedVoice.lang; }
             else { u.lang = cfg.voiceLang; }
             u.rate = 0.97; u.pitch = 1.02; u.volume = 1.0;
+            if (window.KaisoCaption) window.KaisoCaption.speech(text, null);
             u.onend = () => setKaisoSpeaking(false);
             u.onerror = () => setKaisoSpeaking(false);
             window.speechSynthesis.speak(u);
@@ -764,6 +779,9 @@
     }
     function cancelSpeech() {
       const wasSpeaking = !!currentAudio;
+      // Interrupted mid-sentence: drop the caption rather than leaving a
+      // line on the stage that is no longer being said.
+      if (window.KaisoCaption) window.KaisoCaption.clear();
       if (currentAudio) {
         try { currentAudio.pause(); } catch (_) {}
         currentAudio = null;

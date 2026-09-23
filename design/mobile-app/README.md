@@ -142,8 +142,15 @@ A12 keep the emailed copy. Dropped: the standalone onboarding tour and
 the mic priming screen. Mic permission is asked at the first tap of
 Start talking, in context.
 
-**Session states.** B4 the scribe is a real sheet with a grabber that
-drags between peek and full. B5 replaces the old toast-plus-badge: a
+**Session states.** The live caption is one line of what is being said
+right now — Kaiso's sentence while it speaks (B3), the founder's own
+words as they are recognised (B2) — with the founder's set a shade
+quieter because recognition is still guessing. It is one line, never a
+growing block: the scribe is the transcript, this is the present tense,
+and it fades when nobody is talking. The control row gains a fourth
+button for it (mute · end · captions · scribe); captions are on by
+default and the choice is remembered. B4 the scribe is a real sheet with
+a grabber that drags between peek and full. B5 replaces the old toast-plus-badge: a
 ready asset arrives as a banner with a View action, on screen long
 enough to act on (this is KAIZ-117). B7 sells more time at the moment it
 runs out and says plainly that nothing was lost. B8 and B9 make the same

@@ -39,6 +39,7 @@
 <link rel="stylesheet" href="css/mentor/30-brand-kit-forge.css">
 <link rel="stylesheet" href="css/mentor/31-billing.css">
 <link rel="stylesheet" href="css/mentor/32-scribe-sessions.css">
+<link rel="stylesheet" href="css/mentor/33-live-caption.css">
 <link rel="stylesheet" href="css/shared/loader.css">
 </head>
 <body>
@@ -67,6 +68,24 @@
   <span class="kos-count" id="kosCount">1 / 6</span>
   <span class="kos-ready-pill" aria-hidden="true"><b id="kosReadyPct">0</b>%</span>
   <span class="kos-chevron" aria-hidden="true">▾</span>
+</button>
+
+<!-- Live caption — the last sentence said, whoever is saying it. The
+     scribe is the transcript of record; this is the present tense, so it
+     stays out of the accessibility tree and fades when nobody is talking. -->
+<div class="caption" id="liveCaption" aria-hidden="true">
+  <span class="cap-who"></span>
+  <span class="cap-line"></span>
+</div>
+
+<!-- Caption toggle — beside the quill, since both answer "what was just said". -->
+<button type="button" class="caption-toggle" id="captionToggle" aria-pressed="true"
+        aria-label="Turn the live caption off" title="Live caption on">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="3" y="5.5" width="18" height="13" rx="3" stroke-linejoin="round"/>
+    <path d="M10 10.5a2.6 2.6 0 1 0 0 3M17 10.5a2.6 2.6 0 1 0 0 3" stroke-linecap="round"/>
+    <path class="cap-slash" d="M4 20L20 4" stroke-linecap="round"/>
+  </svg>
 </button>
 
 <!-- Scroll icon — opens chat. Visible only after Kaiso is activated. -->
@@ -1559,6 +1578,7 @@
 <script src="js/mentor/18-forge-extras.js"></script>
 <script src="js/mentor/19-billing.js"></script>
 <script src="js/mentor/20-scribe-sessions.js"></script>
+<script src="js/mentor/21-live-caption.js"></script>
 
 </body>
 </html>

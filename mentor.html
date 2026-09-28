@@ -1539,7 +1539,13 @@
 </section>
 
 <!-- Toast -->
+<!-- Shared notification pill: nine modules write plain text into it. -->
 <div class="ktoast" id="ktoast" role="status" aria-live="polite"></div>
+
+<!-- The ready notification has its own pill, because it is the one with
+     something to open and it cannot afford to be overwritten or dismissed
+     by whoever else happens to be using the shared one. -->
+<div class="ktoast kready" id="kready" role="status" aria-live="polite"></div>
 
 <!-- Onboarding tour -->
 <div class="tour-block" id="tourBlock"></div>

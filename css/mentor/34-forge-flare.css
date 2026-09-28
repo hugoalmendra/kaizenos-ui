@@ -1,0 +1,87 @@
+  /* ─── Forge flare — the moment an output is finished ───────────
+     The sigil is where Kaiso lives, so that is where the news breaks:
+     the bars charge from the top down, the core flares once, a ring
+     goes out, and the line under the sigil turns over from KAISO
+     LISTENING to what was just made. One class, held for as long as
+     the toast is up; every animation runs once and settles back. */
+
+  /* the bars charge, top to bottom */
+  body.forged .hex-line { animation: forge-bar 1.05s ease-out; }
+  body.forged .hex-line:nth-of-type(1) { animation-delay: 0s; }
+  body.forged .hex-line:nth-of-type(2) { animation-delay: 0.06s; }
+  body.forged .hex-line:nth-of-type(3) { animation-delay: 0.12s; }
+  body.forged .hex-line:nth-of-type(4) { animation-delay: 0.18s; }
+  body.forged .hex-line:nth-of-type(5) { animation-delay: 0.24s; }
+  body.forged .hex-line:nth-of-type(6) { animation-delay: 0.30s; }
+  @keyframes forge-bar {
+    0%, 100% {
+      fill: var(--gold-bright);
+      filter: drop-shadow(0 0 6px rgba(232, 200, 112, 0.7))
+              drop-shadow(0 0 16px rgba(200, 168, 78, 0.4));
+    }
+    40% {
+      fill: #fff6d8;
+      filter: drop-shadow(0 0 13px rgba(255, 246, 216, 0.95))
+              drop-shadow(0 0 32px rgba(232, 200, 112, 0.65));
+    }
+  }
+
+  /* the core flares once, then goes back to breathing */
+  body.forged .pineal { animation: forge-core 1.4s ease-out; }
+  @keyframes forge-core {
+    0%, 100% { opacity: 0.92; filter: brightness(1); }
+    30%      { opacity: 1;    filter: brightness(1.5); }
+  }
+
+  /* one ring — smaller and slower than the activation burst, so it
+     reads as a result rather than another awakening */
+  body.forged #sigil-1 { animation: forge-ring 1.5s ease-out; }
+  @keyframes forge-ring {
+    0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.55; border-width: 1.5px; }
+    100% { transform: translate(-50%, -50%) scale(1.9);  opacity: 0;    border-width: 0.5px; }
+  }
+
+  /* ─── the toast, right under the sigil ─────────────────────────
+     It takes the status line's own slot, because only one line should
+     speak for Kaiso at a time. */
+  .ktoast {
+    position: fixed;
+    left: 50%; top: calc(50% + 168px);
+    z-index: 70;
+    transform: translate(-50%, 10px);
+    background: rgba(10, 9, 14, 0.95);
+    border: 1px solid rgba(200, 168, 78, 0.35);
+    border-radius: 999px;
+    padding: 11px 20px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    max-width: calc(100vw - 32px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--gold-bright);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6),
+                0 0 26px rgba(200, 168, 78, 0.16);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .ktoast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* the status line steps aside for it — only one line speaks at a time */
+  body.forged #kaisoPhase { opacity: 0; transition: opacity 0.3s ease; }
+
+  /* At phone width the nudge button sits closer under the sigil and the
+     caption is closer still, so there is no room to push anything: the
+     toast rides a little higher instead, into the slot the status line
+     has just vacated. */
+  @media (max-width: 820px) {
+    .ktoast { top: calc(50% + 150px); font-size: 10.5px; padding: 10px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body.forged .hex-line,
+    body.forged .pineal,
+    body.forged #sigil-1 { animation: none; }
+  }

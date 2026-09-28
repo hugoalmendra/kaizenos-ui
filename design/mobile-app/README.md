@@ -148,11 +148,14 @@ words as they are recognised (B2) — with the founder's set a shade
 quieter because recognition is still guessing. It is one line, never a
 growing block: the scribe is the transcript, this is the present tense,
 and it fades when nobody is talking. The control row gains a fourth
-button for it (mute · end · captions · scribe); captions are on by
-default and the choice is remembered. B4 the scribe is a real sheet with
+button for it (mute · end · captions · scribe), on every live-session
+screen including B5; captions are on by default and the choice is
+remembered. B4 the scribe is a real sheet with
 a grabber that drags between peek and full. B5 replaces the old toast-plus-badge: a
 ready asset arrives as a banner with a View action, on screen long
-enough to act on (this is KAIZ-117). B7 sells more time at the moment it
+enough to act on (this is KAIZ-117), and the sigil flares gold in the
+same moment — the news breaks where Kaiso lives, so it reads before a
+word is. B7 sells more time at the moment it
 runs out and says plainly that nothing was lost. B8 and B9 make the same
 promise.
 

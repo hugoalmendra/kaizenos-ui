@@ -80,11 +80,3 @@
   .pack span { font-size: 10px; color: rgba(234, 227, 200, 0.45); }
 
   /* toast */
-  .ktoast { position: fixed; bottom: 86px; left: 50%; z-index: 70;
-    transform: translateX(-50%) translateY(20px);
-    background: rgba(10, 9, 14, 0.95); border: 1px solid rgba(200, 168, 78, 0.35);
-    border-radius: 999px; padding: 11px 20px; font-size: 11px; letter-spacing: 0.1em;
-    color: var(--gold-bright); backdrop-filter: blur(10px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-    opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; }
-  .ktoast.show { opacity: 1; transform: translateX(-50%) translateY(0); }

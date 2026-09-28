@@ -4,12 +4,19 @@
     if (!items.length) return;
     const toast = document.getElementById('ktoast');
     let toastT;
+    // The sigil carries the news: it flares gold for as long as the toast
+    // sits under it, and the status line steps aside so only one of them
+    // speaks at a time. CSS owns the animation; this owns the moment.
     function showToast(msg) {
       if (!toast) return;
       toast.textContent = msg;
       toast.classList.add('show');
+      document.body.classList.add('forged');
       clearTimeout(toastT);
-      toastT = setTimeout(() => toast.classList.remove('show'), 2600);
+      toastT = setTimeout(() => {
+        toast.classList.remove('show');
+        document.body.classList.remove('forged');
+      }, 2600);
     }
     let exchanges = 0;
     const outputs = items.map((el) => ({

@@ -16,6 +16,20 @@ purpose: the folder has to survive being copied onto kaizenos.ai whole.
 does, but they are binding documents and a qualified lawyer in the
 entity's jurisdiction should review them before submission.
 
+## Live at
+
+- https://kaizenos.ai/privacy/
+- https://kaizenos.ai/terms/
+
+**Use the trailing slash.** Without it the site redirects `https://…/terms`
+to `http://…/terms/` — a redirect that drops to plain http, which is not
+what should sit in an App Store listing or an in-app link. Worth fixing on
+the host; until then, link the canonical form.
+
+The cross-links between the two documents are absolute for the same
+reason: served from `/privacy/`, a relative `terms.html` resolves to
+`/privacy/terms.html` and 404s. It did, on the live site.
+
 ## Where they belong
 
 Publish at **kaizenos.ai/privacy** and **kaizenos.ai/terms**, not on the

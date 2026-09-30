@@ -13,6 +13,8 @@
   //     if (window.KaisoConsent.analytics()) startPostHog();
   //     window.addEventListener('kaiso:consent', (e) => { … e.detail.analytics … });
   (function cookieConsent() {
+    // The published policy has one address, wherever the banner is shown.
+    const PRIVACY_URL = 'https://kaizenos.ai/privacy/';
     const KEY = 'kaiso.consent';   // { analytics: bool, at: ISO, v: n }
     const VERSION = 1;             // bump to ask again after a material change
 
@@ -72,7 +74,7 @@
         '<div class="consent-acts">' +
           '<button type="button" class="consent-btn" data-consent="reject">Essential only</button>' +
           '<button type="button" class="consent-btn" data-consent="accept">Allow analytics</button>' +
-          '<a class="consent-link" href="' + privacyHref() + '">Privacy Policy</a>' +
+          '<a class="consent-link" href="' + PRIVACY_URL + '" target="_blank" rel="noopener">Privacy Policy</a>' +
         '</div>';
       document.body.appendChild(el);
       el.addEventListener('click', (e) => {
@@ -82,11 +84,6 @@
         close();
       });
       return el;
-    }
-
-    // The pages live at different depths; the policy is one file either way.
-    function privacyHref() {
-      return /\/legal\//.test(location.pathname) ? 'privacy.html' : 'legal/privacy.html';
     }
 
     function open() {

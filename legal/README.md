@@ -43,17 +43,19 @@ Every placeholder is marked in the source with `<span class="fill">` and
 renders highlighted, so nothing can be missed by eye. Search for `fill`.
 
 Filled in: Kaizen Business Mastery LLC, 6825 S 7th St #8208, Phoenix,
-Arizona 85042; team@kaizenos.ai and +1 (408) 916-7923 for both privacy
-and support; Arizona law and the Maricopa County courts.
+Arizona 85042 — confirmed as a real Arizona address, so Arizona law and
+the Maricopa County courts stand; team@kaizenos.ai and +1 (408) 916-7923
+for both privacy and support; Clerk, AWS, Anthropic (Claude), Resend and
+PostHog in the sub-processor table beside Stripe and Apple; 90 days to
+delete after an account closes, seven years for billing and tax records,
+90 days for logs, and a US$100 floor under the liability cap.
 
 Still open:
 
 | Placeholder | Notes |
 |---|---|
-| `[DATE]` | Last updated and effective date, both files — set them when the documents are final, not before |
-| Sub-processor table | One row left: speech. Clerk, AWS, Anthropic (Claude), Stripe, Apple, Resend and PostHog are named |
-| Retention periods | Post-closure, tax records, logs |
-| `[AMOUNT]` | The floor under the liability cap, in dollars |
+| Sub-processor table | One row: speech. See below — it is the row the audio promise rests on |
+| `[DATE]` | Last updated and effective date, both files. Set them at publication, not before |
 
 ## The company is in the US — what follows from that
 
@@ -62,15 +64,13 @@ policy names no single regulator over us. It routes complaints three ways
 instead: to us first, then to the FTC or a state attorney general in the
 US, or to the reader's own authority in the UK or EEA.
 
-Two things still need deciding, and neither is a placeholder a lawyer can
-fill from the file alone:
+Governing law is Arizona and the Maricopa County courts, confirmed as the
+place the business actually is rather than inferred from a mailing
+address.
 
-- **Governing law.** Written as Arizona, and the Maricopa County courts,
-  because that is where the business is. If the LLC was actually formed in
-  another state — Delaware and Wyoming are the usual ones, and a suite
-  number at a Phoenix street address is often a registered-agent or
-  mail-forwarding address rather than an office — say so and the clause
-  should change with it.
+One question is still for the lawyer, and it is not a placeholder anyone
+can fill from the file:
+
 - **An EU representative.** If founders in the EEA or the UK use
   KaizenOS, GDPR reaches a US company anyway, and Article 27 generally
   requires a named representative in the EEA — with a UK one as well for

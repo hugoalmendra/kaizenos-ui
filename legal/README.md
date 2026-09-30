@@ -2,7 +2,7 @@
 
 Two self-contained pages for the App Store submission and the web app.
 No build step and no dependencies — five files: `privacy.html`,
-`terms.html`, `_style.css`, `kaizenOS.png` and `favicon.png`.
+`terms.html`, `style.css`, `kaizenOS.png` and `favicon.png`.
 
 They wear the same chrome as the rest of KaizenOS: the void background,
 the three star-field layers, the nebula, the fixed wordmark, and the
@@ -29,7 +29,12 @@ dev subdomain:
 - Apple checks that the Privacy Policy URL resolves and is a real policy.
 
 Copy all five files into the marketing site and route `/privacy` and
-`/terms` to them. If that site's routing serves extensionless paths,
+`/terms` to them.
+
+Do not give any of them a leading underscore. GitHub Pages runs Jekyll,
+which silently drops files and folders that start with one: the pages
+serve, the stylesheet 404s, and they render as unstyled text. The repo
+root carries a `.nojekyll` file for the same reason. If that site's routing serves extensionless paths,
 update the cross-links in the footers (`terms.html` → `/terms`).
 
 ## Fill these in before publishing

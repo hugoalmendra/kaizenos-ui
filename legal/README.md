@@ -95,27 +95,27 @@ waiver to their terms. Deliberately not written in: it is a real choice
 with real consequences for consumers, and it is the lawyer's call, not a
 drafting default.
 
-## The speech row
+## The voice provider is Hume, and it does more than transcribe
 
-The table names every provider except the one that transcribes speech,
-which reads "our speech-recognition provider", with the current list
-available on request. That is lawful — GDPR asks for categories of
-recipients, and naming is best practice rather than obligation — and it is
-honest, which naming the wrong company would not have been.
+Hume AI runs the whole voice side: it converts speech to text, **measures
+vocal expression** — tone, pace, emphasis — and generates Kaiso's voice.
+Section 3 of the policy says all three, in that order, and says the middle
+one plainly rather than burying it. Reading emotion from someone's voice
+without telling them is the kind of omission that turns a privacy policy
+into a misrepresentation, and it is the sort of thing that gets found.
 
-Name it as soon as the voice pipeline is settled. Two things to check when
-you do, because the policy already promises audio is not retained:
+Two things follow that are not the policy's job to fix:
 
-- **On iOS, if the app uses Apple's Speech framework, Apple is the speech
-  processor** — recognition goes to Apple's servers unless on-device
-  recognition is forced.
-- **If a realtime voice agent handles the whole exchange**, one provider
-  does speech *and* conversation, and the no-retention promise rests
-  entirely on its terms. Read them before trusting the sentence.
-
-This is the single dependency worth chasing down even with no lawyer in
-the loop: "we do not store your voice" is the most consequential sentence
-in the document, and it is only as true as that contract.
+- **Hume's retention setting is not verified.** The policy no longer
+  claims that nobody retains the audio, because nobody has checked. It
+  says what is true — KaizenOS keeps the transcript, not the audio, and we
+  instruct Hume to keep nothing beyond producing the response — and offers
+  the current position on request. **Check it, then tighten the sentence
+  back.** This is the single highest-value thing on this list.
+- **The app should say it too, not only this page.** Under the EU AI Act,
+  people exposed to an emotion recognition system have to be told they
+  are. A line at the moment the microphone is first requested does that
+  far better than a policy nobody opens, and it is also just fair warning.
 
 ## Claims that must stay true
 
@@ -124,6 +124,11 @@ transcribed, discarded — and that **transcripts and documents are never
 used to train AI models**. Both are commitments, not descriptions. If the
 build ever retains audio or sends content to a provider that trains on
 it, the policy has to change first.
+
+The voice claim is now narrower than it was, on purpose: KaizenOS does not
+store recordings, and Hume is instructed to keep nothing beyond producing
+the response. It no longer asserts that Hume retains nothing, because that
+has not been verified. Verify it and the stronger sentence can come back.
 
 A third claim arrives with PostHog: the policy says analytics cookies are
 set **only where the reader has agreed to them**. That is the right

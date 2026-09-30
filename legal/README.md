@@ -47,11 +47,36 @@ renders highlighted, so nothing can be missed by eye. Search for `fill`.
 | `[DATE]` | Last updated and effective date, both files |
 | `[REGISTERED ADDRESS]`, `[COMPANY NUMBER]` | Kaizen Business Mastery's registered details |
 | `[PRIVACY EMAIL]`, `[SUPPORT EMAIL]` | Aliases that will still exist in two years |
-| `[SUPERVISORY AUTHORITY]` | The DPA where the entity is established |
-| `[JURISDICTION]` | Governing law and courts |
+| `[STATE]`, `[COUNTY, STATE]` | Governing law and the courts with jurisdiction |
 | `[AMOUNT]` | Liability cap floor |
 | Retention periods | Post-closure, tax records, logs |
 | Sub-processor table | The real auth, hosting, speech, AI model, email and analytics providers |
+
+## The company is in the US — what follows from that
+
+There is no US equivalent of a European data protection authority, so the
+policy names no single regulator over us. It routes complaints three ways
+instead: to us first, then to the FTC or a state attorney general in the
+US, or to the reader's own authority in the UK or EEA.
+
+Two things still need deciding, and neither is a placeholder a lawyer can
+fill from the file alone:
+
+- **Governing law.** `[STATE]` is the state whose law governs, which is
+  usually where the business actually operates, not necessarily where it
+  is incorporated. A Delaware incorporation does not by itself make
+  Delaware the right choice.
+- **An EU representative.** If founders in the EEA or the UK use
+  KaizenOS, GDPR reaches a US company anyway, and Article 27 generally
+  requires a named representative in the EEA — with a UK one as well for
+  UK users. Nothing has been written into the policy claiming one exists,
+  because none has been appointed. If the answer is that EU users are in
+  scope, that appointment and a line naming them both belong here.
+
+US companies commonly add an arbitration clause and a class-action
+waiver to their terms. Deliberately not written in: it is a real choice
+with real consequences for consumers, and it is the lawyer's call, not a
+drafting default.
 
 ## Claims that must stay true
 

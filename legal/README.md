@@ -37,25 +37,37 @@ serve, the stylesheet 404s, and they render as unstyled text. The repo
 root carries a `.nojekyll` file for the same reason. If that site's routing serves extensionless paths,
 update the cross-links in the footers (`terms.html` → `/terms`).
 
-## Fill these in before publishing
+## State: published, not lawyer-reviewed
 
-Every placeholder is marked in the source with `<span class="fill">` and
-renders highlighted, so nothing can be missed by eye. Search for `fill`.
+Both documents are complete and dated 30 September 2026. Nothing is left
+blank.
 
-Filled in: Kaizen Business Mastery LLC, 6825 S 7th St #8208, Phoenix,
-Arizona 85042 — confirmed as a real Arizona address, so Arizona law and
-the Maricopa County courts stand; team@kaizenos.ai and +1 (408) 916-7923
-for both privacy and support; Clerk, AWS, Anthropic (Claude), Resend and
-PostHog in the sub-processor table beside Stripe and Apple; 90 days to
-delete after an account closes, seven years for billing and tax records,
-90 days for logs, and a US$100 floor under the liability cap.
+They have **not** been reviewed by a lawyer. That was a deliberate,
+informed decision, and the risk it leaves is worth naming precisely,
+because it is not the one people assume:
 
-Still open:
+- **Length is not the risk.** A shorter policy would have passed App Store
+  review just as easily — Apple checks that the URL resolves and is a
+  plausible policy, not whether it is accurate. Detail does not create
+  liability.
+- **Specificity is the risk, and also the protection.** These documents
+  make checkable promises. Kept, they are the strongest defence there is.
+  Broken, a specific promise is worse than a vague one, because it is a
+  specific false statement.
 
-| Placeholder | Notes |
-|---|---|
-| Sub-processor table | One row: speech. See below — it is the row the audio promise rests on |
-| `[DATE]` | Last updated and effective date, both files. Set them at publication, not before |
+So the thing to guard is not the wording. It is the three claims in
+"Claims that must stay true" below, and the one dependency under "The
+speech row".
+
+## To deploy
+
+1. Copy all five files to the marketing site and route `/privacy` and
+   `/terms` to them.
+2. Put those two URLs in App Store Connect, and in the app beside the
+   subscription price and renewal wording.
+3. Answer the App Store App Privacy questionnaire from the table in
+   section 6, not from memory. If the two disagree, that is a rejection
+   reason and, worse, a contradiction on the record.
 
 ## The company is in the US — what follows from that
 
@@ -83,27 +95,27 @@ waiver to their terms. Deliberately not written in: it is a real choice
 with real consequences for consumers, and it is the lawyer's call, not a
 drafting default.
 
-## The speech row is the one that matters
+## The speech row
 
-It is the only sub-processor that touches a founder's voice, and the
-policy commits to audio being streamed, transcribed and discarded. That
-claim is only as good as the contract with whoever does the transcribing,
-so the row cannot be filled from a hunch.
+The table names every provider except the one that transcribes speech,
+which reads "our speech-recognition provider", with the current list
+available on request. That is lawful — GDPR asks for categories of
+recipients, and naming is best practice rather than obligation — and it is
+honest, which naming the wrong company would not have been.
 
-The prototype proves nothing either way: it runs the browser's own
-Web Speech API by default and an xAI Voice Agent behind `?voice=grok-realtime`.
-Neither is a production decision.
-
-Two consequences worth deciding before the row is written:
+Name it as soon as the voice pipeline is settled. Two things to check when
+you do, because the policy already promises audio is not retained:
 
 - **On iOS, if the app uses Apple's Speech framework, Apple is the speech
-  processor** — recognition is sent to Apple's servers unless on-device
-  recognition is forced. Apple then belongs in this table for that, not
-  only for purchases.
-- **If a realtime voice agent handles the whole exchange**, the same
-  provider is doing speech *and* conversation, and the no-audio-retention
-  promise rests entirely on its terms. Check them before the policy
-  goes live, not after.
+  processor** — recognition goes to Apple's servers unless on-device
+  recognition is forced.
+- **If a realtime voice agent handles the whole exchange**, one provider
+  does speech *and* conversation, and the no-retention promise rests
+  entirely on its terms. Read them before trusting the sentence.
+
+This is the single dependency worth chasing down even with no lawyer in
+the loop: "we do not store your voice" is the most consequential sentence
+in the document, and it is only as true as that contract.
 
 ## Claims that must stay true
 

@@ -1,61 +1,183 @@
-/* Shared styling for the legal pages. Self-contained on purpose: these
-   files have to survive being copied onto whatever kaizenos.ai runs. */
+/* ─── Legal pages ─────────────────────────────────────────────
+   The same chrome as the rest of KaizenOS: the void, the star field,
+   the nebula, and a single gold-hairline panel with the glow across
+   its top edge. Values are lifted from css/landing/00-base.css,
+   01-star-field.css and 03-stage-panel.css rather than approximated.
+
+   Self-contained on purpose — these three files plus the two images
+   have to survive being copied onto kaizenos.ai whole. */
+
 :root {
   --gold: #c8a84e;
   --gold-bright: #e8c870;
-  --void: #06050c;
+  --gold-soft: #8a7434;
+  --void: #03030a;
   --ink: #eae3c8;
   --line: rgba(200, 168, 78, 0.22);
-  --muted: rgba(234, 227, 200, 0.62);
+  --line-soft: rgba(200, 168, 78, 0.12);
+  --panel: linear-gradient(180deg, rgba(16, 13, 22, 0.82) 0%, rgba(8, 7, 12, 0.9) 100%);
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
+
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html, body { margin: 0; padding: 0; min-height: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
-  margin: 0;
-  background: var(--void);
+  background: radial-gradient(ellipse at 50% 30%, #0a0817 0%, #04030a 55%, #000 100%) fixed;
   color: var(--ink);
-  font: 16px/1.72 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--sans);
+  font-size: 15.5px;
+  line-height: 1.74;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
 }
-.wrap { max-width: 760px; margin: 0 auto; padding: 56px 20px 96px; }
-header { border-bottom: 1px solid var(--line); padding-bottom: 26px; margin-bottom: 34px; }
-.brand {
-  font-size: 11px; letter-spacing: 0.42em; text-transform: uppercase;
-  color: var(--gold-bright); margin: 0 0 18px;
+
+/* ── star field ── */
+.stars, .stars-2, .stars-3 { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.stars { background-image:
+    radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 22% 73%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 38% 41%, rgba(255,255,255,0.7) 50%, transparent 100%),
+    radial-gradient(1px 1px at 58% 88%, rgba(255,255,255,0.85) 50%, transparent 100%),
+    radial-gradient(1px 1px at 71% 22%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 84% 56%, rgba(255,255,255,0.7) 50%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 92% 12%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 6% 88%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 47% 7%, rgba(255,255,255,0.6) 50%, transparent 100%),
+    radial-gradient(1px 1px at 31% 94%, rgba(255,255,255,0.6) 50%, transparent 100%);
+  animation: twinkle 6s ease-in-out infinite; }
+.stars-2 { background-image:
+    radial-gradient(1px 1px at 17% 33%, rgba(200,168,78,0.7) 50%, transparent 100%),
+    radial-gradient(1px 1px at 64% 67%, rgba(200,168,78,0.5) 50%, transparent 100%),
+    radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.5) 50%, transparent 100%),
+    radial-gradient(1px 1px at 26% 56%, rgba(255,255,255,0.4) 50%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 43% 22%, rgba(200,168,78,0.8) 50%, transparent 100%),
+    radial-gradient(1px 1px at 88% 38%, rgba(255,255,255,0.4) 50%, transparent 100%);
+  animation: twinkle 9s ease-in-out infinite reverse; }
+.stars-3 { background-image:
+    radial-gradient(0.5px 0.5px at 5% 45%, #fff 50%, transparent 100%),
+    radial-gradient(0.5px 0.5px at 15% 65%, #fff 50%, transparent 100%),
+    radial-gradient(0.5px 0.5px at 36% 78%, #fff 50%, transparent 100%),
+    radial-gradient(0.5px 0.5px at 52% 35%, #fff 50%, transparent 100%),
+    radial-gradient(0.5px 0.5px at 68% 12%, #fff 50%, transparent 100%),
+    radial-gradient(0.5px 0.5px at 75% 47%, #fff 50%, transparent 100%),
+    radial-gradient(0.5px 0.5px at 95% 71%, #fff 50%, transparent 100%);
+  opacity: 0.5; animation: twinkle 4s ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { opacity: 0.85; } 50% { opacity: 0.45; } }
+.nebula {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(60% 40% at 30% 25%, rgba(75, 50, 120, 0.18), transparent 70%),
+    radial-gradient(50% 35% at 75% 75%, rgba(120, 80, 50, 0.12), transparent 70%);
+  mix-blend-mode: screen;
 }
-h1 { font-size: 30px; line-height: 1.2; font-weight: 600; margin: 0 0 12px; }
-.meta { color: var(--muted); font-size: 14px; margin: 0; }
-h2 {
-  font-size: 19px; font-weight: 600; margin: 44px 0 12px;
-  padding-top: 8px; scroll-margin-top: 20px;
+
+/* ── brand, fixed like every other screen ── */
+.brand { position: fixed; top: 20px; left: 26px; z-index: 40; display: flex; align-items: center; }
+.brand img { display: block; height: 24px; width: auto; opacity: 0.92;
+  filter: drop-shadow(0 0 10px rgba(200, 168, 78, 0.18)); }
+
+/* ── stage and panel ── */
+.stage { position: relative; z-index: 10; min-height: 100vh;
+  display: flex; justify-content: center; padding: 96px 20px 112px; }
+.doc { width: 100%; max-width: 780px; animation: rise 0.55s cubic-bezier(.2,.7,.2,1); }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+.panel {
+  position: relative; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 24px; padding: 34px 40px 38px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(200,168,78,0.05) inset,
+              0 -2px 60px rgba(200,168,78,0.04);
 }
-h3 { font-size: 16px; font-weight: 600; margin: 26px 0 8px; color: var(--gold-bright); }
-p, li { color: rgba(234, 227, 200, 0.88); }
+.panel::before { content: ""; position: absolute; inset: 0; border-radius: 24px; pointer-events: none;
+  background: radial-gradient(120% 80% at 50% -10%, rgba(200,168,78,0.10), transparent 60%); }
+.panel > * { position: relative; }
+
+/* ── panel header ── */
+.ph { display: flex; align-items: center; gap: 11px; margin-bottom: 22px; }
+/* the sigil's bars in the numbered circle the landing screens use */
+.ph .mark { width: 30px; height: 30px; flex: 0 0 30px; border: 1px solid var(--line);
+  border-radius: 50%; display: grid; place-items: center; }
+.ph .mark svg { width: 15px; height: 15px; display: block;
+  filter: drop-shadow(0 0 5px rgba(232, 200, 112, 0.35)); }
+.ph .nm { font-size: 10px; letter-spacing: 0.42em; text-transform: uppercase;
+  color: rgba(232, 200, 112, 0.85); font-weight: 500; }
+.ph .badge { margin-left: auto; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase;
+  border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px;
+  color: rgba(234, 227, 200, 0.6); white-space: nowrap; }
+
+h1 { font-size: 30px; line-height: 1.16; font-weight: 600; letter-spacing: -0.01em;
+  margin: 0 0 10px; color: #f4ecd2; }
+h1 .accent { color: var(--gold-bright); }
+.meta { font-size: 12px; color: rgba(234, 227, 200, 0.42); margin: 0 0 26px;
+  letter-spacing: 0.02em; }
+.lede { font-size: 15.5px; color: rgba(234, 227, 200, 0.72); margin: 0 0 16px; }
+
+h2 { font-size: 17px; font-weight: 600; color: #f4ecd2; letter-spacing: -0.005em;
+  margin: 40px 0 12px; scroll-margin-top: 24px; }
+h2 .n { color: rgba(232, 200, 112, 0.7); font-weight: 500; margin-right: 8px; }
+h3 { font-size: 14px; font-weight: 600; margin: 24px 0 8px; color: var(--gold-bright); }
+
+p, li { color: rgba(234, 227, 200, 0.82); }
 p { margin: 0 0 14px; }
-ul, ol { margin: 0 0 16px; padding-left: 22px; }
-li { margin-bottom: 8px; }
-a { color: var(--gold-bright); }
-strong { color: #fff6e0; font-weight: 600; }
-table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 15px; }
-th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid rgba(200,168,78,.14); vertical-align: top; }
-th { color: var(--gold-bright); font-weight: 600; font-size: 13px; letter-spacing: 0.04em; }
-.toc { border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; margin: 0 0 40px; }
-.toc p { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-bright); margin: 0 0 10px; }
-.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 28px; }
-.toc li { margin-bottom: 5px; font-size: 14px; }
-.toc a { text-decoration: none; }
-.toc a:hover { text-decoration: underline; }
-.fill {
-  background: rgba(232, 200, 112, 0.14);
-  border-bottom: 1px dashed rgba(232, 200, 112, 0.5);
-  color: var(--gold-bright); padding: 0 3px; border-radius: 2px;
-}
-footer {
-  margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line);
-  color: var(--muted); font-size: 14px;
-}
-@media (max-width: 620px) {
-  .wrap { padding: 36px 18px 72px; }
+ul, ol { margin: 0 0 16px; padding-left: 20px; }
+li { margin-bottom: 9px; }
+li::marker { color: rgba(200, 168, 78, 0.55); }
+strong { color: #f4ecd2; font-weight: 600; }
+a { color: var(--gold-bright); text-decoration: none;
+  border-bottom: 1px solid rgba(232, 200, 112, 0.35); transition: border-color .18s ease, color .18s ease; }
+a:hover { color: #fff; border-bottom-color: var(--gold-bright); }
+
+/* ── divider, as on the landing screens ── */
+.divider { display: flex; align-items: center; gap: 12px; margin: 34px 0 0;
+  font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(234,227,200,0.3); }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
+
+/* ── tables ── */
+table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-size: 14.5px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+th { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(232, 200, 112, 0.7); font-weight: 500; border-bottom-color: var(--line);
+  padding-bottom: 9px; }
+tbody tr:last-child td { border-bottom: 0; }
+td { color: rgba(234, 227, 200, 0.78); }
+
+/* ── contents ── */
+.toc { border: 1px solid var(--line-soft); border-radius: 16px; padding: 20px 24px; margin: 0 0 8px;
+  background: rgba(234, 227, 200, 0.02); }
+.toc .lbl { display: block; font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase;
+  color: rgba(232, 200, 112, 0.6); font-weight: 500; margin: 0 0 12px; }
+.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+.toc li { margin-bottom: 6px; font-size: 14px; }
+.toc a { border-bottom: 0; color: rgba(234, 227, 200, 0.78); }
+.toc a:hover { color: var(--gold-bright); }
+
+/* ── a value only the company can supply ── */
+.fill { background: rgba(232, 200, 112, 0.13); border-bottom: 1px dashed rgba(232, 200, 112, 0.5);
+  color: var(--gold-bright); padding: 0 4px; border-radius: 3px; white-space: nowrap; }
+
+/* ── footer ── */
+.foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--line-soft);
+  font-size: 13px; color: rgba(234, 227, 200, 0.42); }
+.foot .sep { color: rgba(200, 168, 78, 0.35); }
+.foot .top { margin-left: auto; }
+
+@media (max-width: 720px) {
+  body { font-size: 15px; }
+  .stage { padding: 82px 14px 80px; }
+  .panel { padding: 26px 22px 30px; border-radius: 20px; }
+  .panel::before { border-radius: 20px; }
   h1 { font-size: 25px; }
+  h2 { font-size: 16px; margin-top: 34px; }
   .toc ol { columns: 1; }
+  .ph .badge { display: none; }
+  th, td { padding: 10px 8px; font-size: 13.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stars, .stars-2, .stars-3 { animation: none; }
+  .doc { animation: none; }
+  html { scroll-behavior: auto; }
 }

@@ -1,9 +1,16 @@
 # Legal pages — Privacy Policy and Terms
 
 Two self-contained pages for the App Store submission and the web app.
-They have no build step and no dependencies: `privacy.html`, `terms.html`
-and `_style.css`, styled to the KaizenOS palette so they can be dropped
-onto the marketing site or restyled to match it.
+No build step and no dependencies — five files: `privacy.html`,
+`terms.html`, `_style.css`, `kaizenOS.png` and `favicon.png`.
+
+They wear the same chrome as the rest of KaizenOS: the void background,
+the three star-field layers, the nebula, the fixed wordmark, and the
+gold-hairline panel with the glow across its top edge. The values are
+lifted from `css/landing/00-base.css`, `01-star-field.css` and
+`03-stage-panel.css` rather than approximated, so a reader arrives from
+the app and does not feel they have left it. The CSS is duplicated on
+purpose: the folder has to survive being copied onto kaizenos.ai whole.
 
 **These are drafts.** They are written around what KaizenOS actually
 does, but they are binding documents and a qualified lawyer in the
@@ -21,7 +28,7 @@ dev subdomain:
   tend to end up behind a login; marketing sites do not.
 - Apple checks that the Privacy Policy URL resolves and is a real policy.
 
-Copy the three files into the marketing site and route `/privacy` and
+Copy all five files into the marketing site and route `/privacy` and
 `/terms` to them. If that site's routing serves extensionless paths,
 update the cross-links in the footers (`terms.html` → `/terms`).
 

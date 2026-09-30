@@ -42,15 +42,18 @@ update the cross-links in the footers (`terms.html` → `/terms`).
 Every placeholder is marked in the source with `<span class="fill">` and
 renders highlighted, so nothing can be missed by eye. Search for `fill`.
 
+Filled in: Kaizen Business Mastery LLC, 6825 S 7th St #8208, Phoenix,
+Arizona 85042; team@kaizenos.ai and +1 (408) 916-7923 for both privacy
+and support; Arizona law and the Maricopa County courts.
+
+Still open:
+
 | Placeholder | Notes |
 |---|---|
-| `[DATE]` | Last updated and effective date, both files |
-| `[REGISTERED ADDRESS]`, `[COMPANY NUMBER]` | Kaizen Business Mastery's registered details |
-| `[PRIVACY EMAIL]`, `[SUPPORT EMAIL]` | Aliases that will still exist in two years |
-| `[STATE]`, `[COUNTY, STATE]` | Governing law and the courts with jurisdiction |
-| `[AMOUNT]` | Liability cap floor |
+| `[DATE]` | Last updated and effective date, both files — set them when the documents are final, not before |
+| Sub-processor table | The real auth, hosting, speech, AI model, email and analytics providers, six rows |
 | Retention periods | Post-closure, tax records, logs |
-| Sub-processor table | The real auth, hosting, speech, AI model, email and analytics providers |
+| `[AMOUNT]` | The floor under the liability cap, in dollars |
 
 ## The company is in the US — what follows from that
 
@@ -62,10 +65,12 @@ US, or to the reader's own authority in the UK or EEA.
 Two things still need deciding, and neither is a placeholder a lawyer can
 fill from the file alone:
 
-- **Governing law.** `[STATE]` is the state whose law governs, which is
-  usually where the business actually operates, not necessarily where it
-  is incorporated. A Delaware incorporation does not by itself make
-  Delaware the right choice.
+- **Governing law.** Written as Arizona, and the Maricopa County courts,
+  because that is where the business is. If the LLC was actually formed in
+  another state — Delaware and Wyoming are the usual ones, and a suite
+  number at a Phoenix street address is often a registered-agent or
+  mail-forwarding address rather than an office — say so and the clause
+  should change with it.
 - **An EU representative.** If founders in the EEA or the UK use
   KaizenOS, GDPR reaches a US company anyway, and Article 27 generally
   requires a named representative in the EEA — with a UK one as well for

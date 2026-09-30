@@ -1,0 +1,61 @@
+/* Shared styling for the legal pages. Self-contained on purpose: these
+   files have to survive being copied onto whatever kaizenos.ai runs. */
+:root {
+  --gold: #c8a84e;
+  --gold-bright: #e8c870;
+  --void: #06050c;
+  --ink: #eae3c8;
+  --line: rgba(200, 168, 78, 0.22);
+  --muted: rgba(234, 227, 200, 0.62);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--ink);
+  font: 16px/1.72 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 56px 20px 96px; }
+header { border-bottom: 1px solid var(--line); padding-bottom: 26px; margin-bottom: 34px; }
+.brand {
+  font-size: 11px; letter-spacing: 0.42em; text-transform: uppercase;
+  color: var(--gold-bright); margin: 0 0 18px;
+}
+h1 { font-size: 30px; line-height: 1.2; font-weight: 600; margin: 0 0 12px; }
+.meta { color: var(--muted); font-size: 14px; margin: 0; }
+h2 {
+  font-size: 19px; font-weight: 600; margin: 44px 0 12px;
+  padding-top: 8px; scroll-margin-top: 20px;
+}
+h3 { font-size: 16px; font-weight: 600; margin: 26px 0 8px; color: var(--gold-bright); }
+p, li { color: rgba(234, 227, 200, 0.88); }
+p { margin: 0 0 14px; }
+ul, ol { margin: 0 0 16px; padding-left: 22px; }
+li { margin-bottom: 8px; }
+a { color: var(--gold-bright); }
+strong { color: #fff6e0; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 15px; }
+th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid rgba(200,168,78,.14); vertical-align: top; }
+th { color: var(--gold-bright); font-weight: 600; font-size: 13px; letter-spacing: 0.04em; }
+.toc { border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; margin: 0 0 40px; }
+.toc p { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-bright); margin: 0 0 10px; }
+.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 28px; }
+.toc li { margin-bottom: 5px; font-size: 14px; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+.fill {
+  background: rgba(232, 200, 112, 0.14);
+  border-bottom: 1px dashed rgba(232, 200, 112, 0.5);
+  color: var(--gold-bright); padding: 0 3px; border-radius: 2px;
+}
+footer {
+  margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 14px;
+}
+@media (max-width: 620px) {
+  .wrap { padding: 36px 18px 72px; }
+  h1 { font-size: 25px; }
+  .toc ol { columns: 1; }
+}

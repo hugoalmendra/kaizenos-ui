@@ -51,7 +51,7 @@ Still open:
 | Placeholder | Notes |
 |---|---|
 | `[DATE]` | Last updated and effective date, both files — set them when the documents are final, not before |
-| Sub-processor table | The real auth, hosting, speech, AI model, email and analytics providers, six rows |
+| Sub-processor table | Three rows left: speech, email, analytics/crash. Clerk, AWS, Anthropic (Claude), Stripe and Apple are named |
 | Retention periods | Post-closure, tax records, logs |
 | `[AMOUNT]` | The floor under the liability cap, in dollars |
 
@@ -82,6 +82,28 @@ US companies commonly add an arbitration clause and a class-action
 waiver to their terms. Deliberately not written in: it is a real choice
 with real consequences for consumers, and it is the lawyer's call, not a
 drafting default.
+
+## The speech row is the one that matters
+
+It is the only sub-processor that touches a founder's voice, and the
+policy commits to audio being streamed, transcribed and discarded. That
+claim is only as good as the contract with whoever does the transcribing,
+so the row cannot be filled from a hunch.
+
+The prototype proves nothing either way: it runs the browser's own
+Web Speech API by default and an xAI Voice Agent behind `?voice=grok-realtime`.
+Neither is a production decision.
+
+Two consequences worth deciding before the row is written:
+
+- **On iOS, if the app uses Apple's Speech framework, Apple is the speech
+  processor** — recognition is sent to Apple's servers unless on-device
+  recognition is forced. Apple then belongs in this table for that, not
+  only for purchases.
+- **If a realtime voice agent handles the whole exchange**, the same
+  provider is doing speech *and* conversation, and the no-audio-retention
+  promise rests entirely on its terms. Check them before the policy
+  goes live, not after.
 
 ## Claims that must stay true
 

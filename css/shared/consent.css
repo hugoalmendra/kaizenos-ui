@@ -1,0 +1,98 @@
+  /* ─── Cookie consent ───────────────────────────────────────────
+     Bottom-centre, the project's panel treatment, out of the way of the
+     corner controls on the stage. Deliberately not a modal: refusing
+     costs nothing, so it must not hold the page hostage. */
+  .consent {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%) translateY(14px);
+    z-index: 200;               /* above the stage, the HUD and the panels */
+    width: min(620px, calc(100vw - 32px));
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 24px;
+    border-radius: 20px;
+    border: 1px solid rgba(200, 168, 78, 0.24);
+    background: linear-gradient(180deg, rgba(16, 13, 22, 0.94) 0%, rgba(8, 7, 12, 0.97) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(200, 168, 78, 0.05) inset;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(.2,.7,.2,1), visibility 0.4s ease;
+  }
+  .consent.up { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+  .consent-title {
+    margin: 0 0 8px;
+    font-size: 10px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.85);
+    font-weight: 500;
+  }
+  .consent-copy {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.62;
+    color: rgba(234, 227, 200, 0.68);
+  }
+
+  .consent-acts { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  /* Refusing is the same size and weight as accepting. The only difference
+     is which one is filled, and that follows the current choice. */
+  .consent-btn {
+    flex: 1 1 0;
+    min-width: 150px;
+    border-radius: 999px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: 1px solid rgba(200, 168, 78, 0.22);
+    background: rgba(234, 227, 200, 0.03);
+    color: rgba(234, 227, 200, 0.85);
+    transition: border-color .2s ease, color .2s ease, background .2s ease, transform .2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .consent-btn:hover {
+    border-color: var(--gold-bright, #e8c870);
+    color: var(--gold-bright, #e8c870);
+    background: rgba(200, 168, 78, 0.06);
+  }
+  .consent-btn.primary {
+    /* transparent rather than none, so both buttons are the same size to
+       the pixel — equal prominence is the whole point of this pair */
+    border-color: transparent;
+    font-weight: 600;
+    color: #140e04;
+    background: linear-gradient(135deg, #e8c870, #c8a84e 60%, #8a7434);
+    box-shadow: 0 8px 26px rgba(200, 168, 78, 0.24), 0 0 0 1px rgba(232, 200, 112, 0.4) inset;
+  }
+  .consent-btn.primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .consent-btn:focus-visible { outline: 2px solid rgba(232, 200, 112, .7); outline-offset: 2px; }
+
+  .consent-link {
+    flex: 0 0 auto;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: rgba(232, 200, 112, 0.8);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(232, 200, 112, 0.3);
+  }
+  .consent-link:hover { color: #fff; border-bottom-color: #e8c870; }
+
+  @media (max-width: 560px) {
+    .consent { bottom: 12px; padding: 17px 18px; gap: 14px; border-radius: 18px; }
+    .consent-copy { font-size: 13px; }
+    .consent-acts { gap: 9px; }
+    .consent-btn { flex: 1 1 100%; min-width: 0; }
+    .consent-link { width: 100%; text-align: center; padding-top: 2px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .consent { transition: opacity .01s linear, visibility .01s linear; }
+  }

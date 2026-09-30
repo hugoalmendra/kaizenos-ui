@@ -51,7 +51,7 @@ Still open:
 | Placeholder | Notes |
 |---|---|
 | `[DATE]` | Last updated and effective date, both files — set them when the documents are final, not before |
-| Sub-processor table | Three rows left: speech, email, analytics/crash. Clerk, AWS, Anthropic (Claude), Stripe and Apple are named |
+| Sub-processor table | One row left: speech. Clerk, AWS, Anthropic (Claude), Stripe, Apple, Resend and PostHog are named |
 | Retention periods | Post-closure, tax records, logs |
 | `[AMOUNT]` | The floor under the liability cap, in dollars |
 
@@ -112,6 +112,13 @@ transcribed, discarded — and that **transcripts and documents are never
 used to train AI models**. Both are commitments, not descriptions. If the
 build ever retains audio or sends content to a provider that trains on
 it, the policy has to change first.
+
+A third claim arrives with PostHog: the policy says analytics cookies are
+set **only where the reader has agreed to them**. That is the right
+default, and it is now a commitment — for UK and EEA visitors the web app
+needs a consent gate that actually holds PostHog back until they say yes,
+and the mobile SDK needs the equivalent before it starts identifying a
+device. Loading it on page one for everyone would contradict the policy.
 
 It also names Apple In-App Purchase as the payment path inside the iOS
 app and Stripe on the web, which matches the mobile design: E4 is the

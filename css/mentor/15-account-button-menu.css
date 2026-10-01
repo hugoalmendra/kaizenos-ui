@@ -27,14 +27,17 @@
     transition: opacity 0.25s ease, transform 0.25s ease;
   }
   .account-menu.open { opacity: 1; transform: none; pointer-events: auto; }
-  .account-menu button {
+  .account-menu button,
+  .account-menu a {
     display: flex; align-items: center; gap: 11px; width: 100%; text-align: left;
     background: transparent; border: 0; color: rgba(234, 227, 200, 0.75);
     font: inherit; font-size: 12px; letter-spacing: 0.03em;
     padding: 11px 12px; border-radius: 9px; cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease;
   }
-  .account-menu button:hover { background: rgba(200, 168, 78, 0.08); color: var(--gold-bright); }
+  .account-menu a { text-decoration: none; }
+  .account-menu button:hover,
+  .account-menu a:hover { background: rgba(200, 168, 78, 0.08); color: var(--gold-bright); }
   .account-menu .ic { width: 16px; height: 16px; flex: 0 0 16px; color: var(--gold);
     display: grid; place-items: center; }
   .account-menu .ic svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }

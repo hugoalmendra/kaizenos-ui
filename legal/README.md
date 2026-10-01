@@ -120,12 +120,17 @@ into a misrepresentation, and it is the sort of thing that gets found.
 
 Two things follow that are not the policy's job to fix:
 
-- **Hume's retention setting is not verified.** The policy no longer
-  claims that nobody retains the audio, because nobody has checked. It
-  says what is true — KaizenOS keeps the transcript, not the audio, and we
-  instruct Hume to keep nothing beyond producing the response — and offers
-  the current position on request. **Check it, then tighten the sentence
-  back.** This is the single highest-value thing on this list.
+- **Hume's audio retention is confirmed: none.** Hume keeps the
+  transcript and not the audio, so the strong sentence is back — the audio
+  is not stored, by us or by Hume. That is now a verified claim rather than
+  an aspiration, and it is the best sentence in the document: there is no
+  recording of anyone's voice to hand over, to leak, or to be asked for.
+- **Hume holds a copy of the transcript**, which is disclosed, and which
+  deletion has to reach. The policy says that deleting a transcript or
+  closing an account instructs Hume to delete its copy too, because
+  deleting from KaizenOS and leaving a copy elsewhere is not deleting.
+  **Make sure that call is actually wired up**, and that it is covered by
+  the 90-day commitment. This is now the open item that was Hume retention.
 - **The app should say it too, not only this page.** Under the EU AI Act,
   people exposed to an emotion recognition system have to be told they
   are. A line at the moment the microphone is first requested does that
@@ -139,10 +144,10 @@ used to train AI models**. Both are commitments, not descriptions. If the
 build ever retains audio or sends content to a provider that trains on
 it, the policy has to change first.
 
-The voice claim is now narrower than it was, on purpose: KaizenOS does not
-store recordings, and Hume is instructed to keep nothing beyond producing
-the response. It no longer asserts that Hume retains nothing, because that
-has not been verified. Verify it and the stronger sentence can come back.
+The voice claim is the strongest one here and it is verified: the audio is
+not stored, by us or by Hume. If that ever changes — a different provider,
+a changed setting, a debugging flag that keeps a buffer — this file changes
+first, before the build ships.
 
 A third claim arrives with PostHog: the policy says analytics cookies are
 set **only where the reader has agreed to them**. That is the right

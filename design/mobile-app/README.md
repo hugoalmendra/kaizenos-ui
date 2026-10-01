@@ -174,6 +174,15 @@ control because ninety seconds of spoken copy is a wall of text on a phone,
 the org chart drops the branching tree for a grouped list, and the brand kit
 keeps the mark picker since that is the one choice worth making on mobile.
 
+**Legal.** A3 states what creating an account accepts, with Terms and
+Privacy Policy as links rather than as prose, and E4 carries the same pair
+beneath the subscription price — Apple expects the terms to be reachable
+from the subscription itself, not only from the store listing. Both open
+https://kaizenos.ai/terms/ and https://kaizenos.ai/privacy/ in a web view.
+The You tab has no room for them at 844pt without a redesign, so it does
+not pretend otherwise; if a durable route from You is wanted later, it is
+one row opening a small legal screen, and that screen does not exist yet.
+
 **You.** Replaces the corner dropdown. Time remaining is first on the
 screen with an Add time action beside it. E3 sells hours, not tokens.
 E4 is the platform subscription sheet (StoreKit / Play Billing), not the

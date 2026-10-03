@@ -6,7 +6,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "A1 · Launch",
+      "title": "A1 \u00b7 Launch",
       "page": "page-1"
     },
     {
@@ -15,7 +15,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "A2 · What Kaiso does",
+      "title": "A2 \u00b7 What Kaiso does",
       "page": "page-1"
     },
     {
@@ -24,7 +24,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "A3 · Create account",
+      "title": "A3 \u00b7 Create account",
       "page": "page-1"
     },
     {
@@ -33,7 +33,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "A4 · Sign in",
+      "title": "A4 \u00b7 Sign in",
       "page": "page-1"
     },
     {
@@ -42,7 +42,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "A5 · Reset password",
+      "title": "A5 \u00b7 Reset password",
       "page": "page-1"
     },
     {
@@ -51,7 +51,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "A6 · Intake · Company",
+      "title": "A6 \u00b7 Intake \u00b7 Company",
       "page": "page-1"
     },
     {
@@ -60,7 +60,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "A7 · Intake · Founders",
+      "title": "A7 \u00b7 Intake \u00b7 Founders",
       "page": "page-1"
     },
     {
@@ -69,7 +69,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "A8 · Intake · Traction",
+      "title": "A8 \u00b7 Intake \u00b7 Traction",
       "page": "page-1"
     },
     {
@@ -78,7 +78,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "A9 · Intake · Legal",
+      "title": "A9 \u00b7 Intake \u00b7 Legal",
       "page": "page-1"
     },
     {
@@ -87,7 +87,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "A10 · Venture Profile",
+      "title": "A10 \u00b7 Venture Profile",
       "page": "page-1"
     },
     {
@@ -96,7 +96,7 @@
       "y": 1980,
       "w": 390,
       "h": 844,
-      "title": "A11 · Email opt-in",
+      "title": "A11 \u00b7 Email opt-in",
       "page": "page-1"
     },
     {
@@ -105,7 +105,7 @@
       "y": 1980,
       "w": 390,
       "h": 844,
-      "title": "A12 · Report sent",
+      "title": "A12 \u00b7 Report sent",
       "page": "page-1"
     },
     {
@@ -114,7 +114,7 @@
       "y": 1980,
       "w": 390,
       "h": 844,
-      "title": "A13 · Free time granted",
+      "title": "A13 \u00b7 Free time granted",
       "page": "page-1"
     },
     {
@@ -123,7 +123,7 @@
       "y": 1980,
       "w": 390,
       "h": 844,
-      "title": "A14 · Forming backstage",
+      "title": "A14 \u00b7 Forming backstage",
       "page": "page-1"
     },
     {
@@ -132,7 +132,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "B1 · Home · idle",
+      "title": "B1 \u00b7 Home \u00b7 idle",
       "page": "page-2"
     },
     {
@@ -141,7 +141,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "B2 · Live · listening",
+      "title": "B2 \u00b7 Live \u00b7 listening",
       "page": "page-2"
     },
     {
@@ -150,7 +150,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "B3 · Live · speaking",
+      "title": "B3 \u00b7 Live \u00b7 speaking",
       "page": "page-2"
     },
     {
@@ -159,7 +159,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "B4 · Scribe sheet",
+      "title": "B4 \u00b7 Scribe sheet",
       "page": "page-2"
     },
     {
@@ -168,7 +168,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "B5 · Asset ready",
+      "title": "B5 \u00b7 Asset ready",
       "page": "page-2"
     },
     {
@@ -177,7 +177,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "B6 · Session recap",
+      "title": "B6 \u00b7 Session recap",
       "page": "page-2"
     },
     {
@@ -186,7 +186,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "B7 · Time spent",
+      "title": "B7 \u00b7 Time spent",
       "page": "page-2"
     },
     {
@@ -195,7 +195,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "B8 · Connection lost",
+      "title": "B8 \u00b7 Connection lost",
       "page": "page-2"
     },
     {
@@ -204,7 +204,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "B9 · Offline",
+      "title": "B9 \u00b7 Offline",
       "page": "page-2"
     },
     {
@@ -213,7 +213,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "C1 · Plan",
+      "title": "C1 \u00b7 Plan",
       "page": "page-3"
     },
     {
@@ -222,7 +222,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "C2 · Pillar · Company",
+      "title": "C2 \u00b7 Pillar \u00b7 Company",
       "page": "page-3"
     },
     {
@@ -231,7 +231,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "C3 · Node detail",
+      "title": "C3 \u00b7 Node detail",
       "page": "page-3"
     },
     {
@@ -240,7 +240,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "D1 · Library",
+      "title": "D1 \u00b7 Library",
       "page": "page-4"
     },
     {
@@ -249,7 +249,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "D2 · Library · first run",
+      "title": "D2 \u00b7 Library \u00b7 first run",
       "page": "page-4"
     },
     {
@@ -258,7 +258,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "D3 · Executive Summary",
+      "title": "D3 \u00b7 Executive Summary",
       "page": "page-4"
     },
     {
@@ -267,7 +267,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "D4 · Landing Page",
+      "title": "D4 \u00b7 Landing Page",
       "page": "page-4"
     },
     {
@@ -276,7 +276,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "D5 · Pitch Deck",
+      "title": "D5 \u00b7 Pitch Deck",
       "page": "page-4"
     },
     {
@@ -285,7 +285,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "D6 · YC Application",
+      "title": "D6 \u00b7 YC Application",
       "page": "page-4"
     },
     {
@@ -294,7 +294,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "E1 · You",
+      "title": "E1 \u00b7 You",
       "page": "page-5"
     },
     {
@@ -303,7 +303,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "E2 · Manage account",
+      "title": "E2 \u00b7 Manage account",
       "page": "page-5"
     },
     {
@@ -312,7 +312,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "E3 · Plan & Tokens",
+      "title": "E3 \u00b7 Plan & Tokens",
       "page": "page-5"
     },
     {
@@ -321,7 +321,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "E4 · Purchase",
+      "title": "E4 \u00b7 Purchase",
       "page": "page-5"
     },
     {
@@ -330,7 +330,7 @@
       "y": 0,
       "w": 390,
       "h": 844,
-      "title": "E5 · Sessions",
+      "title": "E5 \u00b7 Sessions",
       "page": "page-5"
     },
     {
@@ -339,7 +339,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "E6 · Notifications",
+      "title": "E6 \u00b7 Notifications",
       "page": "page-5"
     },
     {
@@ -348,7 +348,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "E7 · Feedback",
+      "title": "E7 \u00b7 Feedback",
       "page": "page-5"
     },
     {
@@ -357,7 +357,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "D7 · Elevator Pitch",
+      "title": "D7 \u00b7 Elevator Pitch",
       "page": "page-4"
     },
     {
@@ -366,7 +366,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "D8 · Org Chart",
+      "title": "D8 \u00b7 Org Chart",
       "page": "page-4"
     },
     {
@@ -375,7 +375,7 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "D9 · Brand Kit",
+      "title": "D9 \u00b7 Brand Kit",
       "page": "page-4"
     },
     {
@@ -384,8 +384,26 @@
       "y": 990,
       "w": 390,
       "h": 844,
-      "title": "E8 · Plan · billed on web",
+      "title": "E8 \u00b7 Plan \u00b7 billed on web",
       "page": "page-5"
+    },
+    {
+      "file": "AskKaisoEdit.dc.html",
+      "x": 1880,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "D10 \u00b7 Ask Kaiso to change",
+      "page": "page-4"
+    },
+    {
+      "file": "EditApplied.dc.html",
+      "x": 0,
+      "y": 1980,
+      "w": 390,
+      "h": 844,
+      "title": "D11 \u00b7 Change applied",
+      "page": "page-4"
     }
   ],
   "annotations": [
@@ -394,7 +412,7 @@
       "x": 0,
       "y": -430,
       "w": 620,
-      "text": "KaizenOS mobile app — 390 × 844\n\nRestructured as a native app, not a port of the web build. The web version is one canvas with everything stacked on it as modals; that does not survive contact with a phone.\n\nFOUR TABS. Kaiso (the session), Plan, Library, You. Progress and outputs are destinations, not overlays — you can check either without covering the conversation, and get anywhere without going home first.\n\nTHE SESSION GOES IMMERSIVE. B1 is home, with the tab bar. The moment a session is live (B2, B3) the tab bar and chrome recede: one line of context up top, one control row at the bottom — mute, end, scribe. Nothing competes with the voice.\n\nTIME, NOT TOKENS. Everywhere a founder sees their balance it reads \"14 min left\". Tokens are the billing unit; minutes are what they are actually spending, and what they can act on.\n\nSafe areas reserved, not drawn: 59pt top, 34pt bottom.",
+      "text": "KaizenOS mobile app \u2014 390 \u00d7 844\n\nRestructured as a native app, not a port of the web build. The web version is one canvas with everything stacked on it as modals; that does not survive contact with a phone.\n\nFOUR TABS. Kaiso (the session), Plan, Library, You. Progress and outputs are destinations, not overlays \u2014 you can check either without covering the conversation, and get anywhere without going home first.\n\nTHE SESSION GOES IMMERSIVE. B1 is home, with the tab bar. The moment a session is live (B2, B3) the tab bar and chrome recede: one line of context up top, one control row at the bottom \u2014 mute, end, scribe. Nothing competes with the voice.\n\nTIME, NOT TOKENS. Everywhere a founder sees their balance it reads \"14 min left\". Tokens are the billing unit; minutes are what they are actually spending, and what they can act on.\n\nSafe areas reserved, not drawn: 59pt top, 34pt bottom.",
       "page": "page-2"
     },
     {
@@ -402,7 +420,7 @@
       "x": 2350,
       "y": 300,
       "w": 320,
-      "text": "Session states\n\nB4 the scribe is a real sheet with a grabber, not a fixed 70% panel — it drags between peek and full.\n\nB5 replaces the old toast-plus-badge. A ready asset arrives as a banner with a View action, on screen long enough to act on. No badge to hunt down afterwards, which was the whole of KAIZ-117.\n\nB7 sells more time at the moment it runs out, and says plainly that nothing was lost. B8 and B9 make the same promise — that is the anxiety in a voice product.",
+      "text": "Session states\n\nB4 the scribe is a real sheet with a grabber, not a fixed 70% panel \u2014 it drags between peek and full.\n\nB5 replaces the old toast-plus-badge. A ready asset arrives as a banner with a View action, on screen long enough to act on. No badge to hunt down afterwards, which was the whole of KAIZ-117.\n\nB7 sells more time at the moment it runs out, and says plainly that nothing was lost. B8 and B9 make the same promise \u2014 that is the anxiety in a voice product.",
       "page": "page-2"
     },
     {
@@ -410,7 +428,7 @@
       "x": 0,
       "y": -300,
       "w": 470,
-      "text": "Plan\n\nThree levels: all nine pillars (C1), the nodes inside one (C2), then a single node (C3).\n\nC3 is the screen the web build has no equivalent for, and it is what makes the plan more than a progress bar: what Kaiso already has, what is still missing, the question it will ask next, and a button to go talk about exactly that. It turns a status list into a way in.\n\nPillar colours are the wheel’s own. Node names are the live build’s, including the deferred Virtue pillar.",
+      "text": "Plan\n\nThree levels: all nine pillars (C1), the nodes inside one (C2), then a single node (C3).\n\nC3 is the screen the web build has no equivalent for, and it is what makes the plan more than a progress bar: what Kaiso already has, what is still missing, the question it will ask next, and a button to go talk about exactly that. It turns a status list into a way in.\n\nPillar colours are the wheel\u2019s own. Node names are the live build\u2019s, including the deferred Virtue pillar.",
       "page": "page-3"
     },
     {
@@ -418,7 +436,7 @@
       "x": 0,
       "y": -300,
       "w": 470,
-      "text": "First run\n\nIntake is now a stepped native form — a nav bar with Step n of 4 and a Skip, one thin progress rule, a large title, and 44pt+ controls throughout. It was a scrolling card floating in space, which is a web layout.\n\nA10 is the profile Kaiso builds from the intake; A11 and A12 keep the emailed copy, since that is still how the report is delivered.\n\nDropped in this round: the standalone onboarding tour and the mic priming screen. Both were teaching a UI that no longer needs teaching — four labelled tabs and one Start talking button. Permission is asked at the first tap of Start talking, in context, where the OS prompt belongs.",
+      "text": "First run\n\nIntake is now a stepped native form \u2014 a nav bar with Step n of 4 and a Skip, one thin progress rule, a large title, and 44pt+ controls throughout. It was a scrolling card floating in space, which is a web layout.\n\nA10 is the profile Kaiso builds from the intake; A11 and A12 keep the emailed copy, since that is still how the report is delivered.\n\nDropped in this round: the standalone onboarding tour and the mic priming screen. Both were teaching a UI that no longer needs teaching \u2014 four labelled tabs and one Start talking button. Permission is asked at the first tap of Start talking, in context, where the OS prompt belongs.",
       "page": "page-1"
     },
     {
@@ -426,7 +444,7 @@
       "x": -3,
       "y": -324,
       "w": 470,
-      "text": "Library\n\nA tab, not a modal. Assets are cards with real state; tapping opens a full-screen document with a nav bar and the system share sheet — not a card inside a card.\n\nD2 is the first-run state: an empty library is the most common thing a new user sees, so it explains what will appear and offers the one action that makes it happen.\n\n[YOUR RAISE AMOUNT] on D3 is a deliberate placeholder — do not ship it as written.\n\nD7–D9 are the three outputs added after the first round. The pitch is a segmented control rather than three stacked blocks — ninety seconds of spoken copy is a wall of text at 390pt. The org chart drops the branching tree for a grouped list, because a tree does not survive this width; state moves into a pill. The brand kit keeps the mark picker, since choosing a direction is the one thing a founder will actually do on a phone.",
+      "text": "Library\n\nA tab, not a modal. Assets are cards with real state; tapping opens a full-screen document with a nav bar and the system share sheet \u2014 not a card inside a card.\n\nD2 is the first-run state: an empty library is the most common thing a new user sees, so it explains what will appear and offers the one action that makes it happen.\n\n[YOUR RAISE AMOUNT] on D3 is a deliberate placeholder \u2014 do not ship it as written.\n\nD7\u2013D9 are the three outputs added after the first round. The pitch is a segmented control rather than three stacked blocks \u2014 ninety seconds of spoken copy is a wall of text at 390pt. The org chart drops the branching tree for a grouped list, because a tree does not survive this width; state moves into a pill. The brand kit keeps the mark picker, since choosing a direction is the one thing a founder will actually do on a phone.",
       "page": "page-4"
     },
     {
@@ -434,7 +452,7 @@
       "x": -2,
       "y": -341,
       "w": 470,
-      "text": "You\n\nReplaces the corner dropdown, which was a web pattern that hid five destinations behind one avatar.\n\nTime remaining is the first thing on the screen with an Add time action beside it, because running out mid-conversation is the failure this product has.\n\nE3 sells hours, not tokens. E4 is the platform subscription sheet — StoreKit / Play Billing, not the web card form.\n\nE2 is redrawn out of the default Clerk chrome.\n\nE8 is the state web billing creates. A founder who subscribed by card on the web and then opens the app must not be offered a store subscription on top — that is a double charge. The plan shows as active, the subscribe action is gone, and top-ups stay available through the store. Check the \"change or cancel on the web\" wording with App Review before shipping; it is management, not purchase, but the stores are strict about pointing elsewhere.",
+      "text": "You\n\nReplaces the corner dropdown, which was a web pattern that hid five destinations behind one avatar.\n\nTime remaining is the first thing on the screen with an Add time action beside it, because running out mid-conversation is the failure this product has.\n\nE3 sells hours, not tokens. E4 is the platform subscription sheet \u2014 StoreKit / Play Billing, not the web card form.\n\nE2 is redrawn out of the default Clerk chrome.\n\nE8 is the state web billing creates. A founder who subscribed by card on the web and then opens the app must not be offered a store subscription on top \u2014 that is a double charge. The plan shows as active, the subscribe action is gone, and top-ups stay available through the store. Check the \"change or cancel on the web\" wording with App Review before shipping; it is management, not purchase, but the stores are strict about pointing elsewhere.",
       "page": "page-5"
     }
   ],

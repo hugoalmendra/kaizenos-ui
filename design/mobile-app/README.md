@@ -112,6 +112,8 @@ do nothing outside the canvas.
 | Library | D7 | Elevator Pitch | `ElevatorPitch.dc.html` |
 | Library | D8 | Org Chart | `OrgChart.dc.html` |
 | Library | D9 | Brand Kit | `BrandKit.dc.html` |
+| Library | D10 | Ask Kaiso to change | `AskKaisoEdit.dc.html` |
+| Library | D11 | Change applied | `EditApplied.dc.html` |
 | You | E1 | You | `YouTab.dc.html` |
 | You | E2 | Manage account | `Profile.dc.html` |
 | You | E3 | Plan & Tokens | `PlanTokens.dc.html` |
@@ -182,6 +184,27 @@ https://kaizenos.ai/terms/ and https://kaizenos.ai/privacy/ in a web view.
 The You tab has no room for them at 844pt without a redesign, so it does
 not pretend otherwise; if a durable route from You is wanted later, it is
 one row opening a small legal screen, and that screen does not exist yet.
+
+**Editing by asking.** D10 and D11 are the two halves of KAIZ-207. Every
+document screen carries one way in — a quiet bar at the foot, *Ask Kaiso to
+change this* — because the founder is already reading the thing they want
+changed, and making them go back to a session to fix a sentence is how an
+editor becomes a chore.
+
+D10 is the ask. The document recedes behind a scrim and the sheet quotes
+the passage Kaiso is about to touch, rather than trying to spotlight it
+through the dimming, which does not work and reads worse on a phone
+anyway. The microphone is the large target because the product is spoken;
+the field is there because nobody wants to dictate "fifty-two billion".
+The cost in time is shown before it is spent, not after.
+
+D11 is the result. The changed section is marked in place so the founder
+can see what moved without reading the whole document again, and the bar
+beneath carries what was asked, what it cost, and **Revert** at equal
+weight to **Keep** — a founder may already have sent this document to an
+investor. The quiet line above the buttons is the important one: Kaiso
+noted the correction for the other outputs too. Without that, the same
+fix gets made four times and the product looks like it is not listening.
 
 **You.** Replaces the corner dropdown. Time remaining is first on the
 screen with an Add time action beside it. E3 sells hours, not tokens.

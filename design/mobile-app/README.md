@@ -206,6 +206,15 @@ investor. The quiet line above the buttons is the important one: Kaiso
 noted the correction for the other outputs too. Without that, the same
 fix gets made four times and the product looks like it is not listening.
 
+**Pricing reads the same on both platforms.** $29 a month for ≈ 8 h, and
+top-ups of ≈ 2 h / $12, ≈ 4 h / $22, ≈ 6 h / $30. The **price per hour is
+shown next to every one of them** — $3.63 on the plan against $6.00,
+$5.50 and $5.00 on the top-ups — because that spread is the whole reason
+the ladder was built that way, and a claim that the plan is cheapest is
+worth nothing if the reader has to do the arithmetic to check it. E3 used
+to assert "the lowest price per hour" without ever showing a number; it
+shows it now.
+
 **You.** Replaces the corner dropdown. Time remaining is first on the
 screen with an Add time action beside it. E3 sells hours, not tokens.
 E4 is the platform subscription sheet (StoreKit / Play Billing), not the

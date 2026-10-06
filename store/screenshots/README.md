@@ -69,3 +69,64 @@ Two things that quietly ruin a set:
 A screenshot freezes whatever copy is on screen that day. Worth a pass for
 internal language — "MVP", "deferred", placeholder percentages, debug
 counters — before the capture, not after the upload.
+
+---
+
+# Captions and the frame
+
+## The frame
+
+`caption-frame.svg` — **1290 × 2796**, importable straight into Figma. It
+carries the app's own background: the void gradient, both nebula blooms
+and a star field, with the colours taken from the live CSS rather than
+eyeballed. The dashed box marks where the device capture goes (960 × 2076,
+centred) and there is a faint gold pedestal behind it so the phone has a
+floor instead of sitting on flat black.
+
+**If you are building the frames in Figma, set the artboard to 1290 × 2796.**
+The template that was circulating is 1242 × 2436, which is the 5.8" size
+from the iPhone X era — no longer the slot Apple asks for.
+
+## Type
+
+Measured from the rendered SVG, so these are real limits rather than
+guesses:
+
+| | Size | Colour | Max characters |
+|---|---|---|---|
+| Title | 104px / 700 | `#f4ecd2` | **25** |
+| Subtitle | 46px / 400 | `#e8c870` at 82% | **52** |
+
+Past those the line reaches the edge of the canvas. The title sits at
+y≈300 and the subtitle at y≈396, high enough to survive the crop that the
+App Store applies to search thumbnails — which is the only place most
+people ever see them.
+
+## The captions
+
+In order. The first two do nearly all the work; by the third, someone has
+already decided.
+
+| # | Screen | Title | Subtitle |
+|---|---|---|---|
+| 1 | Live session | **Just talk.** | Kaiso asks what a good advisor would. |
+| 2 | Library | **The work, done.** | Deck, summary, landing page — from your words. |
+| 3 | Session recap | **Nothing is wasted.** | Every session ends with something finished. |
+| 4 | Plan | **Nine pillars, one map.** | Kaiso tracks what's covered and what's thin. |
+| 5 | Home | **Start talking.** | Your first session is free. |
+
+Alternates for the first two, which are worth testing against each other
+once there is traffic:
+
+* 1 — **A mentor who listens.** / Speak. It turns the conversation into work.
+* 2 — **You talked. It built.** / Deck, summary and landing page, forged as you spoke.
+
+Why this order: what it is, what you get, that it keeps paying off, how it
+is organised, and only then the invitation. It is an argument, not a tour
+of the tabs — and the price goes last, where it reads as an answer rather
+than a condition.
+
+Two things to keep out of the captions. Nothing that depends on KAIZ-207,
+since conversational editing has not shipped; and no number that moves —
+"8 hours" and "$29" belong in the listing text, where they can be changed
+without re-uploading five images.

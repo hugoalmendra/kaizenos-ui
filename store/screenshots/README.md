@@ -21,7 +21,34 @@ going there stretches the image very slightly for no gain.
 Up to 10 per slot. Three to five is the working number, and **the first
 two are what almost anyone sees** — in search results nobody scrolls.
 
-## Capture from the real build, at full resolution
+## The capture device decides whether this is easy
+
+App Store sizes are bigger than most phones capture. What a device gives
+you natively:
+
+| Device | Capture | Reaches 6.9"? |
+|---|---|---|
+| iPhone 16 / 15 Pro Max | 1290 × 2796 | **yes, exactly** |
+| iPhone 16 Pro Max | 1320 × 2868 | **yes, exactly** |
+| iPhone 12 / 13 / 14 | 1170 × 2532 | no — needs a 1.10× upscale |
+| iPhone 12 / 13 mini | 1080 × 2340 | no — 1.19× upscale |
+
+**The clean answer is the Simulator.** Run the app on an iPhone 16 Pro Max
+simulator and screenshot there: the capture is already 1320 × 2868, sharp,
+and costs nothing. Xcode's Simulator produces the exact store sizes for
+every device Apple asks for, which is why most teams never capture store
+screenshots on real hardware.
+
+**The acceptable fallback** is a 1170 × 2532 capture from an iPhone 12-class
+device upscaled 1.10× to 1290 × 2796. Ten percent is mild and the aspect is
+within 0.15%, so nothing is visibly stretched — but it is softer than a
+native capture, on the one image that sells the app.
+
+What is not acceptable is a screenshot that has been through a chat app
+first. Those arrive around 924 × 2000, which is 0.79× of an iPhone 12
+capture, and reaching 1290 from there is a 1.40× upscale that looks it.
+
+## Capture from the real build
 
 Apple requires screenshots to show the app as it is (guideline 2.3.3), so
 these come from the device, not from the design files.

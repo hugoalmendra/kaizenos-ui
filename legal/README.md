@@ -149,6 +149,13 @@ not stored, by us or by Hume. If that ever changes — a different provider,
 a changed setting, a debugging flag that keeps a buffer — this file changes
 first, before the build ships.
 
+A fourth arrives with Gemini. The policy now says **we use Google's paid
+Gemini API, where prompts and responses are not used to improve its
+models.** That is true of the paid tier and **not** of the free one, where
+Google may use the content. So the sentence is only as true as the billing
+account behind the key. Check which tier the key belongs to before this
+goes any further, and keep it paid.
+
 A third claim arrives with PostHog: the policy says analytics cookies are
 set **only where the reader has agreed to them**. That is the right
 default, and it is now a commitment — for UK and EEA visitors the web app

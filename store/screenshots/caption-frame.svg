@@ -1,27 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1290" height="2796" viewBox="0 0 1290 2796">
-  <title>KaizenOS — App Store screenshot frame</title>
-  <desc>Background and caption slots for a 6.9" App Store screenshot. Drop the device
-  capture into the area below the caption. Colours are the app's own tokens.</desc>
+  <title>KaizenOS — App Store screenshot frame 1290×2796</title>
+  <desc>Background and caption slots. Drop the device capture into the dashed
+  area. Colours are the app's own tokens.</desc>
 
   <defs>
-    <!-- the void, exactly as the app draws it -->
     <radialGradient id="void" cx="0.5" cy="0.3" r="0.78">
-      <stop offset="0%"   stop-color="#0a0817"/>
-      <stop offset="55%"  stop-color="#04030a"/>
+      <stop offset="0%" stop-color="#0a0817"/>
+      <stop offset="55%" stop-color="#04030a"/>
       <stop offset="100%" stop-color="#000000"/>
     </radialGradient>
-    <!-- nebula, two soft blooms, screened over the void -->
     <radialGradient id="neb1" cx="0.3" cy="0.25" r="0.6">
-      <stop offset="0%"   stop-color="#4b3278" stop-opacity="0.30"/>
-      <stop offset="70%"  stop-color="#4b3278" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#4b3278" stop-opacity="0.30"/>
+      <stop offset="70%" stop-color="#4b3278" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="neb2" cx="0.75" cy="0.75" r="0.5">
-      <stop offset="0%"   stop-color="#785032" stop-opacity="0.20"/>
-      <stop offset="70%"  stop-color="#785032" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#785032" stop-opacity="0.20"/>
+      <stop offset="70%" stop-color="#785032" stop-opacity="0"/>
     </radialGradient>
-    <!-- a little lift under the device so it does not float on flat black -->
     <radialGradient id="pedestal" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%"   stop-color="#c8a84e" stop-opacity="0.13"/>
+      <stop offset="0%" stop-color="#c8a84e" stop-opacity="0.13"/>
       <stop offset="100%" stop-color="#c8a84e" stop-opacity="0"/>
     </radialGradient>
   </defs>
@@ -31,7 +28,7 @@
   <rect width="1290" height="2796" fill="url(#neb2)"/>
 
   <g id="stars">
-        <circle cx="663" cy="617" r="2.0" fill="#ffffff" opacity="0.22"/>
+    <circle cx="663" cy="617" r="2.0" fill="#ffffff" opacity="0.22"/>
     <circle cx="1097" cy="385" r="1.6" fill="#ffffff" opacity="0.7"/>
     <circle cx="439" cy="153" r="1.2" fill="#ffffff" opacity="0.22"/>
     <circle cx="185" cy="2257" r="2.0" fill="#e8c870" opacity="0.5"/>
@@ -183,22 +180,17 @@
     <circle cx="1081" cy="1917" r="2.0" fill="#e8c870" opacity="0.24"/>
   </g>
 
-  <!-- CAPTION — title sits high so it survives the thumbnail crop in search -->
-  <text x="645" y="300" text-anchor="middle"
+  <text x="645" y="299" text-anchor="middle"
         font-family="SF Pro Display, -apple-system, Helvetica Neue, Arial, sans-serif"
         font-size="104" font-weight="700" letter-spacing="-1" fill="#f4ecd2">Just talk.</text>
-
-  <text x="645" y="396" text-anchor="middle"
+  <text x="645" y="397" text-anchor="middle"
         font-family="SF Pro Text, -apple-system, Helvetica Neue, Arial, sans-serif"
-        font-size="46" font-weight="400" fill="#e8c870" opacity="0.82">Kaiso asks what a good advisor would ask next.</text>
+        font-size="46" font-weight="400" fill="#e8c870" opacity="0.82">Kaiso asks what a good advisor would.</text>
 
-  <!-- DEVICE SLOT — put the 1170x2532 capture here, scaled to this box.
-       Centre it; the pedestal glow sits behind so the frame has a floor. -->
-  <ellipse cx="645" cy="1760" rx="640" ry="520" fill="url(#pedestal)"/>
+  <ellipse cx="645" cy="1558" rx="643" ry="519" fill="url(#pedestal)"/>
   <rect x="165" y="520" width="960" height="2076" rx="68"
-        fill="none" stroke="#c8a84e" stroke-opacity="0.18" stroke-width="2"
-        stroke-dasharray="14 12"/>
-  <text x="645" y="1560" text-anchor="middle"
+        fill="none" stroke="#c8a84e" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="14 12"/>
+  <text x="645" y="1558" text-anchor="middle"
         font-family="SF Pro Text, -apple-system, Helvetica Neue, Arial, sans-serif"
         font-size="34" fill="#c8a84e" opacity="0.45">device capture goes here · 960 × 2076</text>
 </svg>

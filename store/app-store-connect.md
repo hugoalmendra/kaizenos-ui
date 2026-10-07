@@ -11,6 +11,19 @@ not find it leaves a one-star review that outlives the fix.
 
 ---
 
+## App name · 30 max
+
+The app is **KaizenOS**. Kaiso is the mentor inside it, and the two are not
+interchangeable: a founder downloads KaizenOS and talks to Kaiso.
+
+```
+KaizenOS
+```
+
+The description uses both, which is correct, but it has to introduce the
+relationship once before leaning on the mentor's name — otherwise someone
+downloads one thing and reads about another. The opening line does that.
+
 ## Subtitle · 30 max
 
 ```
@@ -49,7 +62,7 @@ the lowest per hour.
 ```
 Most founders know what to do. They just don't know what order to do it in — and the work that proves a venture is real keeps getting pushed behind the work that feels urgent.
 
-Kaiso is a mentor you talk to. Not a form, not a chat window: a spoken conversation about your company, in which the documents build themselves out of your answers.
+KaizenOS gives you Kaiso: a mentor you talk to. Not a form, not a chat window, but a spoken conversation about your company, in which the documents build themselves out of your answers.
 
 HOW IT WORKS
 

@@ -144,8 +144,12 @@ used to train AI models**. Both are commitments, not descriptions. If the
 build ever retains audio or sends content to a provider that trains on
 it, the policy has to change first.
 
-The voice claim is the strongest one here and it is verified: the audio is
-not stored, by us or by Hume. If that ever changes — a different provider,
+The voice claim is the strongest one here and it is verified on both
+sides. Hume keeps the transcript and not the audio, confirmed with them;
+and audio storage is switched off in our own build too, so there is no
+copy on either side of the wire. The policy said this before the build
+did — it is now describing rather than promising, which is the right way
+round. If that ever changes — a different provider,
 a changed setting, a debugging flag that keeps a buffer — this file changes
 first, before the build ships.
 

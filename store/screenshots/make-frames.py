@@ -148,82 +148,57 @@ def sigil(cx, cy, scale):
     <g transform="scale(0.8)">{bars}</g>
   </g>'''
 
-# Type is sized off the WIDTH, not the height: these two canvases share a
+# Every creative asset is the same picture at a different crop: the
+# medallion centred, one phrase beneath it. That is deliberate. Apple
+# crops these differently per device and placement, so the focal point
+# has to survive being cut from any side — and a single treatment across
+# all three placements is one brand mark, not three posters.
+#
+# No device in any of them. A portrait phone in a 3840-wide field reads
+# as a stamp lost in an expanse; the first version measured 455 × 987
+# inside the 21:9 canvas and looked it. The medallion is round, so it
+# fits a band as happily as a rectangle; it is the brand; and it says
+# "voice" without showing a device.
+#
+# Type is sized off the WIDTH, not the height: these canvases share a
 # width but not an aspect, and a height-derived size blows the 3:2 title
 # clean through the safe area.
 WIDE = [
-    # stem, w, h, label, subject, headline, subhead
-    ('creative-header', 3840, 1646, 'Product page header · 21:9', 'sigil',
-     'Just talk. Kaiso builds the rest.', None),
-    ('creative-search', 3840, 2560, 'Search results · 3:2', 'captures',
-     'Just talk.', 'Kaiso asks what a good advisor would.'),
+    # stem, w, h, label, medallion cy, bezel radius, phrase baseline
+    ('creative-header', 3840, 1646, 'Product page header · 21:9',
+     0.44, 0.260, 0.90),
+    ('creative-search', 3840, 2560, 'Search results · 3:2',
+     0.44, 0.205, 0.87),
+    ('creative-16x9',   5244, 2950, 'Either placement · 16:9',
+     0.44, 0.205, 0.87),
 ]
+PHRASE = 'Just talk. Kaiso builds the rest.'
 
-def wide_frame(w, h, label, subject_kind, headline, subhead, guides):
+def wide_frame(w, h, label, mcy, bezel, phrase_y, guides):
     n = int(150 * (w * h) / (1290 * 2796))
     body = '\n'.join('    ' + x for x in stars(w, h, n, 11))
     cx = w // 2
     safe = int(min(w, h) * 0.06)
     t_size = int(w * 0.047)
 
-    def text(y, size, fill, weight, family, s, op=None):
-        o = f' opacity="{op}"' if op else ''
-        return (f'\n  <text x="{cx}" y="{y}" text-anchor="middle" '
-                f'font-family="{family}, Helvetica Neue, Helvetica, Arial, sans-serif" '
-                f'font-size="{size}" font-weight="{weight}" letter-spacing="-3" '
-                f'fill="{fill}"{o}>{s}</text>')
-
-    if subject_kind == 'sigil':
-        # 21:9 is too short for a portrait phone — a capture ends up a stamp
-        # in a wide field. The medallion is round, is the brand, and says
-        # "voice" without a device: the one clear idea Apple asks a header
-        # for. Its frontier ring is allowed to bleed past the safe area — a
-        # 0.18-opacity halo is atmosphere, not content a crop can cost us.
-        subject = (sigil(cx, int(h * 0.44), (h * 0.26) / 92)
-                   + text(int(h * 0.90), t_size, INK_BRIGHT, 700,
-                          'SF Pro Display', headline))
-    else:
-        # 3:2 has room for the interface, which is what Apple asks search
-        # results to show. Three captures, not one: the width then has a job
-        # and the row tells the whole product at a glance. All three sit
-        # inside the safe area, so a crop takes background, never a device.
-        slot_h = int(h * 0.545)
-        slot_w = int(slot_h * 1290 / 2796)
-        gap    = int(w * 0.028)
-        sy     = int(h * 0.365)
-        caps   = ''
-        shots  = ('the conversation', 'the live caption', 'what it produced')
-        x0     = cx - (len(shots) * slot_w + (len(shots) - 1) * gap) // 2
-        for i, cap in enumerate(shots):
-            x  = x0 + i * (slot_w + gap)
-            mid = x + slot_w // 2
-            caps += (
-                f'\n  <rect x="{x}" y="{sy}" width="{slot_w}" height="{slot_h}" '
-                f'rx="{int(slot_w*0.07)}" fill="#05040d" stroke="{GOLD}" '
-                'stroke-opacity="0.22" stroke-width="3" stroke-dasharray="18 14"/>'
-                f'\n  <text x="{mid}" y="{sy + slot_h//2 - 14}" text-anchor="middle" '
-                'font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" '
-                f'font-size="{int(t_size*0.28)}" fill="{GOLD}" opacity="0.55">{cap}</text>'
-                f'\n  <text x="{mid}" y="{sy + slot_h//2 + 50}" text-anchor="middle" '
-                'font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" '
-                f'font-size="{int(t_size*0.24)}" fill="{GOLD}" opacity="0.4">'
-                f'{slot_w} × {slot_h}</text>'
-            )
-        subject = (sigil(cx, int(h * 0.125), (h * 0.048) / 92)
-                   + text(int(h * 0.245), t_size, INK_BRIGHT, 700,
-                          'SF Pro Display', headline)
-                   + text(int(h * 0.300), int(t_size * 0.42), GOLD_BRIGHT, 400,
-                          'SF Pro Text', subhead, '0.82')
-                   + caps)
+    # the frontier ring is allowed past the safe area: an 18%-opacity halo
+    # is atmosphere, not content a crop can cost us. The phrase is not.
+    subject = (
+        sigil(cx, int(h * mcy), (h * bezel) / 92)
+        + f'\n  <text x="{cx}" y="{int(h * phrase_y)}" text-anchor="middle" '
+          'font-family="SF Pro Display, Helvetica Neue, Helvetica, Arial, sans-serif" '
+          f'font-size="{t_size}" font-weight="700" letter-spacing="-3" '
+          f'fill="{INK_BRIGHT}">{PHRASE}</text>'
+    )
 
     overlay = '' if not guides else (
         f'\n  <rect x="{safe}" y="{safe}" width="{w-safe*2}" height="{h-safe*2}" rx="{safe}"\n'
         f'        fill="none" stroke="#ff4d4d" stroke-opacity="0.3" stroke-width="3" '
         'stroke-dasharray="26 20"/>\n'
-        f'  <text x="{safe + 24}" y="{h - safe - int(t_size*0.14)}" text-anchor="start"\n'
+        f'  <text x="{safe + 24}" y="{safe - int(t_size*0.14)}" text-anchor="start"\n'
         '        font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif"\n'
         f'        font-size="{int(t_size*0.2)}" fill="#ff4d4d" opacity="0.55">'
-        'safe area — keep wording inside this; Apple crops the edges</text>'
+        'safe area — keep the phrase inside this; Apple crops the edges</text>'
     )
 
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
@@ -260,8 +235,8 @@ def wide_frame(w, h, label, subject_kind, headline, subhead, guides):
 </svg>
 """
 
-for stem, w, h, label, kind, headline, subhead in WIDE:
+for stem, w, h, label, mcy, bezel, py in WIDE:
     for guides in (False, True):
         name = f'{stem}-guides.svg' if guides else f'{stem}.svg'
-        (here / name).write_text(wide_frame(w, h, label, kind, headline, subhead, guides))
+        (here / name).write_text(wide_frame(w, h, label, mcy, bezel, py, guides))
         print(f'{name:<30} {w} × {h}   {label}')

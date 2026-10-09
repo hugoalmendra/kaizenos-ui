@@ -168,7 +168,7 @@ Specifications.
 | **Product page header** | 21:9 | **3840 × 1646** | `.png` |
 | **Search results** | 3:2 | **3840 × 2560** (1920 × 1280 minimum) | `.png` |
 
-Both placements also accept 16:9 at 5244 × 2950, and both accept **video**
+Both placements also accept 16:9 at 5244 × 2950 — generated here too — and both accept **video**
 instead of an image: 5–30 seconds, 30 or 60 fps, designed to loop, and
 **muted in search results**.
 
@@ -184,32 +184,36 @@ pricing, URLs or copyright symbols.
 ## What we made
 
 Run `./make-creative.sh`. It regenerates the SVGs, rasterises them and
-strips alpha. Four SVGs come out, plus the two PNGs you upload.
+strips alpha. Everything is **final artwork** — nothing to drop in.
 
-| File | What it is |
-|---|---|
-| `creative-header.png` / `.svg` | **Final artwork.** Nothing to drop in. |
-| `creative-search.svg` | **A template.** Three capture slots to fill. |
-| `*-guides.svg` | The same, with the safe area drawn on. Never upload these. |
+| File | Canvas | Placement |
+|---|---|---|
+| `creative-header.png` / `.svg` | 3840 × 1646 | product page header (21:9) |
+| `creative-search.png` / `.svg` | 3840 × 2560 | search results (3:2) |
+| `creative-16x9.png` / `.svg` | 5244 × 2950 | either placement, at 16:9 |
+| `*-guides.svg` | — | the same with the safe area drawn on. **Never upload these.** |
 
-**The header has no phone in it, on purpose.** 21:9 is too short for a
-portrait device: a phone in a 3840 × 1646 field is a stamp lost in a wide
-expanse, which is exactly what the first version looked like. The medallion
-is round, so it fits the band; it is the brand; and it says "voice" without
-showing a device. That is the one clear idea Apple asks a header for. Its
-outermost ring is allowed to bleed past the safe area — an 18%-opacity halo
-is atmosphere, not content a crop can cost us.
+**No device in any of them.** A portrait phone in a 3840-wide field reads
+as a stamp lost in an expanse — the first attempt measured 455 × 987 inside
+the 21:9 canvas and looked exactly that weak. The medallion is round, so it
+sits as happily in a 21:9 band as in a 3:2 rectangle; it is the brand; and
+it says "voice" without showing a device. That is the one clear idea Apple
+asks these for.
 
-**The search asset does show the interface**, because that is what Apple
-asks of this placement: enough for someone to judge the app before
-downloading. Three captures rather than one — the width then has a job, and
-the row tells the whole product at a glance: the conversation, the live
-caption, what it produced. All three sit inside the safe area, so a crop
-takes background and never a device.
+**All three are the same picture at a different crop**, on purpose. Apple
+cuts these differently per device and placement, so the focal point has to
+survive being trimmed from any side — and one treatment across every
+placement is a brand mark rather than three unrelated posters. The only
+thing that moves between them is the medallion's size, which is tuned so
+the dotted frontier ring reaches roughly the same share of each canvas.
 
-The medallion in both is lifted from `mentor.html`'s `.sacred-svg` rather
-than redrawn — same hexagram geometry, same ring radii, same colours, in
-its active state. If the mark changes in the app, change it in
+The frontier ring is allowed to bleed past the safe area. An 18%-opacity
+halo is atmosphere, not content a crop can cost us. The phrase is not, and
+it stays inside.
+
+The medallion is lifted from `mentor.html`'s `.sacred-svg` rather than
+redrawn — same hexagram geometry, same ring radii, same colours, in its
+active state. If the mark changes in the app, change it in
 `make-frames.py`'s `sigil()` too.
 
 ## Video is the stronger asset here

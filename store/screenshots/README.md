@@ -148,3 +148,73 @@ Two things to keep out of the captions. Nothing that depends on KAIZ-207,
 since conversational editing has not shipped; and no number that moves —
 "8 hours" and "$29" belong in the listing text, where they can be changed
 without re-uploading five images.
+
+---
+
+# Creative assets (the images on the product page)
+
+These are the separate, optional images Apple shows **above** the
+screenshots on the product page and beside the app in search results.
+They are artwork, not screenshots, and they live under
+App Store Connect → the app → **Creative Assets**.
+
+## Apple's specifications
+
+Confirmed at developer.apple.com → App Store Connect → Creative Assets
+Specifications.
+
+| Placement | Aspect | Size | Format |
+|---|---|---|---|
+| **Product page header** | 21:9 | **3840 × 1646** | `.png` |
+| **Search results** | 3:2 | **3840 × 2560** (1920 × 1280 minimum) | `.png` |
+
+Both placements also accept 16:9 at 5244 × 2950, and both accept **video**
+instead of an image: 5–30 seconds, 30 or 60 fps, designed to loop, and
+**muted in search results**.
+
+**No alpha channel.** Every rasteriser on this machine writes RGBA whether
+or not anything is transparent, so `make-creative.sh` runs the PNG through
+`flatten-png.py`, which drops the channel and composites over black.
+
+What Apple asks for in the artwork: one clear idea per asset, a short
+phrase rather than a sentence, the focal point centred — these crop
+differently per device and placement — no other platform's logos, and no
+pricing, URLs or copyright symbols.
+
+## What we made
+
+Run `./make-creative.sh`. It regenerates the SVGs, rasterises them and
+strips alpha. Four SVGs come out, plus the two PNGs you upload.
+
+| File | What it is |
+|---|---|
+| `creative-header.png` / `.svg` | **Final artwork.** Nothing to drop in. |
+| `creative-search.svg` | **A template.** Three capture slots to fill. |
+| `*-guides.svg` | The same, with the safe area drawn on. Never upload these. |
+
+**The header has no phone in it, on purpose.** 21:9 is too short for a
+portrait device: a phone in a 3840 × 1646 field is a stamp lost in a wide
+expanse, which is exactly what the first version looked like. The medallion
+is round, so it fits the band; it is the brand; and it says "voice" without
+showing a device. That is the one clear idea Apple asks a header for. Its
+outermost ring is allowed to bleed past the safe area — an 18%-opacity halo
+is atmosphere, not content a crop can cost us.
+
+**The search asset does show the interface**, because that is what Apple
+asks of this placement: enough for someone to judge the app before
+downloading. Three captures rather than one — the width then has a job, and
+the row tells the whole product at a glance: the conversation, the live
+caption, what it produced. All three sit inside the safe area, so a crop
+takes background and never a device.
+
+The medallion in both is lifted from `mentor.html`'s `.sacred-svg` rather
+than redrawn — same hexagram geometry, same ring radii, same colours, in
+its active state. If the mark changes in the app, change it in
+`make-frames.py`'s `sigil()` too.
+
+## Video is the stronger asset here
+
+Both placements take a 5–30 second looping video, and for a product whose
+whole proposition is *talk to it*, a still image is arguing with one hand
+tied. The same recording serves as the App Preview. Worth doing once the
+build is stable; the stills above are what ships in the meantime.

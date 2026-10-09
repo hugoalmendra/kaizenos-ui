@@ -172,7 +172,7 @@ WIDE = [
     ('creative-16x9',   5244, 2950, 'Either placement · 16:9',
      0.44, 0.205, 0.87),
 ]
-PHRASE = 'Just talk. Kaiso builds the rest.'
+PHRASE = 'Just talk. KaizenOS builds the rest.'
 
 def wide_frame(w, h, label, mcy, bezel, phrase_y, guides):
     n = int(150 * (w * h) / (1290 * 2796))

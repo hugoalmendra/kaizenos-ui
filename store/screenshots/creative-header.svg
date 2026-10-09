@@ -317,5 +317,5 @@
             stroke-width="0.6" stroke-dasharray="1 5"/>
     <g transform="scale(0.8)"><rect x="-60" y="-65" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="-41" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="-17" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="7" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="31" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="55" width="120" height="10" rx="2" fill="#e8c870"/></g>
   </g>
-  <text x="1920" y="1481" text-anchor="middle" font-family="SF Pro Display, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="180" font-weight="700" letter-spacing="-3" fill="#f4ecd2">Just talk. Kaiso builds the rest.</text>
+  <text x="1920" y="1481" text-anchor="middle" font-family="SF Pro Display, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="180" font-weight="700" letter-spacing="-3" fill="#f4ecd2">Just talk. KaizenOS builds the rest.</text>
 </svg>

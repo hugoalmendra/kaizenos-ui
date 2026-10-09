@@ -222,3 +222,17 @@ Both placements take a 5–30 second looping video, and for a product whose
 whole proposition is *talk to it*, a still image is arguing with one hand
 tied. The same recording serves as the App Preview. Worth doing once the
 build is stable; the stills above are what ships in the meantime.
+
+## The phrase names the app, not the mentor
+
+**"Just talk. KaizenOS builds the rest."** KaizenOS is the product; Kaiso is
+the mentor inside it. A creative asset is often the first and sometimes the
+only place someone meets the name, and in search results it sits beside the
+app's own title — so the phrase has to reinforce *that* name, not introduce
+a second one nobody has met yet.
+
+The App Store subtitle in `../app-store-connect.md` still reads *"Talk.
+Kaiso builds the rest."* That one is deliberate and stays: it renders
+directly beneath the app name, where "Kaiso" reads as what the app gives
+you rather than as a competing brand. If it ever moves somewhere it stands
+alone, it needs the same change.

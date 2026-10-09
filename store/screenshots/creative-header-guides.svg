@@ -320,7 +320,7 @@
   <text x="1920" y="1481" text-anchor="middle" font-family="SF Pro Display, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="180" font-weight="700" letter-spacing="-3" fill="#f4ecd2">Just talk. Kaiso builds the rest.</text>
   <rect x="98" y="98" width="3644" height="1450" rx="98"
         fill="none" stroke="#ff4d4d" stroke-opacity="0.3" stroke-width="3" stroke-dasharray="26 20"/>
-  <text x="122" y="1523" text-anchor="start"
+  <text x="122" y="73" text-anchor="start"
         font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif"
-        font-size="36" fill="#ff4d4d" opacity="0.55">safe area — keep wording inside this; Apple crops the edges</text>
+        font-size="36" fill="#ff4d4d" opacity="0.55">safe area — keep the phrase inside this; Apple crops the edges</text>
 </svg>

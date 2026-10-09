@@ -5,7 +5,7 @@
 set -e
 cd "$(dirname "$0")"
 python3 make-frames.py
-for f in creative-header creative-search; do
+for f in creative-header creative-search creative-16x9; do
   rsvg-convert -o "$f.png" "$f.svg"
   python3 flatten-png.py "$f.png"
 done

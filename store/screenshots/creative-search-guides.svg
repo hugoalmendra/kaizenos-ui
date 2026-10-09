@@ -447,7 +447,7 @@
     <circle cx="2659" cy="583" r="1.2" fill="#ffffff" opacity="0.47"/>
   </g>
 
-  <g transform="translate(1920,320) scale(1.3357)">
+  <g transform="translate(1920,1126) scale(5.7043)">
     <circle cx="0" cy="0" r="170" fill="url(#pinealHalo)"/>
     <circle cx="0" cy="0" r="80"  fill="url(#pinealCore)"/>
     <g fill="none" stroke="#e8c870" stroke-width="0.5" stroke-opacity="0.18">
@@ -463,20 +463,10 @@
             stroke-width="0.6" stroke-dasharray="1 5"/>
     <g transform="scale(0.8)"><rect x="-60" y="-65" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="-41" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="-17" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="7" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="31" width="120" height="10" rx="2" fill="#e8c870"/><rect x="-60" y="55" width="120" height="10" rx="2" fill="#e8c870"/></g>
   </g>
-  <text x="1920" y="627" text-anchor="middle" font-family="SF Pro Display, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="180" font-weight="700" letter-spacing="-3" fill="#f4ecd2">Just talk.</text>
-  <text x="1920" y="768" text-anchor="middle" font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="75" font-weight="400" letter-spacing="-3" fill="#e8c870" opacity="0.82">Kaiso asks what a good advisor would.</text>
-  <rect x="849" y="934" width="643" height="1395" rx="45" fill="#05040d" stroke="#c8a84e" stroke-opacity="0.22" stroke-width="3" stroke-dasharray="18 14"/>
-  <text x="1170" y="1617" text-anchor="middle" font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="50" fill="#c8a84e" opacity="0.55">the conversation</text>
-  <text x="1170" y="1681" text-anchor="middle" font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="43" fill="#c8a84e" opacity="0.4">643 × 1395</text>
-  <rect x="1599" y="934" width="643" height="1395" rx="45" fill="#05040d" stroke="#c8a84e" stroke-opacity="0.22" stroke-width="3" stroke-dasharray="18 14"/>
-  <text x="1920" y="1617" text-anchor="middle" font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="50" fill="#c8a84e" opacity="0.55">the live caption</text>
-  <text x="1920" y="1681" text-anchor="middle" font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="43" fill="#c8a84e" opacity="0.4">643 × 1395</text>
-  <rect x="2349" y="934" width="643" height="1395" rx="45" fill="#05040d" stroke="#c8a84e" stroke-opacity="0.22" stroke-width="3" stroke-dasharray="18 14"/>
-  <text x="2670" y="1617" text-anchor="middle" font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="50" fill="#c8a84e" opacity="0.55">what it produced</text>
-  <text x="2670" y="1681" text-anchor="middle" font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="43" fill="#c8a84e" opacity="0.4">643 × 1395</text>
+  <text x="1920" y="2227" text-anchor="middle" font-family="SF Pro Display, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="180" font-weight="700" letter-spacing="-3" fill="#f4ecd2">Just talk. Kaiso builds the rest.</text>
   <rect x="153" y="153" width="3534" height="2254" rx="153"
         fill="none" stroke="#ff4d4d" stroke-opacity="0.3" stroke-width="3" stroke-dasharray="26 20"/>
-  <text x="177" y="2382" text-anchor="start"
+  <text x="177" y="128" text-anchor="start"
         font-family="SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif"
-        font-size="36" fill="#ff4d4d" opacity="0.55">safe area — keep wording inside this; Apple crops the edges</text>
+        font-size="36" fill="#ff4d4d" opacity="0.55">safe area — keep the phrase inside this; Apple crops the edges</text>
 </svg>

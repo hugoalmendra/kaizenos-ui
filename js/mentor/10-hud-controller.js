@@ -104,6 +104,9 @@
         refilled();
       },
       setPlan(next) { plan = next ? Object.assign({}, next) : null; render(); },
+      // Work other than talking costs time too -- an edit (KAIZ-207)
+      // is small work, but it is work, and the meter has to show it.
+      spend(n) { spend(n); },
     };
     window.KaisoTime = api;
 

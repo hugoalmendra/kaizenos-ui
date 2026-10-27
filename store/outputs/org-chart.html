@@ -1,0 +1,3425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Org Chart — KaizenOS</title>
+<style>
+  :root {
+    --gold: #c8a84e;
+    --gold-bright: #e8c870;
+    --gold-soft: #8a7434;
+    --void: #03030a;
+    --ink: #eae3c8;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    background: radial-gradient(ellipse at 50% 50%, #0a0817 0%, #04030a 55%, #000 100%);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ─── Star field ─────────────────────────────────────────── */
+  .stars, .stars-2, .stars-3 { position: fixed; inset: 0; pointer-events: none; }
+  .stars { background-image:
+      radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 22% 73%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 38% 41%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(1px 1px at 58% 88%, rgba(255,255,255,0.85) 50%, transparent 100%),
+      radial-gradient(1px 1px at 71% 22%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 84% 56%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 92% 12%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 6% 88%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 47% 7%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(1px 1px at 31% 94%, rgba(255,255,255,0.6) 50%, transparent 100%);
+    animation: twinkle 6s ease-in-out infinite;
+  }
+  .stars-2 { background-image:
+      radial-gradient(1px 1px at 17% 33%, rgba(200,168,78,0.7) 50%, transparent 100%),
+      radial-gradient(1px 1px at 64% 67%, rgba(200,168,78,0.5) 50%, transparent 100%),
+      radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.5) 50%, transparent 100%),
+      radial-gradient(1px 1px at 26% 56%, rgba(255,255,255,0.4) 50%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 43% 22%, rgba(200,168,78,0.8) 50%, transparent 100%),
+      radial-gradient(1px 1px at 88% 38%, rgba(255,255,255,0.4) 50%, transparent 100%);
+    animation: twinkle 9s ease-in-out infinite reverse;
+  }
+  .stars-3 { background-image:
+      radial-gradient(0.5px 0.5px at 5% 45%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 15% 65%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 36% 78%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 52% 35%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 68% 12%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 75% 47%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 95% 71%, #fff 50%, transparent 100%);
+    opacity: 0.5;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+  /* Doubles the background star count when the mentor wakes — the base
+     stars/stars-2/stars-3 layers contain ~26 pinpoints between them, and
+     this extra layer adds ~26 more so the active sky has 2× density.
+     Hidden by default; fades in alongside the active state. */
+  .stars-extra {
+    position: fixed; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 9% 27%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 41% 14%, rgba(255,255,255,0.8) 50%, transparent 100%),
+      radial-gradient(1px 1px at 73% 84%, rgba(232,200,112,0.7) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 19% 51%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 86% 29%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(1px 1px at 56% 62%, rgba(232,200,112,0.6) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 33% 86%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 3% 73%, rgba(255,255,255,0.85) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 27% 9%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(1px 1px at 49% 47%, rgba(232,200,112,0.55) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 62% 31%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 81% 65%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(1px 1px at 11% 41%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 91% 91%, rgba(232,200,112,0.5) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 7% 8%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 38% 72%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 67% 18%, rgba(232,200,112,0.6) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 23% 38%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(1px 1px at 14% 82%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 44% 58%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(1px 1px at 78% 11%, rgba(232,200,112,0.65) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 53% 90%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 70% 53%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 96% 47%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 2% 19%, rgba(232,200,112,0.55) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 30% 60%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(1px 1px at 16% 12%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 24% 24%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 35% 49%, rgba(232,200,112,0.55) 50%, transparent 100%),
+      radial-gradient(1px 1px at 46% 78%, rgba(255,255,255,0.65) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 58% 4%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 64% 41%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(1px 1px at 72% 70%, rgba(232,200,112,0.6) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 84% 22%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 89% 56%, #fff 50%, transparent 100%),
+      radial-gradient(1px 1px at 5% 33%, rgba(255,255,255,0.55) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 12% 64%, rgba(232,200,112,0.55) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 21% 79%, rgba(255,255,255,0.65) 50%, transparent 100%),
+      radial-gradient(1px 1px at 28% 43%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 37% 92%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 50% 21%, rgba(232,200,112,0.5) 50%, transparent 100%),
+      radial-gradient(1px 1px at 60% 76%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 69% 28%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 76% 86%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(1px 1px at 83% 71%, rgba(232,200,112,0.55) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 92% 14%, rgba(255,255,255,0.7) 50%, transparent 100%),
+      radial-gradient(1px 1px at 98% 80%, #fff 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 8% 96%, rgba(255,255,255,0.6) 50%, transparent 100%),
+      radial-gradient(0.5px 0.5px at 18% 5%, rgba(232,200,112,0.5) 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 1.6s ease;
+    animation: twinkle 5s ease-in-out infinite;
+  }
+  body.active .stars-extra { opacity: 0.85; }
+
+  /* When active, the background star layers flicker ~20% faster
+     (durations × 1/1.2). */
+  body.active .stars   { animation-duration: 5s; }
+  body.active .stars-2 { animation-duration: 7.5s; }
+  body.active .stars-3 { animation-duration: 3.3s; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.85; }
+    50%      { opacity: 0.45; }
+  }
+
+  /* nebula wash */
+  .nebula {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(60% 40% at 30% 30%, rgba(75, 50, 120, 0.18), transparent 70%),
+      radial-gradient(50% 35% at 75% 75%, rgba(120, 80, 50, 0.12), transparent 70%);
+    mix-blend-mode: screen;
+  }
+
+  /* ─── Stage ─────────────────────────────────────────────── */
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .glyph-area {
+    position: relative;
+    width: min(72vmin, 720px);
+    height: min(72vmin, 720px);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* The single sacred button */
+  .sacred {
+    position: relative;
+    width: 280px; height: 280px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    -webkit-tap-highlight-color: transparent;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    outline: none;
+  }
+  .sacred:focus-visible .ring-outer { stroke: var(--gold-bright); }
+
+  .sacred-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+  .ring-outer, .ring-mid, .ring-inner {
+    fill: none;
+    stroke: var(--gold);
+    transition: stroke 0.6s ease, stroke-opacity 0.6s ease, stroke-width 0.6s ease;
+  }
+  .ring-outer { stroke-opacity: 0.32; stroke-width: 1; stroke-dasharray: 2 3; }
+  .ring-mid   { stroke-opacity: 0.32; stroke-width: 1; }
+  .ring-inner { stroke-opacity: 0.55; stroke-width: 1.25; }
+
+  /* The 6 lines of Hexagram #1 (Ch'ien — all yang/solid).
+     Drawn as SVG <rect>s so we can animate the inner 4 as audio bars
+     while the top & bottom remain fixed. The hexagram stays VERTICAL. */
+  .hex-line {
+    fill: var(--gold);
+    transition: fill 0.6s ease, filter 0.6s ease, opacity 0.6s ease;
+  }
+
+  /* breathing aura before activation — softer, like a coin’s glint */
+  .aura {
+    position: absolute;
+    inset: -25%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,168,78,0.14) 0%, rgba(200,168,78,0.04) 40%, transparent 70%);
+    animation: breathe 5.5s ease-in-out infinite;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(0.92); opacity: 0.55; }
+    50%      { transform: scale(1.08); opacity: 0.95; }
+  }
+
+  /* ─── Medallion (dormant) vs. Compass (active) ──────────────
+     In dormant state Kaiso reads as a coin floating in space:
+     just the inner ring, the hexagram, and a faint bezel.
+     On activation the rest of the structure (spokes, outer rings,
+     ticks, frontier) blooms in with a stagger. */
+  .compass-structure {
+    opacity: 0;
+    transition: opacity 1.2s ease 0.2s;
+  }
+  body.active .compass-structure { opacity: 1; }
+
+  /* Coin bezel — a thin double rim that frames the medallion in dormant state */
+  .bezel-outer, .bezel-inner {
+    fill: none;
+    stroke: var(--gold);
+    stroke-opacity: 0.45;
+    stroke-width: 1;
+    transition: stroke 0.8s ease, stroke-opacity 0.8s ease;
+  }
+  .bezel-inner { stroke-opacity: 0.28; stroke-width: 0.6; }
+  body.active .bezel-outer { stroke: var(--gold-bright); stroke-opacity: 0.7; }
+  body.active .bezel-inner { stroke: var(--gold-bright); stroke-opacity: 0.45; }
+
+  /* Outer ring: stationary. */
+  .ring-outer-g { transform-origin: 0 0; }
+
+  /* Inner dotted ring rotates clockwise ONLY when active.
+     Now drawn with denser dasharray to look more filled-in. */
+  .ring-outer { transform-origin: 0 0; }
+  body.active .ring-outer { animation: spin-ccw-r 60s linear infinite; }
+  @keyframes spin-cw { to { transform: rotate(360deg); } }
+
+  /* Outermost dotted ring — spins clockwise, faint fade */
+  .ring-frontier {
+    fill: none;
+    stroke: var(--gold-bright);
+    stroke-opacity: 0.10;
+    stroke-width: 0.6;
+    stroke-dasharray: 1 5;
+    transform-origin: 0 0;
+  }
+  body.active .ring-frontier {
+    stroke-opacity: 0.18;
+    animation: spin-cw 110s linear infinite;
+  }
+
+  /* Shooting-star field: streaks crossing between Kaiso core and moon orbit */
+  .shooters {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 460px; height: 460px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    overflow: visible;
+  }
+  .shooters svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  .shooter {
+    stroke: url(#shootGrad);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    fill: none;
+    opacity: 0;
+  }
+
+  /* ─── Eye-shaped galaxy backdrop ─────────────────────── */
+  /* Galaxy hidden until Kaiso wakes up. */
+  .eye-galaxy {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 520px;
+    height: 520px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+    filter: blur(0.5px);
+  }
+  body.active .eye-galaxy { opacity: 1; }
+  .eye-galaxy svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+  /* The whole nebula — disk, dust, and starfield — rotates together,
+     glacially, as one cosmic field. */
+  .galaxy-rot {
+    transform-origin: 0 0;
+    transform-box: view-box;
+    animation: galaxy-spin 780s linear infinite;
+  }
+  /* Inner layers no longer self-rotate; they're carried by .galaxy-rot. */
+  .galaxy-disk, .galaxy-dust {
+    transform-origin: 0 0;
+    transform-box: view-box;
+  }
+  @keyframes galaxy-spin { to { transform: rotate(360deg); } }
+
+  .galaxy-stars circle { fill: #fff8e0; transform-origin: center; transform-box: fill-box; }
+  .galaxy-stars circle.tw {
+    animation: star-twinkle var(--td, 3s) ease-in-out infinite;
+    animation-delay: var(--del, 0s);
+  }
+  @keyframes star-twinkle {
+    0%, 100% { opacity: var(--ob, 0.25); transform: scale(0.8); }
+    50%      { opacity: 1;               transform: scale(1.25); }
+  }
+
+  .eye-rim {
+    stroke: rgba(232, 200, 112, 0);
+    stroke-width: 0.6;
+    transition: stroke 1.2s ease;
+  }
+  body.active .eye-rim { stroke: rgba(232, 200, 112, 0.18); }
+
+ /* Inner orbit rings (between Kaiso core and 13-moon outer ring). */
+  .inner-orbit {
+    position: absolute;
+    left: 50%; top: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+  .inner-orbit svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  .inner-orbit .moon-path { fill: none; stroke: rgba(200,168,78,0.04); stroke-width: 0.5; stroke-dasharray: 1 5; }
+
+  /* Orbit A: closer to core, clockwise. Faster than B. Smallest stars.
+     Tightened 10% inward from previous radius. */
+  .orbit-a {
+    width: 352px; height: 352px;
+    animation: spin-cw-slow 106s linear infinite;
+  }
+  @keyframes spin-cw-slow {
+    from { transform: translate(-50%, -50%) rotate(0deg);   }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* Orbit Ⓧ (innermost): along the outer compass frontier ring (r=168).
+     Rotates clockwise, like A. Stars stay steady (no blinking) at all times. */
+  .orbit-az {
+    width: 292px; height: 292px;
+    animation: spin-cw-az 61s linear infinite;
+  }
+  @keyframes spin-cw-az {
+    from { transform: translate(-50%, -50%) rotate(0deg);   }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .orbit-az .moon { fill: rgba(232, 200, 112, 0.28); }
+  body.active .orbit-az .moon {
+    fill: var(--gold-bright);
+    filter: drop-shadow(0 0 3px rgba(232,200,112,0.85));
+    /* No flicker animation — steady glow. */
+  }
+  body.active .orbit-az .moon-path { stroke: rgba(232,200,112,0.16); }
+
+  /* Orbit B: middle, counter-clockwise. ~44% faster than original
+     (was 140s → 112s → 97s). Radius set so the ring passes EXACTLY
+     through the KAISO LISTENING dot. */
+  .orbit-b {
+    width: 414px; height: 414px;
+    animation: spin-ccw-mid 97s linear infinite;
+  }
+  @keyframes spin-ccw-mid {
+    from { transform: translate(-50%, -50%) rotate(0deg);    }
+    to   { transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+
+  /* Active: orbit paths brighten faintly + stars flicker.
+     A blinks in unison with KAISO LISTENING dot (2s pulse).
+     B blinks randomly/sporadically per-star (delays + durations
+     are randomized inline by JS). */
+  body.active .orbit-a .moon-path,
+  body.active .orbit-b .moon-path { stroke: rgba(232,200,112,0.16); }
+
+  /* Orbit A stars: smallest of all (smaller than the outer 13 moons). */
+  .orbit-a .moon { fill: rgba(232, 200, 112, 0.28); }
+  .orbit-b .moon { fill: rgba(232, 200, 112, 0.28); }
+  body.active .orbit-a .moon {
+    fill: var(--gold-bright);
+    filter: drop-shadow(0 0 3px rgba(232,200,112,0.85));
+    animation: flicker-a 2s ease-in-out infinite;
+  }
+  body.active .orbit-b .moon {
+    fill: var(--gold-bright);
+    filter: drop-shadow(0 0 3px rgba(232,200,112,0.85));
+    animation: flicker-b 2.4s ease-in-out infinite;
+  }
+  @keyframes flicker-a {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1;   }
+  }
+  @keyframes flicker-b {
+    0%, 100% { opacity: 1;   }
+    18%      { opacity: 0.18;}
+    32%      { opacity: 0.95;}
+    55%      { opacity: 0.15;}
+    80%      { opacity: 0.7; }
+  }
+
+  /* Outer-ring purple aura: hidden until the mentor wakes, then a faint
+     deep-purple wash radiates from the 13-moon ring (~240px) INWARD.
+     Sits BEHIND everything else (z-index: -1). */
+  .outer-aura {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 520px; height: 520px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    /* Tight ring band only — transparent everywhere except a narrow rim. */
+    background:
+      radial-gradient(circle at center,
+        rgba(60, 30, 110, 0)     0%,
+        rgba(60, 30, 110, 0)     78%,
+        rgba(86, 48, 150, 0.04)  90%,
+        rgba(96, 54, 168, 0.08)  97%,
+        rgba(96, 54, 168, 0)    100%);
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 1.6s ease;
+    z-index: -1;
+  }
+  body.active .outer-aura { opacity: 1; }
+
+  /* Cropped violet nebula glow inside the moon ring. Lives inside
+     .moon-orbit so it rotates with the 13 moons. Hidden until the
+     mentor wakes; tight asymmetric arm so rotation is visible. */
+  .moon-ring-aura { opacity: 0; transition: opacity 1.6s ease; }
+  body.active .moon-ring-aura { opacity: 0.5; }
+
+  /* Cropped violet nebula container — its own slow clockwise rotation,
+     independent of the moon ring. Positioned identically to .moon-orbit
+     so the clipped aura aligns with the 13-moon ring. */
+  .moon-aura-rot {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 520px; height: 520px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: spin-cw-aura 600s linear infinite;
+  }
+  @keyframes spin-cw-aura {
+    from { transform: translate(-50%, -50%) rotate(0deg);   }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .moon-aura-rot svg { width: 100%; height: 100%; overflow: visible; display: block; }
+
+ /* Moon-orbit ring: 13 small star-points orbiting counter-clockwise.
+     Spins at all times (dormant + active). */
+  .moon-orbit {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 520px; height: 520px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: spin-ccw 180s linear infinite;
+  }
+  @keyframes spin-ccw {
+    from { transform: translate(-50%, -50%) rotate(0deg);    }
+    to   { transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+  .moon-orbit svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  /* Dormant: faint star-points only — no glow halo, no orbit path. */
+  .moon-path { fill: none; stroke: rgba(200,168,78,0.04); stroke-width: 0.5; stroke-dasharray: 1 5; }
+  .moon { fill: rgba(232, 200, 112, 0.28); }
+  .moon-glow { fill: rgba(232, 200, 112, 0); transition: fill 0.8s ease; }
+  /* Active: moons illuminate softly — still subtle, like distant stars. */
+  /* Active: moons illuminate at full original size with halo + glow. */
+  body.active .moon { fill: var(--gold-bright); filter: drop-shadow(0 0 4px rgba(232,200,112,0.9)); transform: scale(2.5); transform-origin: center; transform-box: fill-box; transition: transform 0.8s ease, fill 0.8s ease; }
+  body.active .moon-glow { fill: rgba(232, 200, 112, 0.22); transform: scale(2.5); transform-origin: center; transform-box: fill-box; transition: transform 0.8s ease, fill 0.8s ease; }
+  body.active .moon-path { stroke: rgba(232,200,112,0.22); }
+
+  /* ─── Text labels ───────────────────────────────────────── */
+  .label-stack {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    pointer-events: none;
+    text-align: center;
+  }
+  .label-top {
+    position: absolute;
+    top: -190px; left: 0; right: 0;
+    font-size: 13px;
+    letter-spacing: 0.55em;
+    color: rgba(232, 200, 112, 0.85);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .label-bottom {
+    position: absolute;
+    bottom: -190px; left: 0; right: 0;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    color: rgba(234, 227, 200, 0.45);
+    text-transform: uppercase;
+    font-style: italic;
+  }
+  .label-bottom .hint {
+    display: block;
+    margin-top: 26px;
+    font-size: 10px;
+    letter-spacing: 0.55em;
+    color: rgba(234, 227, 200, 0.32);
+    font-style: normal;
+    transition: opacity 0.5s ease;
+  }
+
+  /* ─── ACTIVATED state ──────────────────────────────────── */
+  body.active .aura { opacity: 0; }
+
+  body.active .ring-outer { stroke: var(--gold-bright); stroke-opacity: 0.42; stroke-width: 3.5; stroke-dasharray: 0.1 6; stroke-linecap: round; }
+  body.active .ring-mid   { stroke: var(--gold-bright); stroke-opacity: 0.6;  stroke-width: 1.25; stroke-dasharray: 6 4; }
+  body.active .ring-inner { stroke: var(--gold-bright); stroke-opacity: 0.85; stroke-width: 1.5; }
+  body.active .bezel-outer { stroke-dasharray: 3 5; }
+  body.active .bezel-inner { stroke-dasharray: 2 4; }
+
+  /* Spin the solid line rings in place when active. They stay perfectly
+     centered. Each circle is drawn at cx=0, cy=0 in its own SVG user
+     coordinate space, so rotating about (0,0) IS rotating about its
+     own center — and works in every browser without transform-box. */
+  .ring-mid, .ring-inner, .bezel-outer, .bezel-inner {
+    transform-origin: 0 0;
+  }
+  body.active .ring-mid    { animation: spin-cw  75s linear infinite; }
+  body.active .ring-inner  { animation: spin-ccw-r 90s linear infinite; }
+  body.active .bezel-outer { animation: spin-cw  140s linear infinite; }
+  body.active .bezel-inner { animation: spin-ccw-r 165s linear infinite; }
+  @keyframes spin-ccw-r { to { transform: rotate(-360deg); } }
+
+  body.active .hex-line {
+    fill: var(--gold-bright);
+    filter: drop-shadow(0 0 6px rgba(232, 200, 112, 0.7))
+            drop-shadow(0 0 16px rgba(200, 168, 78, 0.4));
+  }
+
+  /* Pineal blinding-light core — only visible when active */
+  .pineal {
+    transform-origin: center;
+    transform-box: fill-box;
+    opacity: 0;
+    transition: opacity 1s ease 0.1s;
+    mix-blend-mode: screen;
+  }
+  body.active .pineal { opacity: 1; animation: pineal-pulse 2.4s ease-in-out infinite; }
+  @keyframes pineal-pulse {
+    0%, 100% { opacity: 0.92; filter: brightness(1); }
+    50%      { opacity: 1;    filter: brightness(1.15); }
+  }
+
+  /* Compass: rotates clockwise ONLY when active */
+  .compass {
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  body.active .compass { animation: compass-spin 90s linear infinite; }
+  @keyframes compass-spin { to { transform: rotate(360deg); } }
+
+  /* Compass grid lines — highly transparent, faint structure */
+  .grid-line { stroke: var(--gold-bright); stroke-width: 0.5; }
+  .grid-tick { stroke: var(--gold-bright); stroke-width: 0.5; }
+
+
+
+  .third-eye {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 0%, var(--gold-bright) 35%, rgba(200,168,78,0) 80%);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+    z-index: 11;
+    mix-blend-mode: screen;
+  }
+  body.active .third-eye {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    box-shadow:
+      0 0 24px 3px rgba(232, 200, 112, 0.6),
+      0 0 64px 8px rgba(200, 168, 78, 0.3);
+    animation: eye-pulse 3s ease-in-out infinite 1.2s;
+  }
+  @keyframes eye-pulse {
+    0%, 100% { box-shadow: 0 0 24px 3px rgba(232,200,112,0.6), 0 0 64px 8px rgba(200,168,78,0.3); }
+    50%      { box-shadow: 0 0 40px 6px rgba(232,200,112,0.9), 0 0 96px 14px rgba(200,168,78,0.45); }
+  }
+
+  /* ─── Activation flash ─────────────────────────────────── */
+  .flash {
+    position: fixed;
+    left: 50%; top: 50%;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    z-index: 99;
+    box-shadow: 0 0 60px 30px rgba(255, 240, 200, 0.9);
+    opacity: 0;
+  }
+  .flash.fire { animation: flash-burst 1.1s ease-out forwards; }
+  @keyframes flash-burst {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    20%  { transform: translate(-50%, -50%) scale(80); opacity: 0.9; }
+    100% { transform: translate(-50%, -50%) scale(220); opacity: 0; }
+  }
+
+  /* sigil ring that expands outward on activation */
+  .sigil-ring {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-bright);
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sigil-ring.fire { animation: sigil-out 1.6s ease-out forwards; }
+  @keyframes sigil-out {
+    0%   { transform: translate(-50%, -50%) scale(0.8); opacity: 0.9; border-width: 2px; }
+    100% { transform: translate(-50%, -50%) scale(3.0); opacity: 0;   border-width: 0.5px; }
+  }
+
+  /* ─── Top corner brand ─────────────────────────────────── */
+  .brand {
+    position: fixed;
+    top: 26px; left: 32px;
+    z-index: 40;
+    pointer-events: none;
+  }
+  .brand img {
+    display: block;
+    height: 24px; width: auto;
+    opacity: 0.92;
+    filter: drop-shadow(0 0 10px rgba(200, 168, 78, 0.18));
+  }
+
+  /* ─── Funding readiness meter — lives in the top-right rail ───── */
+  .readiness {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 18px; align-self: stretch;
+    border-left: 1px solid rgba(200, 168, 78, 0.14);
+    max-width: 360px; overflow: hidden; cursor: help;
+    transition: max-width 0.45s cubic-bezier(0.2,0.7,0.2,1),
+                padding 0.45s cubic-bezier(0.2,0.7,0.2,1),
+                opacity 0.3s ease, border-color 0.4s ease, background 0.4s ease;
+  }
+  .rd-gauge {
+    position: relative; width: 46px; height: 46px; flex: 0 0 46px;
+    border-radius: 50%;
+    background: conic-gradient(var(--gold-bright) calc(var(--p, 0) * 1%),
+                rgba(200, 168, 78, 0.14) 0);
+    display: grid; place-items: center;
+    transition: background 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .rd-gauge::after {
+    content: ''; position: absolute; inset: 4px; border-radius: 50%;
+    background: radial-gradient(circle at 50% 35%, #15101f, #0a0812);
+  }
+  .rd-grade {
+    position: relative; z-index: 1;
+    font-size: 15px; font-weight: 700; letter-spacing: 0.02em;
+    color: var(--gold-bright); text-shadow: 0 0 10px rgba(232, 200, 112, 0.4);
+  }
+  .rd-text { display: flex; flex-direction: column; line-height: 1.25; }
+  .rd-cap {
+    font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.45);
+  }
+  .rd-verdict {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.01em; color: #f1e9cf;
+    transition: color 0.4s ease;
+  }
+  /* A+ — celebratory state */
+  .readiness.funded { background: rgba(232, 200, 112, 0.06); max-width: 480px; cursor: default; }
+  .readiness.funded .rd-grade,
+  .readiness.funded .rd-verdict { color: var(--gold-bright); }
+  .rd-yc-btn {
+    flex: 0 0 auto; border-radius: 999px; padding: 7px 12px; margin-left: 2px;
+    font: inherit; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid rgba(232, 200, 112, 0.55);
+    background: linear-gradient(135deg, rgba(232, 200, 112, 0.18), rgba(200, 168, 78, 0.08));
+    color: var(--gold-bright); cursor: pointer; white-space: nowrap;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+  .rd-yc-btn[hidden] { display: none; }
+  .rd-yc-btn:hover {
+    border-color: var(--gold-bright);
+    background: linear-gradient(135deg, rgba(232, 200, 112, 0.28), rgba(200, 168, 78, 0.12));
+    transform: translateY(-1px);
+  }
+
+  .meta {
+    position: fixed;
+    bottom: 28px; left: 32px;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: rgba(234, 227, 200, 0.3);
+    text-transform: uppercase;
+  }
+  .meta-r {
+    position: fixed;
+    bottom: 24px; right: 32px;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: rgba(234, 227, 200, 0.55);
+    text-transform: uppercase;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    pointer-events: none;
+  }
+  .meta-r .stardate-label {
+    color: rgba(234, 227, 200, 0.3);
+    font-size: 8px;
+    letter-spacing: 0.5em;
+  }
+  .binary-clock {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+  }
+  .binary-clock .col {
+    display: flex;
+    flex-direction: row; /* LSB on the left */
+    gap: 3px;
+  }
+  .binary-clock .bit {
+    width: 5px; height: 5px;
+    border: 1px solid rgba(200, 168, 78, 0.35);
+    border-radius: 50%;
+    background: transparent;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .binary-clock .bit.on {
+    background: var(--gold-bright);
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 4px rgba(232, 200, 112, 0.7);
+  }
+  .binary-clock .sep {
+    width: 1px; height: 8px;
+    background: rgba(200, 168, 78, 0.25);
+    margin: 0 2px;
+  }
+
+  /* The "KAISO LISTENING" tag under the sacred glyph (not the scribe mic). */
+  .kaiso-listening {
+    position: absolute;
+    bottom: -190px; left: 0; right: 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.5em;
+    color: rgba(232, 200, 112, 0.85);
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.6s ease 0.6s;
+  }
+  body.active .kaiso-listening { opacity: 1; }
+  body.active .label-bottom { opacity: 0; transition: opacity 0.4s ease; }
+
+  .kaiso-listening .pulse-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold-bright);
+    margin-right: 14px;
+    vertical-align: middle;
+    /* Optical centering with caps-height of letter-spaced uppercase. */
+    transform: translateY(-2px);
+    box-shadow: 0 0 8px var(--gold-bright);
+    animation: dot-pulse 2s ease-in-out infinite;
+  }
+  @keyframes dot-pulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.85); }
+    50%      { opacity: 1;   transform: scale(1.15); }
+  }
+
+  /* ── Orb status phases: LISTENING · THINKING · SPEAKING ──────
+     The label text is swapped in JS; these accents make each phase
+     legible at a glance from the dot's colour and cadence. */
+
+  /* THINKING — a calmer, contemplative amber with a slow breath. */
+  .kaiso-listening[data-phase="thinking"] { color: rgba(232, 200, 112, 0.65); }
+  .kaiso-listening[data-phase="thinking"] .pulse-dot {
+    background: #d8b45a;
+    box-shadow: 0 0 8px rgba(216, 180, 90, 0.7);
+    animation: dot-pulse 2.6s ease-in-out infinite;
+  }
+
+  /* SPEAKING — brighter and quicker, the voice is active. */
+  .kaiso-listening[data-phase="speaking"] { color: rgba(255, 240, 200, 0.95); }
+  .kaiso-listening[data-phase="speaking"] .pulse-dot {
+    background: #fff5d6;
+    box-shadow: 0 0 12px rgba(255, 240, 200, 0.85);
+    animation: dot-pulse 0.85s ease-in-out infinite;
+  }
+
+  /* Reset button */
+  .reset {
+    position: fixed;
+    top: 28px; right: 32px;
+    background: transparent;
+    border: 1px solid rgba(200, 168, 78, 0.3);
+    color: rgba(232, 200, 112, 0.7);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    cursor: pointer;
+    border-radius: 2px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  body.active .reset { opacity: 1; pointer-events: auto; }
+  .reset:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+
+  /* Hover-to-deactivate hint while active */
+  .deact-hint {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: rgba(255, 240, 200, 0.95);
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    text-shadow: 0 0 12px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
+    white-space: nowrap;
+    z-index: 12;
+  }
+  body.active .sacred:hover .deact-hint { opacity: 1; }
+  body.active .sacred:hover .hex-line { opacity: 0.4; }
+
+  /* Session timer — bottom-right, visible only when active */
+  .session-timer {
+    position: fixed;
+    bottom: 28px; right: 32px;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    color: rgba(232, 200, 112, 0.7);
+    text-transform: uppercase;
+    text-align: right;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease 0.2s;
+    text-shadow: 0 0 12px rgba(232,200,112,0.18);
+    z-index: 25;
+    line-height: 44px; /* match scribe button height for baseline alignment */
+  }
+  .session-timer .st-label { opacity: 0.55; margin-right: 0.7em; }
+  .session-timer .st-time { font-variant-numeric: tabular-nums; }
+  body.active .session-timer { opacity: 1; pointer-events: auto; cursor: help; }
+
+  /* Scribe toggle — bottom-left, same row as stardate */
+  .scroll-toggle {
+    position: fixed;
+    bottom: 28px; left: 32px;
+    width: 44px; height: 44px;
+    background: rgba(8, 7, 12, 0.6);
+    border: 1px solid rgba(200, 168, 78, 0.35);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease 0.2s, border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+    z-index: 30;
+    backdrop-filter: blur(6px);
+  }
+  body.active .scroll-toggle { opacity: 1; pointer-events: auto; }
+  .scroll-toggle:hover {
+    border-color: var(--gold-bright);
+    transform: translateY(-1px);
+    background: rgba(20, 16, 8, 0.7);
+  }
+  .scroll-toggle svg { width: 22px; height: 22px; stroke: var(--gold); transition: stroke 0.25s ease; fill: none; stroke-width: 1.2; }
+  .scroll-toggle:hover svg { stroke: var(--gold-bright); }
+  body.chat-open .scroll-toggle { opacity: 0.35; }
+
+  /* ─── Chat (scribe) window — bottom 70%, full width when open.
+     Slides up from bottom; in default state Kaiso fills the whole
+     viewport. Mobile-friendly: rounded top corners, max-width clamp,
+     touch-friendly type sizes. */
+  .chat-window {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 70vh;
+    background: linear-gradient(180deg, rgba(14,12,18,0.92) 0%, rgba(8,7,12,0.96) 100%);
+    border-top: 1px solid rgba(200, 168, 78, 0.32);
+    border-radius: 28px 28px 0 0;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(100%);
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2,0.7,0.2,1);
+    z-index: 29;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 -16px 48px rgba(0,0,0,0.7),
+                0 0 0 1px rgba(200,168,78,0.06) inset,
+                0 -2px 60px rgba(200,168,78,0.06);
+    overflow: hidden;
+  }
+  body.chat-open .chat-window {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  /* When the scribe is open, Kaiso shrinks to the top 30% of the
+     screen so the user can see both the listening glyph AND the
+     transcript without scrolling. */
+  body.chat-open .stage {
+    transform: translateY(-35vh) scale(0.45);
+    transform-origin: 50% 50%;
+    transition: transform 0.45s cubic-bezier(0.2,0.7,0.2,1);
+  }
+  /* Hide ambient decorations when scribe is open — keep focus on the
+     conversation. The audio-bar hexagram still animates in the
+     compressed glyph as a visual heartbeat. */
+  body.chat-open .moons,
+  body.chat-open .moon-orbit,
+  body.chat-open .moon-aura-rot,
+  body.chat-open .session-timer,
+  body.chat-open #binaryClock { opacity: 0.0; pointer-events: none; transition: opacity 0.35s ease; }
+  /* Collapse the readiness segment out of the rail when the scribe opens. */
+  body.chat-open .readiness {
+    max-width: 0; padding-left: 0; padding-right: 0;
+    opacity: 0; pointer-events: none; border-left-color: transparent;
+  }
+  /* Soften the stars too so the scribe surface reads cleanly. */
+  body.chat-open .stars,
+  body.chat-open .stars-2,
+  body.chat-open .stars-3,
+  body.chat-open .stars-extra { opacity: 0.35; transition: opacity 0.35s ease; }
+  .stage { transition: transform 0.45s cubic-bezier(0.2,0.7,0.2,1); }
+
+  /* Scroll-toggle button moves up out of the way when scribe opens. */
+  body.chat-open .scroll-toggle { bottom: calc(70vh + 16px); opacity: 0.6; }
+
+  /* ─── Mobile breakpoints — touch targets, readable type ────── */
+  @media (max-width: 820px) {
+    .chat-window { height: 70vh; border-radius: 24px 24px 0 0; }
+    body.chat-open .stage { transform: translateY(-30vh) scale(0.40); }
+    .session-timer { bottom: 24px; right: 24px; line-height: 48px; }
+    .token-meter { width: 200px; padding: 10px 16px; }
+    .readiness { padding: 0 14px; gap: 9px; }
+    .readiness .rd-cap { display: none; }
+    .rd-gauge { width: 40px; height: 40px; flex: 0 0 40px; }
+    .scroll-toggle { bottom: 24px; left: 24px; width: 48px; height: 48px; }
+    body.chat-open .scroll-toggle { bottom: calc(70vh + 12px); }
+  }
+  @media (max-width: 480px) {
+    body.chat-open .stage { transform: translateY(-28vh) scale(0.38); }
+    .session-timer { line-height: 52px; }
+    .scroll-toggle { width: 52px; height: 52px; }  /* iOS HIG min touch target */
+
+    /* Top chrome: brand left, HUD right — reserve space so they don't collide. */
+    .brand { top: 14px; left: 12px; }
+    .brand img { height: 16px; }
+
+    .hud-top {
+      top: 10px; right: 10px; border-radius: 16px;
+      max-width: calc(100vw - 118px);
+    }
+    .token-meter {
+      width: auto; min-width: 0; flex: 1 1 auto;
+      padding: 8px 12px;
+    }
+    .token-meter .tm-rate { display: none; }
+    .readiness { display: none; }   /* keep the rail compact: tokens + avatar */
+    .account-btn { width: 44px; }
+    .account-btn::before { width: 30px; height: 30px; }
+    .account-menu { top: 58px; right: 10px; }
+  }
+  /* Phones in landscape — keep proportions sensible. */
+  @media (max-height: 520px) and (orientation: landscape) {
+    .chat-window { height: 80vh; }
+    body.chat-open .stage { transform: translateY(-40vh) scale(0.30); }
+  }
+
+  .chat-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 26px 14px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.10);
+  }
+  .chat-title {
+    font-size: 10px;
+    letter-spacing: 0.45em;
+    color: rgba(232, 200, 112, 0.85);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chat-title .pulse-dot {
+    width: 6px; height: 6px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--gold-bright);
+    animation: dot-pulse 1.6s ease-in-out infinite;
+  }
+  .chat-close {
+    background: transparent;
+    border: none;
+    color: rgba(234, 227, 200, 0.5);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 6px;
+    transition: color 0.2s ease;
+  }
+  .chat-close:hover { color: var(--gold-bright); }
+
+  .chat-log {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;  /* momentum scroll on iOS */
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(200,168,78,0.25) transparent;
+    /* Center the message column on wider viewports so messages don't
+       stretch absurdly wide when the scribe is full-width. */
+    align-items: stretch;
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .chat-log::-webkit-scrollbar { width: 6px; }
+  .chat-log::-webkit-scrollbar-thumb { background: rgba(200,168,78,0.2); border-radius: 3px; }
+
+  /* ── Chat bubbles ── */
+  .msg {
+    font-size: 15px;             /* readable on phones */
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    max-width: 86%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  @media (max-width: 480px) {
+    .msg { font-size: 16px; max-width: 92%; }
+    .chat-log { padding: 18px 16px; gap: 12px; }
+  }
+  .msg .who {
+    font-size: 8px;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    padding: 0 14px;
+  }
+  .msg .body {
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(200, 168, 78, 0.25);
+    background: rgba(20, 16, 8, 0.35);
+    display: inline-block;
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  /* Long bodies relax from a perfect oval into a soft pill */
+  .msg .body.long { border-radius: 22px; padding: 10px 18px; line-height: 1.55; }
+
+  .msg.user { align-self: flex-end; align-items: flex-end; color: rgba(234,227,200,0.95); }
+  .msg.user .who { color: rgba(234,227,200,0.55); }
+  .msg.user .body {
+    background: rgba(234, 227, 200, 0.08);
+    border-color: rgba(234, 227, 200, 0.22);
+  }
+
+  .msg.kaiso { align-self: flex-start; align-items: flex-start; color: rgba(232, 200, 112, 0.95); }
+  .msg.kaiso .who { color: rgba(232,200,112,0.7); }
+  .msg.kaiso .body {
+    background: rgba(200, 168, 78, 0.08);
+    border-color: rgba(200, 168, 78, 0.32);
+  }
+  .msg.kaiso .body strong {
+    font-weight: 600;
+    color: var(--gold-bright);
+  }
+
+  .msg.live { align-self: flex-start; align-items: flex-start; color: rgba(255, 245, 214, 0.95); }
+  .msg.live .who { color: rgba(232,200,112,0.7); }
+  .msg.live .body {
+    font-style: italic;
+    background: rgba(232, 200, 112, 0.05);
+    border-color: rgba(232, 200, 112, 0.4);
+    border-style: dashed;
+  }
+  .msg.live .caret {
+    display: inline-block;
+    width: 6px; height: 12px;
+    background: var(--gold-bright);
+    margin-left: 2px;
+    transform: translateY(2px);
+    animation: caret-blink 1s steps(2) infinite;
+  }
+  @keyframes caret-blink { 50% { opacity: 0; } }
+
+  .chat-input {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    border-top: 1px solid rgba(200, 168, 78, 0.10);
+    padding: 14px 18px;
+    gap: 10px;
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    /* Honour the iOS safe-area inset so the input doesn't sit under
+       the home-indicator bar on iPhone. */
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+    gap: 10px;
+  }
+  .chat-input input {
+    flex: 1;
+    background: rgba(234, 227, 200, 0.04);
+    border: 1px solid rgba(200, 168, 78, 0.22);
+    border-radius: 999px;
+    outline: none;
+    color: rgba(234, 227, 200, 0.95);
+    font: inherit;
+    font-size: 16px;             /* ≥16px stops iOS from auto-zooming on focus */
+    letter-spacing: 0.02em;
+    padding: 12px 18px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    appearance: none; -webkit-appearance: none;  /* kill iOS default styling */
+  }
+  .chat-input input:focus { border-color: rgba(232, 200, 112, 0.55); background: rgba(234, 227, 200, 0.06); }
+  .chat-input input::placeholder { color: rgba(234, 227, 200, 0.3); letter-spacing: 0.08em; }
+  .chat-send {
+    background: transparent;
+    border: 1px solid rgba(200, 168, 78, 0.4);
+    color: rgba(232, 200, 112, 0.85);
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+  .chat-send:hover { border-color: var(--gold-bright); color: var(--gold-bright); background: rgba(200,168,78,0.06); }
+  .chat-send:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* Scribe mic — always in the input row; never use class "listening" (conflicts with stage label). */
+  .chat-mic {
+    display: flex !important;
+    position: static !important;
+    visibility: visible !important;
+    opacity: 1;
+    background: transparent;
+    border: 1px solid rgba(200, 168, 78, 0.55);
+    color: rgba(232, 200, 112, 0.85);
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    flex: 0 0 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    z-index: 2;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, box-shadow 0.4s ease;
+  }
+  .chat-mic:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+  .chat-mic.mic-on {
+    color: var(--gold-bright);
+    border-color: var(--gold-bright);
+    background: rgba(200, 168, 78, 0.12);
+    box-shadow: 0 0 0 0 rgba(232, 200, 112, 0.45);
+    animation: micPulse 1.6s ease-in-out infinite;
+  }
+  .chat-mic.muted {
+    opacity: 0.65 !important;
+    animation: none;
+    box-shadow: none;
+    border-color: rgba(200, 168, 78, 0.35);
+    color: rgba(232, 200, 112, 0.55);
+  }
+  .chat-mic.unavailable {
+    opacity: 0.5 !important;
+    cursor: not-allowed;
+    border-color: rgba(200, 168, 78, 0.25);
+    color: rgba(232, 200, 112, 0.4);
+  }
+  @keyframes micPulse {
+    0%   { box-shadow: 0 0 0 0   rgba(232, 200, 112, 0.45); }
+    70%  { box-shadow: 0 0 0 10px rgba(232, 200, 112, 0);    }
+    100% { box-shadow: 0 0 0 0   rgba(232, 200, 112, 0);    }
+  }
+
+  /* Thinking dots while a turn is in flight. */
+  .msg.kaiso .body.thinking {
+    color: rgba(232, 200, 112, 0.55);
+    font-style: italic;
+  }
+  .msg.kaiso .body.thinking::after {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px; margin-left: 4px;
+    border-radius: 50%;
+    background: rgba(232, 200, 112, 0.7);
+    animation: thinkBlink 1.2s ease-in-out infinite;
+  }
+  @keyframes thinkBlink { 0%,100% { opacity: 0.2; } 50% { opacity: 1; } }
+
+  /* Error variant — soft warning tone, no jarring red. */
+  .msg.kaiso .body.error {
+    color: rgba(232, 168, 112, 0.85);
+    border-color: rgba(232, 168, 112, 0.35);
+  }
+
+  /* ─── Session HUD: top-right rail — one unified glass surface ── */
+  .hud-top {
+    position: fixed; top: 14px; right: 24px; z-index: 36;
+    display: flex; align-items: stretch;
+    background: linear-gradient(180deg, rgba(14, 12, 20, 0.66), rgba(8, 7, 12, 0.62));
+    border: 1px solid rgba(200, 168, 78, 0.22);
+    border-radius: 18px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 240, 200, 0.05);
+    overflow: hidden;
+    opacity: 0; pointer-events: none;
+    transform: translateY(-12px);
+    transition: opacity 0.6s ease 0.25s, transform 0.6s ease 0.25s,
+                border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  body.active .hud-top { opacity: 1; pointer-events: auto; transform: none; }
+  /* Tint the whole rail amber when tokens run low. */
+  .hud-top:has(.token-meter.low) { border-color: rgba(232, 168, 112, 0.45); }
+
+  /* ─── Session HUD: token spend meter — first segment ───────── */
+  .token-meter {
+    width: 232px; flex: 0 0 auto;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 11px 18px;
+  }
+  .token-meter .tm-top { display: flex; align-items: center; gap: 8px;
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; }
+  .token-meter .tm-dot { width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright);
+    animation: dot-pulse 2s ease-in-out infinite; }
+  .token-meter .tm-label { color: rgba(232, 200, 112, 0.8); }
+  .token-meter .tm-count { margin-left: auto; color: rgba(234, 227, 200, 0.5); letter-spacing: 0.12em; }
+  .token-meter .tm-count b { color: var(--gold-bright); font-weight: 600; }
+  .token-meter .tm-track { height: 5px; border-radius: 999px;
+    background: rgba(234, 227, 200, 0.1); overflow: hidden; margin-top: 9px; }
+  .token-meter .tm-track > span { display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    box-shadow: 0 0 8px rgba(232, 200, 112, 0.45);
+    width: 80%; transition: width 0.5s ease, background 0.4s ease; }
+  .token-meter .tm-rate { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.35); margin-top: 7px; text-align: right; }
+  .token-meter.low .tm-track > span { background: linear-gradient(90deg, #a85a2e, #e8a870); box-shadow: 0 0 8px rgba(232, 168, 112, 0.5); }
+  .token-meter.low .tm-rate { color: rgba(232, 168, 112, 0.85); }
+  .token-meter.plan .tm-track > span { background: linear-gradient(90deg, var(--gold-bright), #fff5d6); }
+
+  /* ─── Account button + menu ──────────────────────────────── */
+  .account-btn {
+    position: relative; flex: 0 0 auto; align-self: stretch;
+    width: 60px; border: 0; border-radius: 0;
+    border-left: 1px solid rgba(200, 168, 78, 0.14);
+    background: transparent; color: rgba(232, 200, 112, 0.82);
+    display: grid; place-items: center; cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  /* Circular ring keeps the avatar affordance while living in the rail. */
+  .account-btn::before {
+    content: ''; position: absolute; width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(200, 168, 78, 0.3);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .account-btn:hover { background: rgba(200, 168, 78, 0.07); color: var(--gold-bright); }
+  .account-btn:hover::before { border-color: var(--gold-bright); background: rgba(200, 168, 78, 0.06); }
+  .account-btn svg { position: relative; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+
+  .account-menu {
+    position: fixed; top: 70px; right: 24px; z-index: 37; width: 214px;
+    background: rgba(10, 9, 14, 0.95);
+    border: 1px solid rgba(200, 168, 78, 0.28);
+    border-radius: 14px; padding: 7px; backdrop-filter: blur(14px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    opacity: 0; transform: translateY(-8px); pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .account-menu.open { opacity: 1; transform: none; pointer-events: auto; }
+  .account-menu button,
+  .account-menu a {
+    display: flex; align-items: center; gap: 11px; width: 100%; text-align: left;
+    background: transparent; border: 0; color: rgba(234, 227, 200, 0.75);
+    font: inherit; font-size: 12px; letter-spacing: 0.03em;
+    padding: 11px 12px; border-radius: 9px; cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .account-menu a { text-decoration: none; }
+  .account-menu button:hover,
+  .account-menu a:hover { background: rgba(200, 168, 78, 0.08); color: var(--gold-bright); }
+  .account-menu .ic { width: 16px; height: 16px; flex: 0 0 16px; color: var(--gold);
+    display: grid; place-items: center; }
+  .account-menu .ic svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .account-menu .sep { height: 1px; background: rgba(200, 168, 78, 0.12); margin: 4px 6px; }
+  .account-menu button.danger:hover { color: #e8a870; background: rgba(232, 168, 112, 0.08); }
+  .account-menu button.danger:hover .ic { color: #e8a870; }
+
+  /* ─── Modal (Library / Plan) ─────────────────────────────── */
+  .kmodal {
+    position: fixed; inset: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .kmodal.open { opacity: 1; pointer-events: auto; }
+  .kmodal-backdrop { position: absolute; inset: 0; background: rgba(2, 2, 7, 0.74); backdrop-filter: blur(5px); }
+  .kpanel {
+    position: relative; width: 100%; max-width: 440px; max-height: 86vh; overflow: auto;
+    background: linear-gradient(180deg, rgba(16, 13, 22, 0.94), rgba(8, 7, 12, 0.97));
+    border: 1px solid rgba(200, 168, 78, 0.28); border-radius: 22px; padding: 24px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(200, 168, 78, 0.05) inset;
+    display: none;
+    scrollbar-width: thin; scrollbar-color: rgba(200,168,78,0.25) transparent;
+  }
+  .kpanel::-webkit-scrollbar { width: 6px; }
+  .kpanel::-webkit-scrollbar-thumb { background: rgba(200,168,78,0.2); border-radius: 3px; }
+  .kmodal.open .kpanel.show { display: block; animation: rise 0.4s cubic-bezier(0.2,0.7,0.2,1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  .kp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .kp-head .tm-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright); }
+  .kp-title { font-size: 10px; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(232, 200, 112, 0.85); }
+  .kp-close { margin-left: auto; background: transparent; border: 0; color: rgba(234, 227, 200, 0.5);
+    font-size: 16px; line-height: 1; cursor: pointer; padding: 2px 6px; transition: color 0.2s ease; }
+  .kp-close:hover { color: var(--gold-bright); }
+  .kp-sub { font-size: 13px; line-height: 1.55; color: rgba(234, 227, 200, 0.6); margin: 0 0 16px; }
+  .kp-lbl { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(232, 200, 112, 0.6); }
+  .kp-note { font-size: 10px; color: rgba(234, 227, 200, 0.4); text-align: center; margin-top: 14px; line-height: 1.5; }
+  .kp-note b { color: rgba(232, 200, 112, 0.8); }
+
+  /* shared pill button */
+  .kbtn { display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    border-radius: 999px; padding: 9px 14px; cursor: pointer; font: inherit;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    border: 1px solid rgba(200, 168, 78, 0.3); background: rgba(234, 227, 200, 0.03);
+    color: rgba(234, 227, 200, 0.85); transition: all 0.2s ease; white-space: nowrap; }
+  .kbtn:hover { border-color: var(--gold-bright); color: var(--gold-bright); background: rgba(200, 168, 78, 0.06); }
+  .kbtn.primary { border: 0; color: #140e04; font-weight: 600;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold) 60%, var(--gold-soft));
+    box-shadow: 0 8px 24px rgba(200, 168, 78, 0.28); }
+  .kbtn.primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .kbtn.block { display: flex; width: 100%; padding: 13px; font-size: 11px; }
+
+  /* library items */
+  .lib-item { display: flex; align-items: center; gap: 13px;
+    border: 1px solid rgba(200, 168, 78, 0.14); border-radius: 14px; padding: 11px 12px;
+    transition: border-color 0.2s ease, background 0.2s ease; }
+  .lib-item + .lib-item { margin-top: 10px; }
+  .lib-item:hover { border-color: rgba(200, 168, 78, 0.32); background: rgba(200, 168, 78, 0.04); }
+  .lib-thumb { width: 50px; height: 50px; flex: 0 0 50px; border-radius: 11px;
+    display: grid; place-items: center; font-size: 18px; color: var(--gold-bright);
+    border: 1px solid rgba(200, 168, 78, 0.18);
+    background: radial-gradient(80% 120% at 20% 0%, rgba(120, 90, 160, 0.25), transparent 60%),
+                linear-gradient(160deg, #161226, #0a0812); }
+  .lib-meta { flex: 1; min-width: 0; }
+  .lib-meta b { display: block; font-size: 14px; color: #f1e9cf; font-weight: 600; }
+  .lib-meta span { font-size: 10px; letter-spacing: 0.04em; color: rgba(234, 227, 200, 0.42); }
+  .lib-item .kbtn { font-size: 8px; padding: 7px 12px; letter-spacing: 0.14em; }
+  .lib-item .kbtn[disabled] { opacity: 0.4; cursor: default; pointer-events: none; }
+  /* output forge progress */
+  .lib-status { display: block; }
+  .lib-prog { display: block; height: 4px; margin-top: 8px; border-radius: 999px;
+    background: rgba(200, 168, 78, 0.12); overflow: hidden; }
+  .lib-prog-fill { display: block; height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, rgba(200, 168, 78, 0.65), var(--gold-bright));
+    box-shadow: 0 0 8px rgba(232, 200, 112, 0.4);
+    transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .lib-item.ready { border-color: rgba(232, 200, 112, 0.42); }
+  .lib-item.ready .lib-status { color: rgba(232, 200, 112, 0.85); }
+  .lib-item.ready .lib-thumb { color: #fff; border-color: rgba(232, 200, 112, 0.5);
+    box-shadow: 0 0 16px rgba(232, 200, 112, 0.25); }
+
+  /* ─── Executive Summary one-pager ────────────────────────── */
+  .kpanel-wide { max-width: 760px; }
+  .exec-actions { display: flex; justify-content: flex-end; gap: 8px; margin: -4px 0 16px; }
+  .exec-actions .kbtn.primary { font-size: 10px; padding: 10px 16px; }
+
+  .exec-doc {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 16px;
+    background: radial-gradient(120% 80% at 50% 0%, rgba(120, 90, 160, 0.12), transparent 55%),
+                linear-gradient(180deg, rgba(12, 10, 18, 0.9), rgba(6, 5, 10, 0.95));
+    padding: 30px 30px 22px; }
+
+  .exec-banner { text-align: center; padding-bottom: 22px; margin-bottom: 22px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.18); }
+  .exec-banner-mark { font-size: 22px; color: var(--gold-bright); margin-bottom: 8px;
+    text-shadow: 0 0 18px rgba(232, 200, 112, 0.45); }
+  .exec-eyebrow { font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.7); }
+  .exec-co { font-size: 34px; font-weight: 700; letter-spacing: 0.02em; margin: 8px 0 4px;
+    color: #f5eed4; }
+  .exec-tag { font-size: 14px; line-height: 1.5; color: rgba(234, 227, 200, 0.72);
+    max-width: 460px; margin: 0 auto; }
+  .exec-meta { margin-top: 14px; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.45); display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .exec-meta .exec-dot { color: rgba(200, 168, 78, 0.5); }
+
+  .exec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 26px; margin-bottom: 22px; }
+  .exec-sec-title { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--gold-bright); margin: 0 0 8px; padding-bottom: 6px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.16); }
+  .exec-sec-body { font-size: 12.5px; line-height: 1.62; color: rgba(234, 227, 200, 0.78); margin: 0; }
+  .exec-sec-body b { color: #f1e9cf; font-weight: 600; }
+
+  .exec-band { margin-bottom: 22px; }
+  .exec-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+  .exec-stat { flex: 1; min-width: 120px; display: flex; flex-direction: column; gap: 4px;
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 12px; padding: 13px 14px;
+    background: rgba(200, 168, 78, 0.04); }
+  .es-val { font-size: 22px; font-weight: 700; color: var(--gold-bright); line-height: 1; }
+  .es-lbl { font-size: 9.5px; letter-spacing: 0.04em; line-height: 1.4; color: rgba(234, 227, 200, 0.5);
+    text-transform: uppercase; }
+
+  .exec-sec-ask .exec-sec-body { color: rgba(234, 227, 200, 0.85); }
+  .exec-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-top: 8px; padding-top: 16px; border-top: 1px solid rgba(200, 168, 78, 0.18);
+    font-size: 10px; letter-spacing: 0.08em; }
+  .exec-foot-co { font-weight: 700; color: var(--gold-bright); letter-spacing: 0.12em; }
+  .exec-foot-contact { color: rgba(234, 227, 200, 0.55); }
+  .exec-foot-mark { margin-left: auto; text-transform: uppercase; letter-spacing: 0.18em;
+    color: rgba(234, 227, 200, 0.4); }
+
+  @media (max-width: 560px) {
+    .exec-grid { grid-template-columns: 1fr; }
+    .exec-doc { padding: 22px 18px 18px; }
+    .exec-co { font-size: 27px; }
+  }
+
+  /* plan cards */
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 16px; }
+  .plan-card { border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 14px; padding: 13px;
+    cursor: pointer; display: flex; flex-direction: column; gap: 5px;
+    transition: border-color 0.2s ease, background 0.2s ease; }
+  .plan-card:hover { border-color: rgba(200, 168, 78, 0.32); }
+  .plan-card.sel { border-color: rgba(232, 200, 112, 0.6); background: rgba(200, 168, 78, 0.07);
+    box-shadow: 0 0 0 1px rgba(232, 200, 112, 0.25) inset; }
+  .plan-card .pc-name { font-size: 13px; font-weight: 600; color: #f1e9cf; }
+  .plan-card .pc-sub { font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(234, 227, 200, 0.4); }
+  .plan-card .pc-price { font-size: 18px; font-weight: 700; color: var(--gold-bright); margin-top: 2px; }
+  .plan-card .pc-price small { font-size: 10px; font-weight: 500; color: rgba(234, 227, 200, 0.45); }
+
+  /* token packs */
+  .pack-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .pack { display: flex; flex-direction: column; gap: 2px; align-items: center;
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 12px; padding: 11px 6px;
+    cursor: pointer; background: transparent; color: rgba(234, 227, 200, 0.8); font: inherit;
+    transition: border-color 0.2s ease, background 0.2s ease; }
+  .pack:hover { border-color: rgba(200, 168, 78, 0.32); }
+  .pack.sel { border-color: rgba(232, 200, 112, 0.6); background: rgba(200, 168, 78, 0.07);
+    box-shadow: 0 0 0 1px rgba(232, 200, 112, 0.25) inset; }
+  .pack b { font-size: 14px; color: var(--gold-bright); font-weight: 700; }
+  .pack span { font-size: 10px; color: rgba(234, 227, 200, 0.45); }
+
+  /* toast */
+
+  /* ─── Onboarding tour ────────────────────────────────────── */
+  /* While the tour runs, reveal the HUD pieces so they can be pointed to. */
+  body.tour .hud-top { opacity: 1; transform: none; pointer-events: auto; }
+  body.tour .scroll-toggle,
+  body.tour .caption-toggle { opacity: 0.95; }
+
+  .tour-block { position: fixed; inset: 0; z-index: 88; display: none; }
+  body.tour .tour-block { display: block; }
+
+  .tour-spot {
+    position: fixed; top: 50%; left: 50%; width: 0; height: 0;
+    border-radius: 16px; border: 1px solid rgba(232, 200, 112, 0.65);
+    box-shadow: 0 0 0 9999px rgba(2, 2, 7, 0.8), 0 0 26px rgba(232, 200, 112, 0.25) inset;
+    z-index: 89; pointer-events: none; opacity: 0;
+    transition: top 0.45s cubic-bezier(.2,.7,.2,1), left 0.45s cubic-bezier(.2,.7,.2,1),
+                width 0.45s cubic-bezier(.2,.7,.2,1), height 0.45s cubic-bezier(.2,.7,.2,1),
+                border-radius 0.45s ease, opacity 0.35s ease;
+  }
+  body.tour .tour-spot { opacity: 1; }
+
+  .tour-tip {
+    position: fixed; z-index: 92; width: 268px; max-width: calc(100vw - 32px);
+    background: rgba(12, 10, 16, 0.97); border: 1px solid rgba(200, 168, 78, 0.32);
+    border-radius: 16px; padding: 16px 18px 14px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(200, 168, 78, 0.05) inset;
+    opacity: 0; transform: translateY(8px); pointer-events: none;
+    transition: top 0.45s cubic-bezier(.2,.7,.2,1), left 0.45s cubic-bezier(.2,.7,.2,1), opacity 0.35s ease, transform 0.35s ease;
+  }
+  body.tour .tour-tip { opacity: 1; transform: none; pointer-events: auto; }
+  .tour-tip .tt-step { font-size: 8px; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(232, 200, 112, 0.6); }
+  .tour-tip .tt-title { font-size: 15px; font-weight: 600; color: #f4ecd2; margin: 7px 0 5px; }
+  .tour-tip .tt-body { font-size: 12.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.65); }
+  .tour-tip .tt-foot { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+  .tour-tip .tt-dots { display: flex; gap: 6px; }
+  .tour-tip .tt-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(234, 227, 200, 0.22); }
+  .tour-tip .tt-dots i.on { background: var(--gold-bright); box-shadow: 0 0 8px rgba(232, 200, 112, 0.6); }
+  .tour-tip .tt-skip { margin-left: auto; background: transparent; border: 0; color: rgba(234, 227, 200, 0.45);
+    font: inherit; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; padding: 6px 4px; }
+  .tour-tip .tt-skip:hover { color: var(--gold-bright); }
+  .tour-tip .tt-next { background: linear-gradient(135deg, var(--gold-bright), var(--gold) 60%, var(--gold-soft));
+    border: 0; color: #140e04; font: inherit; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 9px 16px; border-radius: 999px; cursor: pointer; transition: filter .2s ease, transform .2s ease; }
+  .tour-tip .tt-next:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+  /* ─── KOS wheel: current pillar · node indicator + ambient tint ── */
+  /* Smoothly animatable color (Chrome/Safari 16.4+; degrades to a snap). */
+  @property --kos-color {
+    syntax: '<color>'; inherits: false; initial-value: rgba(200, 168, 78, 0);
+  }
+
+  /* Ambient background wash that matches the active pillar's wheel colour. */
+  .kos-tint {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    --kos-color: rgba(200, 168, 78, 0);
+    background: radial-gradient(ellipse at 50% 14%, var(--kos-color) 0%, transparent 62%);
+    opacity: 0;
+    transition: --kos-color 1.4s ease, opacity 1.4s ease;
+  }
+  body.active .kos-tint { opacity: 1; }
+
+  /* Top-centre pill: which pillar & node the founder is filling right now. */
+  .kos-indicator {
+    position: fixed; top: 18px; left: 50%; z-index: 36;
+    transform: translateX(-50%) translateY(-10px);
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px; border-radius: 999px;
+    background: rgba(8, 7, 12, 0.55);
+    border: 1px solid rgba(200, 168, 78, 0.18);
+    backdrop-filter: blur(10px);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s, border-color 0.6s ease;
+  }
+  body.active .kos-indicator {
+    opacity: 1; pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .kos-gem {
+    width: 9px; height: 9px; border-radius: 50%; flex: 0 0 9px;
+    background: var(--gold-bright); box-shadow: 0 0 10px var(--gold-bright);
+    transition: background 0.9s ease, box-shadow 0.9s ease;
+  }
+  .kos-pillar {
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600;
+    color: var(--kos-pillar-color, var(--gold-bright));
+    transition: color 0.9s ease;
+  }
+  .kos-sep { color: rgba(234, 227, 200, 0.3); font-size: 10px; }
+  .kos-node {
+    font-size: 11px; letter-spacing: 0.04em;
+    color: rgba(234, 227, 200, 0.82);
+  }
+  .kos-count {
+    margin-left: 4px; font-size: 8px; letter-spacing: 0.14em;
+    color: rgba(234, 227, 200, 0.35);
+  }
+
+  /* Tie the pill's border to the active pillar for a touch of cohesion. */
+  body.active .kos-indicator { border-color: var(--kos-pillar-border, rgba(200, 168, 78, 0.18)); }
+
+  @media (max-width: 600px) {
+    .kos-indicator { top: 12px; padding: 6px 12px; gap: 8px; }
+    .kos-count { display: none; }
+  }
+
+  /* Optional "done talking" nudge — below the listening label on the stage. */
+  .done-talking {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 228px);
+    transform: translateX(-50%);
+    z-index: 15;
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(200, 168, 78, 0.28);
+    background: rgba(8, 8, 18, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: rgba(232, 200, 112, 0.82);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease, border-color 0.2s ease,
+                color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .done-talking-label { letter-spacing: inherit; }
+  .done-talking-kbd {
+    font-family: inherit;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 5px;
+    border: 1px solid rgba(200, 168, 78, 0.22);
+    background: rgba(200, 168, 78, 0.07);
+    color: rgba(234, 227, 200, 0.42);
+    line-height: 1;
+  }
+  .done-talking-arrow {
+    letter-spacing: 0;
+    font-size: 12px;
+    opacity: 0.75;
+    transition: transform 0.2s ease;
+  }
+  .done-talking.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  .done-talking:hover,
+  .done-talking:focus-visible {
+    border-color: rgba(232, 200, 112, 0.55);
+    color: var(--gold-bright);
+    background: rgba(12, 12, 24, 0.72);
+    outline: none;
+  }
+  .done-talking:hover .done-talking-kbd {
+    border-color: rgba(232, 200, 112, 0.35);
+    color: rgba(232, 200, 112, 0.65);
+    background: rgba(200, 168, 78, 0.12);
+  }
+  .done-talking:hover .done-talking-arrow { transform: translateX(2px); }
+  .done-talking:active { transform: translateX(-50%) scale(0.98); }
+  .done-talking:disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .done-talking {
+      top: calc(50% + 200px);
+      padding: 8px 14px;
+      font-size: 9px;
+      letter-spacing: 0.26em;
+    }
+    .done-talking-kbd { display: none; }
+  }
+
+  /* ─── KOS plan panel + indicator progress pill ─────────────── */
+
+  /* Clickable indicator — progress % + chevron */
+  .kos-indicator {
+    cursor: pointer;
+    font: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .kos-indicator:hover {
+    border-color: var(--kos-pillar-border, rgba(200, 168, 78, 0.35));
+    background: rgba(10, 9, 14, 0.68);
+  }
+  .kos-indicator:focus-visible {
+    outline: 2px solid rgba(232, 200, 112, 0.45);
+    outline-offset: 3px;
+  }
+  .kos-indicator.open {
+    border-color: var(--kos-pillar-border, rgba(200, 168, 78, 0.45));
+    background: rgba(12, 11, 18, 0.72);
+  }
+  .kos-ready-pill {
+    margin-left: 6px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(234, 227, 200, 0.12);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: rgba(234, 227, 200, 0.45);
+    white-space: nowrap;
+  }
+  .kos-ready-pill b {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    letter-spacing: 0.02em;
+  }
+  .kos-chevron {
+    margin-left: 2px;
+    font-size: 9px;
+    color: rgba(234, 227, 200, 0.35);
+    transition: transform 0.25s ease, color 0.2s ease;
+  }
+  .kos-indicator.open .kos-chevron {
+    transform: rotate(180deg);
+    color: rgba(234, 227, 200, 0.55);
+  }
+
+  /* Plan modal — extends shared .kpanel shell */
+  .kpanel-kos {
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    padding-bottom: 20px;
+  }
+  .kmodal.open .kpanel-kos.show {
+    display: flex;
+    animation: rise 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Header — title left, readiness badge + close right */
+  .kpanel-kos .plan-kp-head {
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .kpanel-kos .plan-head-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .kpanel-kos .plan-head-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .kpanel-kos .kp-close {
+    margin-left: 0;
+    padding: 4px 6px;
+    font-size: 18px;
+  }
+
+  .plan-ready-badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 3px;
+    padding: 7px 14px 8px;
+    border-radius: 999px;
+    background: rgba(200, 168, 78, 0.1);
+    border: 1px solid rgba(200, 168, 78, 0.32);
+    box-shadow: 0 0 16px rgba(232, 200, 112, 0.08);
+    white-space: nowrap;
+  }
+  .plan-ready-pct {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--gold-bright);
+    text-shadow: 0 0 12px rgba(232, 200, 112, 0.35);
+  }
+  .plan-ready-suffix {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--gold-bright);
+    margin-right: 5px;
+  }
+  .plan-ready-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.88);
+  }
+
+  .kpanel-kos .plan-kp-sub {
+    margin: 0 0 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.1);
+    line-height: 1.6;
+    color: rgba(234, 227, 200, 0.55);
+  }
+
+  .plan-scroll {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    max-height: min(58vh, 480px);
+    margin: 0 -4px;
+    padding: 0 4px 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(200,168,78,0.25) transparent;
+  }
+  .plan-scroll::-webkit-scrollbar { width: 6px; }
+  .plan-scroll::-webkit-scrollbar-thumb { background: rgba(200,168,78,0.2); border-radius: 3px; }
+
+  .plan-pillar + .plan-pillar { margin-top: 14px; }
+  .plan-pillar > .kp-lbl { margin-bottom: 8px; }
+
+  .plan-nodes {
+    border: 1px solid rgba(200, 168, 78, 0.14);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(234, 227, 200, 0.02);
+  }
+
+  .plan-node {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 13px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.08);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .plan-node:last-child { border-bottom: 0; }
+  .plan-node-main { min-width: 0; flex: 1; }
+  .plan-node-name {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #f1e9cf;
+    line-height: 1.3;
+  }
+  .plan-node-status {
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    color: rgba(234, 227, 200, 0.38);
+    line-height: 1.35;
+  }
+  .plan-node-pct {
+    flex: 0 0 auto;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(234, 227, 200, 0.45);
+    padding-top: 2px;
+  }
+
+  .plan-node.done .plan-node-name { color: rgba(234, 227, 200, 0.72); }
+  .plan-node.done .plan-node-status { color: rgba(232, 200, 112, 0.55); }
+  .plan-node.done .plan-node-pct { color: var(--gold-bright); }
+
+  .plan-node.current {
+    background: rgba(200, 168, 78, 0.06);
+    border-left: 3px solid var(--pillar-color, var(--gold-bright));
+    padding-left: 10px;
+  }
+  .plan-node.current .plan-node-name { color: var(--gold-bright); }
+  .plan-node.current .plan-node-status { color: rgba(232, 200, 112, 0.65); }
+  .plan-node.current .plan-node-pct { color: rgba(232, 200, 112, 0.85); }
+
+  @media (max-width: 600px) {
+    .kos-ready-pill { display: none; }
+    .plan-scroll { max-height: min(62vh, 420px); }
+    .kpanel-kos .plan-kp-head { gap: 10px; }
+    .plan-ready-pct { font-size: 20px; }
+    .plan-ready-suffix { font-size: 14px; }
+    .plan-ready-badge { padding: 6px 12px 7px; }
+  }
+
+  /* ─── YC Application Pack ─────────────────────────────────── */
+  .yc-actions {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;
+    margin: -4px 0 16px;
+  }
+  .yc-actions .kbtn { font-size: 10px; padding: 10px 14px; }
+  .yc-fields { display: flex; flex-direction: column; gap: 12px; }
+  .yc-section { margin-bottom: 4px; }
+  .yc-sec-name {
+    font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.65); margin: 0 0 10px;
+  }
+  .yc-field {
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 14px; padding: 12px 14px;
+    background: rgba(200, 168, 78, 0.03);
+  }
+  .yc-field-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .yc-field-label {
+    flex: 1; font-size: 11px; font-weight: 600; line-height: 1.45; color: #f1e9cf;
+  }
+  .yc-field-label small {
+    display: block; font-size: 9px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; color: rgba(234, 227, 200, 0.42); margin-top: 3px;
+  }
+  .yc-field-copy {
+    flex: 0 0 auto; font-size: 8px; padding: 6px 10px; letter-spacing: 0.12em;
+  }
+  .yc-field-value {
+    font-size: 12px; line-height: 1.58; color: rgba(234, 227, 200, 0.78);
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .yc-field-value.empty { color: rgba(234, 227, 200, 0.45); font-style: italic; }
+  .yc-char-count {
+    margin-top: 6px; font-size: 9px; letter-spacing: 0.08em;
+    color: rgba(232, 200, 112, 0.55); text-align: right;
+  }
+  .yc-char-count.over { color: #e8a870; }
+
+  /* ─── Forged landing page preview ─────────────────────────── */
+  .land-doc {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 16px; overflow: hidden;
+    background: linear-gradient(180deg, #0c0a12 0%, #06050a 100%);
+  }
+  .land-hero {
+    text-align: center; padding: 36px 24px 32px;
+    background: radial-gradient(120% 80% at 50% 0%, rgba(120, 90, 160, 0.18), transparent 55%);
+    border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+  }
+  .land-logo {
+    display: inline-block; font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--gold-bright); margin-bottom: 14px;
+  }
+  .land-hero h1 {
+    font-size: 28px; font-weight: 700; color: #f5eed4; margin: 0 0 10px; line-height: 1.2;
+  }
+  .land-tag { font-size: 14px; line-height: 1.55; color: rgba(234, 227, 200, 0.72); max-width: 420px; margin: 0 auto 20px; }
+  .land-cta {
+    display: inline-block; border-radius: 999px; padding: 11px 22px;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
+    color: #140e04;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold) 60%, var(--gold-soft));
+    box-shadow: 0 8px 24px rgba(200, 168, 78, 0.28);
+  }
+  .land-block { padding: 22px 24px; border-bottom: 1px solid rgba(200, 168, 78, 0.1); }
+  .land-block:last-child { border-bottom: 0; }
+  .land-lbl {
+    font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--gold-bright); margin: 0 0 10px;
+  }
+  .land-body { font-size: 13px; line-height: 1.6; color: rgba(234, 227, 200, 0.78); margin: 0; }
+  .land-feats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 4px; }
+  .land-feat {
+    border: 1px solid rgba(200, 168, 78, 0.14); border-radius: 12px; padding: 12px;
+    background: rgba(200, 168, 78, 0.04);
+  }
+  .land-feat b { display: block; font-size: 11px; color: #f1e9cf; margin-bottom: 6px; }
+  .land-feat span { font-size: 11px; line-height: 1.5; color: rgba(234, 227, 200, 0.62); }
+  .land-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+  .land-stat {
+    flex: 1; min-width: 90px; text-align: center; padding: 12px 8px;
+    border: 1px solid rgba(200, 168, 78, 0.14); border-radius: 12px;
+  }
+  .land-stat b { display: block; font-size: 18px; color: var(--gold-bright); }
+  .land-stat span { font-size: 8px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(234, 227, 200, 0.45); }
+  .land-foot {
+    padding: 18px 24px; text-align: center; font-size: 10px; letter-spacing: 0.08em;
+    color: rgba(234, 227, 200, 0.45);
+  }
+  @media (max-width: 560px) {
+    .land-feats { grid-template-columns: 1fr; }
+    .land-hero h1 { font-size: 22px; }
+  }
+
+  /* ─── Forged pitch deck preview ───────────────────────────── */
+  .deck-doc { display: flex; flex-direction: column; gap: 14px; }
+  .deck-slide {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 14px;
+    aspect-ratio: 16 / 9; min-height: 140px; padding: 18px 20px;
+    background: radial-gradient(100% 80% at 20% 0%, rgba(120, 90, 160, 0.14), transparent 55%),
+                linear-gradient(160deg, rgba(14, 11, 20, 0.95), rgba(6, 5, 10, 0.98));
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .deck-slide.cover { text-align: center; justify-content: center; }
+  .deck-num {
+    position: absolute; top: 12px; right: 14px;
+    font-size: 9px; letter-spacing: 0.2em; color: rgba(234, 227, 200, 0.35);
+  }
+  .deck-glyph { font-size: 14px; color: var(--gold-bright); opacity: 0.7; margin-bottom: 6px; }
+  .deck-eyebrow {
+    font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.65); margin-bottom: 8px;
+  }
+  .deck-title {
+    font-size: 18px; font-weight: 700; color: #f5eed4; line-height: 1.25; margin: 0 0 8px;
+  }
+  .deck-slide.cover .deck-title { font-size: 26px; }
+  .deck-body { font-size: 12px; line-height: 1.55; color: rgba(234, 227, 200, 0.75); margin: 0; }
+  .deck-slide.cover .deck-body { font-size: 13px; max-width: 380px; margin: 0 auto; }
+  .deck-sub {
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(200, 168, 78, 0.12);
+    font-size: 11px; line-height: 1.5; color: rgba(234, 227, 200, 0.6);
+  }
+  .deck-sub b { color: rgba(232, 200, 112, 0.8); font-weight: 600; }
+  .deck-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .deck-cell {
+    border: 1px solid rgba(200, 168, 78, 0.12); border-radius: 10px; padding: 10px;
+    background: rgba(200, 168, 78, 0.03);
+  }
+  .deck-cell b { display: block; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold-bright); margin-bottom: 4px; }
+  .deck-cell span { font-size: 11px; line-height: 1.45; color: rgba(234, 227, 200, 0.7); }
+
+  /* ─── Mobile top chrome — brand + HUD rail (loads LAST) ───────
+     Must load after 13-hud-rail / 14-hud-token-meter / 15-account
+     so these compact overrides win the cascade. Goal: brand on the
+     left and the token+avatar rail on the right never overlap, and
+     the avatar stays fully on-screen. */
+  @media (max-width: 600px) {
+    /* Brand: compact wordmark, pinned top-left. */
+    .brand { top: 15px; left: 14px; }
+    .brand img { height: 15px; }
+
+    /* HUD rail: pinned top-right, reserving room for the brand so the
+       two never collide. */
+    .hud-top {
+      top: 12px; right: 12px; left: auto;
+    }
+
+    /* Token rail and pillar share ONE width + corner radius so they read
+       as a matched, right-aligned stack. The 136px reserve keeps their
+       left edge clear of the brand wordmark. */
+    .hud-top, .kos-indicator {
+      width: calc(100vw - 136px);
+      max-width: none;
+      border-radius: 14px;
+    }
+
+    /* Token meter shrinks to fit; drop the fixed 232px width and the
+       third "rate" line to stay a tidy two-row pill. */
+    .token-meter {
+      width: auto; min-width: 0; flex: 1 1 auto;
+      padding: 8px 13px;
+    }
+    .token-meter .tm-top { letter-spacing: 0.18em; }
+    .token-meter .tm-rate { display: none; }
+
+    /* Funding readiness is hidden on phones to keep the rail compact. */
+    .readiness { display: none; }
+
+    /* Avatar: narrower fixed column so it never overflows the viewport. */
+    .account-btn { width: 46px; flex: 0 0 46px; }
+    .account-btn::before { width: 32px; height: 32px; }
+
+    /* Dropdown re-anchored under the compact rail. */
+    .account-menu { top: 60px; right: 12px; width: min(214px, calc(100vw - 24px)); }
+  }
+
+  /* KOS pillar indicator lives top-centre on desktop, where it would
+     collide with both the brand (left) and the token rail (right) on a
+     phone. On mobile: drop it to a second row, right-aligned directly
+     under the token rail. Its centring transform (translateX(-50%)) is
+     cleared in both the dormant and active states. */
+  @media (max-width: 600px) {
+    .kos-indicator {
+      top: 64px; left: auto; right: 12px;
+      justify-content: center;   /* balance content in the shared width */
+      transform: translateY(-10px);
+    }
+    body.active .kos-indicator { transform: translateY(0); }
+  }
+
+  /* Very small phones (≤360px): tighten the token label so the
+     count never wraps or clips. */
+  @media (max-width: 360px) {
+    .token-meter { padding: 8px 11px; }
+    .token-meter .tm-top { letter-spacing: 0.12em; font-size: 8.5px; }
+  }
+
+  /* ─── Feedback + Manage account panels ────────────────────────
+     Both exist in production already; this brings them into the
+     prototype. Feedback matches production one-for-one. Account does
+     NOT — production still renders the identity provider's own white
+     modal, and this is what it should look like instead: the same
+     dark panel, gold rules and type as every other panel here. */
+
+  /* ── Feedback ── */
+  .fb-scale {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .fb-score {
+    min-height: 46px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(200, 168, 78, 0.28);
+    border-radius: 12px;
+    background: transparent;
+    color: rgba(234, 227, 200, 0.72);
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+  }
+  .fb-score:hover { border-color: rgba(232, 200, 112, 0.5); color: var(--gold-bright); }
+  .fb-score.sel {
+    border-color: rgba(232, 200, 112, 0.65);
+    background: rgba(200, 168, 78, 0.08);
+    color: #f4ecd2;
+    box-shadow: 0 0 0 1px rgba(232, 200, 112, 0.22) inset;
+  }
+
+  .fb-note {
+    width: 100%;
+    margin-top: 12px;
+    min-height: 96px;
+    resize: vertical;
+    background: rgba(234, 227, 200, 0.04);
+    border: 1px solid rgba(200, 168, 78, 0.22);
+    border-radius: 12px;
+    outline: none;
+    color: rgba(234, 227, 200, 0.92);
+    font: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 13px 15px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .fb-note:focus { border-color: rgba(232, 200, 112, 0.55); background: rgba(234, 227, 200, 0.06); }
+  .fb-note::placeholder { color: rgba(234, 227, 200, 0.3); }
+
+  /* ── Manage account ── */
+  .acct-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid rgba(200, 168, 78, 0.14);
+    border-radius: 16px;
+    padding: 15px;
+  }
+  .acct-avatar {
+    width: 56px; height: 56px; flex: 0 0 56px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: rgba(232, 200, 112, 0.85);
+    border: 1px solid rgba(200, 168, 78, 0.3);
+    background: radial-gradient(80% 120% at 30% 0%, rgba(120, 90, 160, 0.28), transparent 62%),
+                linear-gradient(160deg, #161226, #0a0812);
+  }
+  .acct-avatar svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .acct-who { flex: 1; min-width: 0; }
+  .acct-who b { display: block; font-size: 15px; color: #f4ecd2; font-weight: 600; }
+  .acct-who span { font-size: 11.5px; color: rgba(234, 227, 200, 0.45); }
+
+  .acct-list {
+    border: 1px solid rgba(200, 168, 78, 0.14);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .acct-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 13px 15px;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    color: rgba(234, 227, 200, 0.88);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .acct-row + .acct-row { border-top: 1px solid rgba(200, 168, 78, 0.1); }
+  .acct-row:hover { background: rgba(200, 168, 78, 0.05); }
+  .acct-row .ic { width: 18px; height: 18px; flex: 0 0 18px; color: var(--gold); display: grid; place-items: center; }
+  .acct-row .ic svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .acct-row .tx { flex: 1; min-width: 0; }
+  .acct-row .tx b { display: block; font-size: 14px; font-weight: 500; }
+  .acct-row .tx i { font-style: normal; display: block; font-size: 11.5px; color: rgba(234, 227, 200, 0.42); }
+  .acct-row .go { color: rgba(234, 227, 200, 0.3); font-size: 13px; }
+  .acct-mail { flex: 1; min-width: 0; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .acct-badge {
+    font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: #110c05; background: var(--gold); border-radius: 999px;
+    padding: 4px 8px; font-weight: 600; flex: 0 0 auto;
+  }
+  .acct-danger { border-color: rgba(232, 168, 112, 0.24); }
+  .acct-danger .acct-row { color: #e8a870; }
+  .acct-danger .acct-row:hover { background: rgba(232, 168, 112, 0.07); }
+
+  /* ── Account: view stack, forms, popover ─────────────────────── */
+  .acct-back {
+    background: transparent; border: 0; cursor: pointer;
+    color: rgba(232, 200, 112, 0.8); font: inherit; font-size: 16px;
+    line-height: 1; padding: 2px 8px 2px 0; margin-left: -2px;
+  }
+  .acct-back:hover { color: var(--gold-bright); }
+
+  .acct-field { display: block; margin-bottom: 14px; }
+  .acct-field .kp-lbl { display: block; margin-bottom: 7px; }
+  .acct-field input {
+    width: 100%;
+    background: rgba(234, 227, 200, 0.04);
+    border: 1px solid rgba(200, 168, 78, 0.22);
+    border-radius: 12px;
+    outline: none;
+    color: rgba(234, 227, 200, 0.95);
+    font: inherit; font-size: 15px;
+    padding: 13px 15px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .acct-field input:focus { border-color: rgba(232, 200, 112, 0.55); background: rgba(234, 227, 200, 0.06); }
+  .acct-field input::placeholder { color: rgba(234, 227, 200, 0.3); }
+  .acct-field input.invalid { border-color: rgba(232, 168, 112, 0.7); background: rgba(232, 168, 112, 0.06); }
+  .acct-code { letter-spacing: 0.5em; font-size: 19px !important; text-align: center; }
+
+  .acct-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .acct-actions .kbtn { flex: 1; }
+  .kbtn.danger {
+    border-color: rgba(232, 168, 112, 0.5);
+    color: #e8a870;
+  }
+  .kbtn.danger:hover { border-color: #e8a870; background: rgba(232, 168, 112, 0.08); color: #e8a870; }
+  .kbtn[disabled] { opacity: 0.4; pointer-events: none; }
+
+  /* rows that are not themselves buttons */
+  .acct-row--static { cursor: default; }
+  .acct-row--static:hover { background: transparent; }
+
+  .acct-more { position: relative; flex: 0 0 auto; display: inline-flex; }
+  .acct-dots {
+    background: transparent; border: 0; cursor: pointer; font: inherit;
+    color: rgba(234, 227, 200, 0.4); font-size: 15px; line-height: 1;
+    padding: 6px 4px; border-radius: 6px;
+  }
+  .acct-dots:hover { color: var(--gold-bright); }
+  .acct-pop {
+    position: absolute; top: calc(100% + 6px); right: 0; z-index: 4;
+    min-width: 170px; padding: 6px;
+    background: rgba(10, 9, 14, 0.97);
+    border: 1px solid rgba(200, 168, 78, 0.28);
+    border-radius: 12px;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.7);
+    display: flex; flex-direction: column;
+  }
+  .acct-pop button {
+    background: transparent; border: 0; cursor: pointer; font: inherit;
+    text-align: left; font-size: 12.5px; color: rgba(234, 227, 200, 0.8);
+    padding: 10px 11px; border-radius: 8px;
+  }
+  .acct-pop button:hover { background: rgba(200, 168, 78, 0.08); color: var(--gold-bright); }
+  .acct-pop button.danger { color: #e8a870; }
+  .acct-pop button.danger:hover { background: rgba(232, 168, 112, 0.08); }
+  .acct-pop button[disabled] { opacity: 0.4; pointer-events: none; }
+
+  .acct-warn {
+    border: 1px solid rgba(232, 168, 112, 0.3);
+    background: rgba(232, 168, 112, 0.05);
+    border-radius: 14px; padding: 14px 15px; margin-bottom: 18px;
+  }
+  .acct-warn b { display: block; font-size: 14px; color: #e8a870; font-weight: 600; margin-bottom: 5px; }
+  .acct-warn span { font-size: 12.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.6); }
+
+  /* An explicit display wins over the `hidden` attribute, so say it
+     back. Without this, a closed popover still paints. */
+  .acct-pop[hidden],
+  .acct-view[hidden] { display: none; }
+
+  /* The email list clips its rows so the rounded corners hold, which
+     also clips a menu hanging below a row. While one is open the list
+     lets it through and the row rises above its neighbours. */
+  .acct-row { position: relative; }
+  .acct-list.pop-open { overflow: visible; }
+  .acct-row.pop-open { z-index: 20; }
+  .acct-pop { z-index: 21; }
+
+  /* ─── Your Company — the overview ─────────────────────────────
+     Every node as a card, grouped by pillar. Captured nodes are lit;
+     the rest are drawn dimmed with the question Kaiso will ask, so the
+     founder can see the whole shape of what is coming and where they
+     are in it. Click a card to open it. */
+  .co-surface {
+    position: fixed; inset: 0; z-index: 80;
+    display: none;
+    flex-direction: column;
+    background: radial-gradient(ellipse at 50% 0%, #0b0917 0%, #05040c 55%, #000 100%);
+  }
+  .co-surface.open { display: flex; animation: co-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  @keyframes co-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .co-top {
+    flex: 0 0 auto;
+    display: flex; align-items: center; gap: 18px;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+  }
+  .co-back {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: transparent; border: 0; cursor: pointer; font: inherit;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.75); padding: 8px 4px;
+  }
+  .co-back:hover { color: var(--gold-bright); }
+  .co-top-title { font-size: 11px; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(232, 200, 112, 0.85); }
+  .co-top-meta { margin-left: auto; font-size: 12px; color: rgba(234, 227, 200, 0.4); font-variant-numeric: tabular-nums; }
+
+  .co-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .co-body { width: 100%; padding: 36px 40px 90px; box-sizing: border-box; }
+
+  .co-head { margin-bottom: 30px; }
+  .co-eyebrow { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(232, 200, 112, 0.6); margin-bottom: 10px; }
+  .co-name { font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; color: #f4ecd2; margin: 0 0 8px; }
+  .co-sub { font-size: 14px; color: rgba(234, 227, 200, 0.5); margin: 0; }
+
+  /* ── pillar section — staggers in when the surface opens ── */
+  .co-section {
+    margin-bottom: 28px;
+    animation: co-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 55ms);
+  }
+  .settled .co-section { animation: none; }
+  @keyframes co-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .co-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .co-section-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .co-section-name { font-size: 11px; letter-spacing: 0.34em; text-transform: uppercase; font-weight: 600; }
+  .co-section-count { margin-left: auto; font-size: 11px; color: rgba(234, 227, 200, 0.35); font-variant-numeric: tabular-nums; }
+  .co-section-bar { height: 3px; border-radius: 999px; background: rgba(234, 227, 200, 0.07); overflow: hidden; margin-bottom: 12px; }
+  .co-section-bar > span {
+    display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    box-shadow: 0 0 8px rgba(232, 200, 112, 0.4);
+    transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* ── card ── */
+  .co-card {
+    border: 1px solid rgba(200, 168, 78, 0.14);
+    border-radius: 16px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, background 0.2s ease, opacity 0.3s ease;
+  }
+  .co-card:hover { border-color: rgba(200, 168, 78, 0.3); }
+  .co-card.open { border-color: rgba(232, 200, 112, 0.42); background: rgba(200, 168, 78, 0.03); }
+
+  /* dimmed until captured — present, so the founder sees what is coming */
+  .co-card.ghost { opacity: 0.42; border-style: dashed; }
+  .co-card.ghost:hover, .co-card.ghost.open { opacity: 0.75; }
+  .co-card.ghost .co-node { color: rgba(234, 227, 200, 0.55); }
+  .co-card.ghost .co-preview { font-style: italic; }
+
+  /* the moment a node lands: the card lights up and opens itself */
+  .co-card.ignite { animation: co-ignite 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  @keyframes co-ignite {
+    0%   { opacity: 0.42; border-color: rgba(200, 168, 78, 0.14); box-shadow: 0 0 0 0 rgba(232, 200, 112, 0); }
+    30%  { opacity: 1; border-color: var(--gold-bright); box-shadow: 0 0 0 4px rgba(232, 200, 112, 0.18), 0 0 40px rgba(232, 200, 112, 0.35); }
+    100% { opacity: 1; border-color: rgba(232, 200, 112, 0.42); box-shadow: 0 0 0 0 rgba(232, 200, 112, 0); }
+  }
+
+  .co-card-head {
+    display: flex; align-items: flex-start; gap: 14px;
+    width: 100%; background: transparent; border: 0; font: inherit; text-align: left;
+    padding: 15px 18px; cursor: pointer; color: inherit;
+  }
+  .co-status {
+    width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; margin-top: 4px;
+    background: var(--gold-bright); box-shadow: 0 0 8px rgba(232, 200, 112, 0.6);
+  }
+  .co-card.ghost .co-status { background: transparent; border: 1px solid rgba(234, 227, 200, 0.35); box-shadow: none; }
+  /* stacked: node name on top, the preview under it, full width */
+  .co-head-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .co-node { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(232, 200, 112, 0.8); line-height: 16px; }
+  .co-preview {
+    font-size: 14px; line-height: 1.5; color: rgba(234, 227, 200, 0.6);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    transition: opacity 0.2s ease, max-height 0.28s ease;
+    max-height: 3em;
+  }
+  .co-card.open .co-preview { opacity: 0; max-height: 0; }
+  .co-chev {
+    flex: 0 0 auto; margin-top: 1px; color: rgba(234, 227, 200, 0.35); font-size: 15px;
+    transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.2s ease;
+  }
+  .co-card.open .co-chev { transform: rotate(90deg); color: var(--gold-bright); }
+
+  /* body opens with a real height animation, no fixed max-height guessing */
+  .co-card-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.34s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .co-card.open .co-card-body { grid-template-rows: 1fr; }
+  .co-card-inner { min-height: 0; overflow: hidden; }
+  .co-card-pad { padding: 2px 18px 18px; }
+
+  /* the question — the thing this was an answer to */
+  .co-q {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 14px; margin-bottom: 14px;
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 12px;
+    background: rgba(200, 168, 78, 0.04);
+  }
+  .co-q-mark {
+    flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
+    display: grid; place-items: center;
+    border: 1px solid rgba(200, 168, 78, 0.35); color: var(--gold-bright);
+    font-size: 11px; font-weight: 700;
+  }
+  .co-q-lbl { display: block; font-size: 8.5px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(232, 200, 112, 0.6); margin-bottom: 4px; }
+  .co-q p { margin: 0; font-size: 14px; line-height: 1.55; color: rgba(234, 227, 200, 0.8); font-style: italic; text-wrap: pretty; }
+
+  .co-text { margin: 0; font-size: 15.5px; line-height: 1.65; color: rgba(234, 227, 200, 0.92); text-wrap: pretty; white-space: pre-wrap; }
+  .co-textarea {
+    width: 100%; min-height: 110px; resize: vertical;
+    background: rgba(234, 227, 200, 0.04);
+    border: 1px solid rgba(200, 168, 78, 0.25); border-radius: 12px; outline: none;
+    color: rgba(234, 227, 200, 0.95); font: inherit; font-size: 15.5px; line-height: 1.65;
+    padding: 14px 16px;
+  }
+  .co-textarea:focus { border-color: rgba(232, 200, 112, 0.55); background: rgba(234, 227, 200, 0.06); }
+
+  .co-source { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 11.5px; color: rgba(234, 227, 200, 0.38); }
+  .co-source-tag { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-soft); }
+  .co-source-tag.mine { border-color: rgba(232, 200, 112, 0.45); color: rgba(232, 200, 112, 0.9); }
+
+  .co-card-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .co-card-actions .kbtn { font-size: 9px; padding: 9px 14px; }
+
+  /* the ghost's body is an invitation, not a form */
+  .co-ghost-note { margin: 0 0 2px; font-size: 13.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.5); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .co-surface.open, .co-section, .co-card.ignite { animation: none; }
+    .co-card-body, .co-chev, .co-section-bar > span { transition: none; }
+  }
+  @media (max-width: 640px) {
+    .co-body { padding: 24px 16px 60px; }
+    .co-name { font-size: 27px; }
+    .co-top { gap: 12px; padding: 12px 16px; }
+    .co-top-title { display: none; }
+  }
+
+  /* ─── Forged elevator pitch ───────────────────────────────────
+     One refined line, then the same story at 30 / 60 / 90 seconds.
+     Spoken copy, so it is set larger and looser than the other
+     documents — the founder reads this off a screen out loud. */
+  .pitch-doc {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 16px; overflow: hidden;
+    background: linear-gradient(180deg, #0c0a12 0%, #06050a 100%);
+  }
+  .pitch-hero {
+    padding: 30px 26px 26px; text-align: center;
+    background: radial-gradient(120% 80% at 50% 0%, rgba(200, 168, 78, 0.12), transparent 60%);
+    border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+  }
+  .pitch-eyebrow {
+    font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--gold-bright); margin-bottom: 14px;
+  }
+  .pitch-co { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(234, 227, 200, 0.5); margin-bottom: 12px; }
+  .pitch-line {
+    font-size: 20px; line-height: 1.45; font-weight: 600; color: #f5eed4;
+    max-width: 520px; margin: 0 auto; text-wrap: pretty;
+  }
+  .pitch-line em { font-style: normal; color: var(--gold-bright); }
+
+  .pitch-block { padding: 22px 26px; border-bottom: 1px solid rgba(200, 168, 78, 0.1); }
+  .pitch-block:last-of-type { border-bottom: 0; }
+  .pitch-block-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+  .pitch-dur {
+    font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 600;
+    color: #140e04; background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    border-radius: 999px; padding: 5px 11px;
+  }
+  .pitch-when { font-size: 11px; color: rgba(234, 227, 200, 0.5); }
+  .pitch-count { margin-left: auto; font-size: 10px; color: rgba(234, 227, 200, 0.35); font-variant-numeric: tabular-nums; }
+  .pitch-body {
+    margin: 0; font-size: 14.5px; line-height: 1.72; color: rgba(234, 227, 200, 0.84);
+    text-wrap: pretty;
+  }
+  .pitch-body + .pitch-body { margin-top: 12px; }
+
+  .pitch-foot {
+    padding: 16px 26px; font-size: 10px; letter-spacing: 0.06em;
+    color: rgba(234, 227, 200, 0.4); text-align: center;
+  }
+  @media (max-width: 560px) {
+    .pitch-line { font-size: 17px; }
+    .pitch-body { font-size: 13.5px; }
+  }
+
+  /* ─── Forged org chart ────────────────────────────────────────
+     Who is here, who is missing. Filled roles are solid; target
+     hires are dashed; a co-founder gap is drawn in amber so the
+     hole in the team is the thing you notice first. Nodes open on
+     click to say why the role exists and when it lands. */
+  .org-doc {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 16px; overflow: hidden;
+    background: linear-gradient(180deg, #0c0a12 0%, #06050a 100%);
+  }
+  .org-head {
+    padding: 24px 26px 20px; text-align: center;
+    background: radial-gradient(120% 80% at 50% 0%, rgba(90, 130, 160, 0.16), transparent 60%);
+    border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+  }
+  .org-eyebrow { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 10px; }
+  .org-co { font-size: 22px; font-weight: 700; color: #f5eed4; margin: 0 0 6px; }
+  .org-sub { font-size: 12px; color: rgba(234, 227, 200, 0.55); margin: 0; }
+
+  .org-tree { padding: 26px 22px 8px; }
+  .org-tier { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  /* founders sit side by side; .org-node is full-width inside a branch column */
+  .org-tier > .org-node { width: auto; flex: 1 1 240px; max-width: 320px; }
+
+  /* the spine that drops from the founders into the functions */
+  .org-spine { height: 22px; margin: 0 auto; width: 1px; background: rgba(200, 168, 78, 0.28); }
+  .org-rail {
+    height: 1px; background: rgba(200, 168, 78, 0.28);
+    margin: 0 auto; width: min(100%, 620px);
+  }
+  .org-branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 0; }
+  .org-branch { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+  .org-drop { height: 18px; width: 1px; background: rgba(200, 168, 78, 0.28); margin: 0 auto; }
+  .org-fn {
+    font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; text-align: center;
+    color: rgba(234, 227, 200, 0.5); margin-bottom: 2px;
+  }
+
+  .org-node {
+    display: block; width: 100%; text-align: left; font: inherit; cursor: pointer;
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 12px;
+    background: rgba(200, 168, 78, 0.05); color: inherit;
+    padding: 11px 13px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .org-node:hover { border-color: rgba(200, 168, 78, 0.4); background: rgba(200, 168, 78, 0.09); }
+  .org-node-top { display: flex; align-items: center; gap: 8px; }
+  .org-role { font-size: 12px; font-weight: 600; color: #f1e9cf; }
+  .org-tag {
+    margin-left: auto; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.75); border: 1px solid rgba(200, 168, 78, 0.28);
+    border-radius: 999px; padding: 3px 7px; white-space: nowrap;
+  }
+  .org-who { display: block; font-size: 11px; line-height: 1.5; color: rgba(234, 227, 200, 0.58); margin-top: 5px; }
+
+  /* target hire — not filled yet */
+  .org-node.open { border-style: dashed; background: transparent; }
+  .org-node.open .org-role { color: rgba(234, 227, 200, 0.72); }
+  /* the co-founder gap — the one hole worth flagging */
+  .org-node.gap { border-color: rgba(232, 168, 112, 0.45); border-style: dashed; background: rgba(232, 168, 112, 0.05); }
+  .org-node.gap .org-tag { color: #e8a870; border-color: rgba(232, 168, 112, 0.45); }
+
+  .org-detail {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .org-node.expanded .org-detail { grid-template-rows: 1fr; }
+  .org-detail-in { display: block; min-height: 0; overflow: hidden; }
+  .org-detail-p {
+    display: block; margin: 9px 0 0; padding-top: 9px; font-size: 11.5px; line-height: 1.6;
+    color: rgba(234, 227, 200, 0.7); border-top: 1px solid rgba(200, 168, 78, 0.14);
+  }
+
+  .org-legend {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    padding: 18px 26px 22px; border-top: 1px solid rgba(200, 168, 78, 0.1); margin-top: 18px;
+  }
+  .org-key { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; color: rgba(234, 227, 200, 0.5); }
+  .org-key i { width: 16px; height: 10px; border-radius: 3px; border: 1px solid rgba(200, 168, 78, 0.35); background: rgba(200, 168, 78, 0.12); }
+  .org-key.is-open i { border-style: dashed; background: transparent; }
+  .org-key.is-gap i { border-style: dashed; border-color: rgba(232, 168, 112, 0.5); background: rgba(232, 168, 112, 0.1); }
+
+  @media (max-width: 560px) {
+    .org-branches { grid-template-columns: 1fr; }
+    .org-tier > .org-node { flex-basis: 100%; max-width: none; }
+    .org-rail { display: none; }
+    .org-co { font-size: 19px; }
+  }
+
+  /* ─── Forged brand kit ────────────────────────────────────────
+     Palette, type and logo direction as a starter kit. Swatches
+     copy their hex on click; the whole thing exports as CSS custom
+     properties so a developer can paste it straight in. */
+  .brand-doc {
+    border: 1px solid rgba(200, 168, 78, 0.2); border-radius: 16px; overflow: hidden;
+    background: linear-gradient(180deg, #0c0a12 0%, #06050a 100%);
+  }
+  .brand-head {
+    padding: 26px; border-bottom: 1px solid rgba(200, 168, 78, 0.14);
+    background: radial-gradient(120% 80% at 50% 0%, rgba(160, 120, 90, 0.16), transparent 60%);
+  }
+  .brand-eyebrow { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 14px; }
+  .brand-lockups { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .brand-lock {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    border-radius: 12px; padding: 22px 16px; min-height: 118px;
+    border: 1px solid rgba(200, 168, 78, 0.16);
+  }
+  .brand-lock.on-dark { background: #08070d; }
+  .brand-lock.on-light { background: #f7f4ea; }
+  /* the mark is the venture's own, so it takes the venture's colours —
+     never Kaiso's gold, which would follow every founder's brand around */
+  .brand-mark { display: block; width: 36px; height: 36px; }
+  .brand-mark svg { display: block; width: 100%; height: 100%; }
+  .brand-lock.on-dark .brand-mark { color: #f5f2ea; }
+  .brand-lock.on-light .brand-mark { color: #10141c; }
+  .brand-word { font-size: 17px; font-weight: 700; letter-spacing: 0.06em; }
+  .brand-lock.on-dark .brand-word { color: #f5eed4; }
+  .brand-lock.on-light .brand-word { color: #1a1a1a; }
+  .brand-lock small {
+    font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  .brand-lock.on-dark small { color: rgba(234, 227, 200, 0.4); }
+  .brand-lock.on-light small { color: rgba(26, 26, 26, 0.45); }
+
+
+  /* ── generated directions ── */
+  .brand-marks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 14px 0 12px; }
+  .brand-mark-opt {
+    display: flex; flex-direction: column; gap: 10px; text-align: left; font: inherit; cursor: pointer;
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 12px; padding: 14px 13px 13px;
+    background: transparent; color: inherit;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .brand-mark-opt:hover { border-color: rgba(200, 168, 78, 0.38); background: rgba(200, 168, 78, 0.04); }
+  .brand-mark-opt.sel { border-color: rgba(232, 200, 112, 0.55); background: rgba(200, 168, 78, 0.07); }
+  .mo-art { display: grid; place-items: center; height: 52px; color: #f5f2ea; }
+  .mo-art svg { width: 40px; height: 40px; }
+  .brand-mark-opt.sel .mo-art { color: #fff; }
+  .mo-meta b { display: block; font-size: 11px; color: #f1e9cf; font-weight: 600; margin-bottom: 5px; }
+  .mo-meta span { display: block; font-size: 10.5px; line-height: 1.5; color: rgba(234, 227, 200, 0.5); }
+
+  .brand-mark-foot {
+    display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap;
+    border: 1px solid rgba(232, 168, 112, 0.28); border-radius: 12px;
+    background: rgba(232, 168, 112, 0.05); padding: 13px 15px; margin-bottom: 14px;
+  }
+  .brand-clear { flex: 1; min-width: 220px; margin: 0; font-size: 11.5px; line-height: 1.6; color: rgba(234, 227, 200, 0.66); }
+  .brand-clear b { color: #e8a870; font-weight: 600; }
+  .brand-mark-foot .kbtn { flex: 0 0 auto; font-size: 9px; padding: 9px 14px; }
+
+  .brand-block { padding: 22px 26px; border-bottom: 1px solid rgba(200, 168, 78, 0.1); }
+  .brand-block:last-of-type { border-bottom: 0; }
+  .brand-lbl { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold-bright); margin: 0 0 12px; }
+  .brand-note { font-size: 12px; line-height: 1.6; color: rgba(234, 227, 200, 0.6); margin: 10px 0 0; }
+
+  .brand-swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 10px; }
+  .brand-swatch {
+    display: block; text-align: left; font: inherit; cursor: pointer; padding: 0; overflow: hidden;
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 12px; background: transparent; color: inherit;
+    transition: border-color 0.2s ease;
+  }
+  .brand-swatch:hover { border-color: rgba(232, 200, 112, 0.45); }
+  .brand-chip { display: block; height: 54px; }
+  .brand-swatch-meta { display: block; padding: 9px 11px 11px; }
+  .brand-swatch b { display: block; font-size: 11px; color: #f1e9cf; font-weight: 600; }
+  .brand-hex {
+    display: block; font-size: 10px; letter-spacing: 0.06em; margin-top: 3px;
+    color: rgba(234, 227, 200, 0.5); font-variant-numeric: tabular-nums;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase;
+  }
+  .brand-swatch.copied .brand-hex { color: var(--gold-bright); }
+
+  .brand-type-row {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    padding: 12px 0; border-bottom: 1px dashed rgba(200, 168, 78, 0.12);
+  }
+  .brand-type-row:last-child { border-bottom: 0; }
+  .brand-spec {
+    flex: 0 0 108px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.42);
+  }
+  .brand-sample { color: #f1e9cf; line-height: 1.25; }
+  .brand-sample.display { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand-sample.heading { font-size: 17px; font-weight: 600; }
+  .brand-sample.body { font-size: 13.5px; font-weight: 400; color: rgba(234, 227, 200, 0.8); line-height: 1.6; }
+  .brand-sample.caption { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(234, 227, 200, 0.55); }
+
+  .brand-voice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .brand-voice-col { border: 1px solid rgba(200, 168, 78, 0.14); border-radius: 12px; padding: 13px 15px; }
+  .brand-voice-col b { display: block; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 9px; }
+  .brand-voice-col.say b { color: var(--gold-bright); }
+  .brand-voice-col.avoid b { color: #e8a870; }
+  .brand-voice-col ul { margin: 0; padding-left: 16px; }
+  .brand-voice-col li { font-size: 12px; line-height: 1.6; color: rgba(234, 227, 200, 0.7); margin-bottom: 5px; }
+  .brand-voice-col li:last-child { margin-bottom: 0; }
+
+  .brand-foot { padding: 16px 26px; text-align: center; font-size: 10px; letter-spacing: 0.06em; color: rgba(234, 227, 200, 0.4); }
+
+  @media (max-width: 560px) {
+    .brand-lockups, .brand-voice { grid-template-columns: 1fr; }
+    .brand-marks { grid-template-columns: 1fr 1fr; }
+    .brand-spec { flex-basis: 100%; }
+  }
+
+  /* ─── Plan & Tokens — buying session time ────────────────────── */
+
+  /* Several of these set display:flex, which beats the hidden attribute
+     on its own. The flow toggles visibility with hidden throughout. */
+  #panelPlan [hidden], #panelAccount [hidden], .time-banner[hidden] { display: none !important; }
+
+  /* the HUD meter opens the purchase flow */
+  .token-meter { cursor: pointer; }
+  .token-meter:focus-visible { outline: 1px solid rgba(232, 200, 112, 0.6); outline-offset: 3px; border-radius: 10px; }
+  .token-meter.empty .tm-track > span { width: 0 !important; }
+  .token-meter.empty .tm-rate { color: rgba(232, 168, 112, 0.9); }
+  .token-meter.empty .tm-count b { color: #e8a870; }
+
+  /* plan cards are buttons now, so they need the button reset */
+  button.plan-card { font: inherit; color: inherit; background: transparent; text-align: left; width: 100%; }
+  .kbtn[disabled] { opacity: 0.45; cursor: default; }
+
+  /* ── choose ── */
+  .buy-paused {
+    border: 1px solid rgba(232, 168, 112, 0.35); border-radius: 12px;
+    background: rgba(232, 168, 112, 0.06);
+    padding: 12px 14px; margin: 2px 0 14px;
+    font-size: 12.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.72);
+  }
+  .buy-paused b { color: #e8a870; font-weight: 600; }
+
+  .buy-balance {
+    display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px;
+    padding: 2px 0 14px; margin-bottom: 12px;
+    border-bottom: 1px solid rgba(200, 168, 78, 0.12);
+  }
+  .buy-balance .kp-lbl { flex-basis: 100%; }
+  .buy-balance > b { font-size: 24px; font-weight: 600; color: #f4ecd2; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .buy-balance > span:last-child { font-size: 12px; color: rgba(234, 227, 200, 0.45); }
+
+  .buy-detail { margin: -4px 0 16px; }
+  .buy-points { margin: 0; padding: 0; list-style: none; }
+  .buy-points li {
+    position: relative; padding-left: 18px;
+    font-size: 12.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.66);
+  }
+  .buy-points li + li { margin-top: 5px; }
+  .buy-points li::before {
+    content: ""; position: absolute; left: 3px; top: 0.62em;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
+  }
+  .pack i { font-style: normal; font-size: 9.5px; letter-spacing: 0.04em; color: rgba(234, 227, 200, 0.35); margin-top: 1px; }
+  .buy-points li b { color: var(--gold-bright); font-weight: 600; }
+  .buy-nudge {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    margin-top: 12px; padding: 11px 13px; border-radius: 12px;
+    border: 1px solid rgba(232, 200, 112, 0.28); background: rgba(200, 168, 78, 0.06);
+  }
+  .buy-nudge span { flex: 1; min-width: 200px; font-size: 12px; line-height: 1.5; color: rgba(234, 227, 200, 0.72); }
+  .buy-nudge .bill-link { font-size: 11.5px; white-space: nowrap; }
+  .buy-pack-note { margin: 10px 0 0; font-size: 11.5px; line-height: 1.5; color: rgba(234, 227, 200, 0.5); }
+  .buy-current {
+    margin-top: 10px; font-size: 11px; letter-spacing: 0.08em;
+    color: rgba(232, 200, 112, 0.8);
+  }
+
+  /* ── checkout ── */
+  .buy-summary {
+    border: 1px solid rgba(200, 168, 78, 0.16); border-radius: 14px;
+    padding: 14px 16px; margin-bottom: 14px;
+  }
+  .buy-sum-row { display: flex; align-items: baseline; gap: 12px; }
+  .buy-sum-row span { flex: 1; font-size: 14px; font-weight: 600; color: #f1e9cf; }
+  .buy-sum-row b { font-size: 18px; font-weight: 700; color: var(--gold-bright); font-variant-numeric: tabular-nums; }
+  .buy-sum-sub { margin: 7px 0 0; font-size: 11.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.5); }
+  .buy-sum-sub + .buy-sum-sub { margin-top: 4px; }
+
+  /* Where Stripe's embedded checkout mounts. Deliberately does not
+     imitate Stripe's form: a dashed, labelled slot with the prototype's
+     outcome picker inside. */
+  .stripe-slot {
+    border: 1px dashed rgba(200, 168, 78, 0.34); border-radius: 14px;
+    padding: 15px 16px 16px;
+    background: rgba(200, 168, 78, 0.025);
+  }
+  .stripe-head { display: flex; align-items: center; gap: 8px; color: var(--gold-bright); }
+  .stripe-head b { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: #f1e9cf; }
+  .stripe-copy { margin: 6px 0 14px; font-size: 12px; line-height: 1.55; color: rgba(234, 227, 200, 0.55); }
+  .stripe-sim { border-top: 1px solid rgba(200, 168, 78, 0.12); padding-top: 12px; }
+  .stripe-sim-lbl {
+    display: block; margin-bottom: 9px;
+    font-size: 8.5px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(234, 227, 200, 0.4);
+  }
+  .stripe-sim-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .stripe-sim-grid .kbtn { font-size: 8.5px; padding: 11px 8px; }
+  .stripe-sim-note { display: block; margin-top: 10px; font-size: 10.5px; line-height: 1.5; color: rgba(234, 227, 200, 0.38); }
+
+  /* ── outcome states ── */
+  .buy-state { text-align: center; padding: 10px 6px 18px; }
+  .buy-state h3 { margin: 14px 0 7px; font-size: 18px; font-weight: 600; color: #f4ecd2; letter-spacing: -0.01em; }
+  .buy-state p { margin: 0 auto; max-width: 340px; font-size: 13px; line-height: 1.6; color: rgba(234, 227, 200, 0.62); text-wrap: pretty; }
+  .buy-state p b { color: #f1e9cf; font-weight: 600; }
+  .buy-ic {
+    display: inline-grid; place-items: center; width: 54px; height: 54px; border-radius: 50%;
+    color: var(--gold-bright); border: 1px solid rgba(200, 168, 78, 0.35); background: rgba(200, 168, 78, 0.06);
+  }
+  .buy-ic.warn { color: #e8a870; border-color: rgba(232, 168, 112, 0.4); background: rgba(232, 168, 112, 0.06); }
+  .buy-ic.ok {
+    color: #140e04; border: 0;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold) 60%, var(--gold-soft));
+    box-shadow: 0 0 0 6px rgba(232, 200, 112, 0.12), 0 8px 26px rgba(200, 168, 78, 0.3);
+    animation: buy-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+  }
+  @keyframes buy-pop { from { transform: scale(0.6); opacity: 0; } to { transform: none; opacity: 1; } }
+  .buy-loader { display: grid; place-items: center; min-height: 64px; }
+  .buy-gap { margin-top: 8px; }
+  .buy-center { text-align: center; }
+
+  /* ── low-time banner ── */
+  .time-banner {
+    position: fixed; z-index: 45; top: 86px; right: 24px;
+    display: flex; align-items: center; gap: 12px;
+    max-width: min(460px, calc(100vw - 32px));
+    padding: 10px 10px 10px 14px; border-radius: 14px;
+    border: 1px solid rgba(232, 168, 112, 0.4);
+    background: rgba(14, 10, 8, 0.88); backdrop-filter: blur(10px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    animation: buy-drop 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  @keyframes buy-drop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  .tb-dot { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: #e8a870; box-shadow: 0 0 8px rgba(232, 168, 112, 0.7); }
+  .tb-txt { flex: 1; font-size: 12.5px; line-height: 1.45; color: rgba(234, 227, 200, 0.75); }
+  .tb-txt b { color: #e8a870; font-weight: 600; }
+  .time-banner .kbtn.primary { flex: 0 0 auto; font-size: 8.5px; padding: 9px 13px; }
+  .tb-x {
+    flex: 0 0 auto; width: 30px; height: 30px; border: 0; border-radius: 50%; cursor: pointer;
+    background: transparent; color: rgba(234, 227, 200, 0.4); font-size: 11px;
+  }
+  .tb-x:hover { color: #f1e9cf; background: rgba(234, 227, 200, 0.06); }
+
+  /* ── Account → Plan & billing ── */
+  .bill-alert {
+    display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
+    border: 1px solid rgba(232, 168, 112, 0.4); border-radius: 12px;
+    background: rgba(232, 168, 112, 0.06);
+    padding: 13px 15px; margin-bottom: 16px;
+  }
+  .bill-alert > b { font-size: 14px; color: #e8a870; font-weight: 600; }
+  .bill-alert > span { font-size: 12.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.66); }
+  .bill-alert > span b { color: #f1e9cf; font-weight: 600; }
+  .bill-alert .kbtn { margin-top: 6px; font-size: 8.5px; padding: 10px 14px; }
+
+  .bill-left { font-size: 13px; font-weight: 600; color: var(--gold-bright); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bill-gold { color: rgba(232, 200, 112, 0.9); }
+  .bill-amt { font-size: 13px; color: rgba(234, 227, 200, 0.75); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bill-row.failed .tx i, .bill-row.failed .bill-amt { color: #e8a870; }
+
+  .bill-link {
+    border: 0; background: transparent; padding: 0; cursor: pointer; font: inherit;
+    font-size: 11px; color: rgba(232, 200, 112, 0.8); text-decoration: underline; text-underline-offset: 3px;
+  }
+  .bill-link:hover { color: var(--gold-bright); }
+  .bill-row .bill-link { margin-left: 4px; }
+
+  .bill-sim {
+    display: block; width: 100%; margin-top: 14px; padding: 10px; cursor: pointer;
+    border: 1px dashed rgba(234, 227, 200, 0.16); border-radius: 10px; background: transparent;
+    font: inherit; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(234, 227, 200, 0.38);
+  }
+  .bill-sim--inline { width: auto; margin-top: 4px; padding: 7px 10px; font-size: 8.5px; }
+  .bill-sim-pair { display: flex; gap: 8px; flex-wrap: wrap; }
+  .bill-status {
+    font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap;
+    border: 1px solid rgba(234, 227, 200, 0.2); border-radius: 999px; padding: 3px 8px;
+    color: rgba(234, 227, 200, 0.55);
+  }
+  .bill-status.warn { color: #e8a870; border-color: rgba(232, 168, 112, 0.45); }
+  .bill-row.refunded .tx b, .bill-row.refunded .bill-amt { color: rgba(234, 227, 200, 0.45); }
+  .buy-blocked {
+    border: 1px solid rgba(232, 168, 112, 0.35); border-radius: 12px; background: rgba(232, 168, 112, 0.06);
+    padding: 12px 14px; margin: 0 0 12px;
+    font-size: 12.5px; line-height: 1.55; color: rgba(234, 227, 200, 0.72);
+  }
+  .buy-blocked b { color: #e8a870; font-weight: 600; }
+  .bill-sim:hover { color: rgba(234, 227, 200, 0.65); border-color: rgba(234, 227, 200, 0.3); }
+
+  @media (max-width: 640px) {
+    .time-banner { top: auto; bottom: 18px; right: 16px; left: 16px; max-width: none; }
+    .stripe-sim-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── Scribe — session dividers and times ─────────────────────
+     Quiet by design: the scribe is read after a session, not during
+     one, so the marks stay out of the way while the founder talks. */
+  .scribe-sep {
+    display: flex; align-items: center; gap: 10px;
+    margin: 10px 0 2px;
+  }
+  .scribe-sep::before, .scribe-sep::after {
+    content: ""; flex: 1; height: 1px;
+    background: rgba(200, 168, 78, 0.16);
+  }
+  .scribe-sep:first-child { margin-top: 0; }
+  .scribe-sep-label {
+    font-size: 8.5px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.38); white-space: nowrap;
+  }
+  /* the session still running */
+  .scribe-sep.live::before, .scribe-sep.live::after { background: rgba(200, 168, 78, 0.28); }
+  .scribe-sep.live .scribe-sep-label { color: rgba(232, 200, 112, 0.75); }
+
+  /* a time on the turn, only after a pause */
+  .msg .who { display: flex; align-items: baseline; gap: 8px; }
+  .msg.user .who { flex-direction: row-reverse; }
+  .msg .at {
+    font-size: 9px; letter-spacing: 0.08em; font-variant-numeric: tabular-nums;
+    color: rgba(234, 227, 200, 0.3);
+  }
+
+  /* earlier sessions sit back from the live one */
+  .msg.seeded .body { opacity: 0.82; }
+
+  /* ─── Live caption — one line, bottom of the stage ─────────────
+     Anchored above the two corner controls so it never collides with
+     the scribe quill or the session timer. Wide enough for a sentence,
+     never wide enough to become a paragraph. */
+  .caption {
+    position: fixed;
+    left: 50%;
+    bottom: 92px;
+    transform: translateX(-50%) translateY(6px);
+    width: min(720px, calc(100vw - 56px));
+    z-index: 24;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(200, 168, 78, 0.16);
+    background: rgba(6, 5, 12, 0.56);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.42s ease, visibility 0.42s ease, transform 0.42s ease;
+  }
+  .caption.up { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+  .caption .cap-who {
+    flex: 0 0 auto;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.6);
+  }
+  .caption .cap-line {
+    min-width: 0;
+    font-size: 15px;
+    line-height: 1.45;
+    color: rgba(234, 227, 200, 0.92);
+    text-wrap: pretty;
+  }
+  /* The founder's own words are interim — recognition is still guessing,
+     so they read a shade quieter than Kaiso's finished sentence. */
+  .caption[data-who="you"] .cap-who { color: rgba(234, 227, 200, 0.45); }
+  .caption[data-who="you"] .cap-line { color: rgba(234, 227, 200, 0.7); }
+
+  /* The scribe says it better while it is open, and the stage is dormant
+     between sessions. */
+  body:not(.active) .caption,
+  body.chat-open .caption { opacity: 0 !important; visibility: hidden !important; }
+
+  /* ── toggle — next to the scribe quill, same size and weight ── */
+  .caption-toggle {
+    position: fixed;
+    bottom: 28px; left: 88px;
+    width: 44px; height: 44px;
+    padding: 0;
+    background: rgba(8, 7, 12, 0.6);
+    border: 1px solid rgba(200, 168, 78, 0.35);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease 0.2s, border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+    z-index: 30;
+    backdrop-filter: blur(6px);
+    -webkit-tap-highlight-color: transparent;
+  }
+  body.active .caption-toggle { opacity: 1; pointer-events: auto; }
+  .caption-toggle:hover {
+    border-color: var(--gold-bright);
+    transform: translateY(-1px);
+    background: rgba(20, 16, 8, 0.7);
+  }
+  .caption-toggle svg { width: 22px; height: 22px; stroke: var(--gold); fill: none; stroke-width: 1.3; transition: stroke 0.25s ease, opacity 0.25s ease; }
+  .caption-toggle:hover svg { stroke: var(--gold-bright); }
+  /* Off reads as off at a glance: the glyph dims and the slash appears. */
+  .caption-toggle.off { border-color: rgba(200, 168, 78, 0.2); }
+  .caption-toggle.off svg { stroke: rgba(200, 168, 78, 0.45); }
+  .caption-toggle .cap-slash { opacity: 0; }
+  .caption-toggle.off .cap-slash { opacity: 1; }
+  body.chat-open .caption-toggle { opacity: 0.35; }
+
+  /* Matches the 820px / 480px steps the corner controls move on. */
+  @media (max-width: 820px) {
+    .caption-toggle { bottom: 24px; left: 80px; width: 48px; height: 48px; }
+    body.chat-open .caption-toggle { bottom: calc(70vh + 12px); }
+    .caption {
+      bottom: 84px;
+      width: calc(100vw - 32px);
+      padding: 11px 15px;
+      gap: 9px;
+      flex-direction: column;
+      align-items: center;
+    }
+    .caption .cap-line { font-size: 14px; }
+  }
+  @media (max-width: 480px) {
+    .caption-toggle { left: 86px; width: 52px; height: 52px; }
+  }
+
+  /* ─── Forge flare — the moment an output is finished ───────────
+     The sigil is where Kaiso lives, so that is where the news breaks:
+     the bars charge from the top down, the core flares once, a ring
+     goes out, and the line under the sigil turns over from KAISO
+     LISTENING to what was just made. One class, held for as long as
+     the toast is up; every animation runs once and settles back. */
+
+  /* the bars charge, top to bottom */
+  body.forged .hex-line { animation: forge-bar 1.05s ease-out; }
+  body.forged .hex-line:nth-of-type(1) { animation-delay: 0s; }
+  body.forged .hex-line:nth-of-type(2) { animation-delay: 0.06s; }
+  body.forged .hex-line:nth-of-type(3) { animation-delay: 0.12s; }
+  body.forged .hex-line:nth-of-type(4) { animation-delay: 0.18s; }
+  body.forged .hex-line:nth-of-type(5) { animation-delay: 0.24s; }
+  body.forged .hex-line:nth-of-type(6) { animation-delay: 0.30s; }
+  @keyframes forge-bar {
+    0%, 100% {
+      fill: var(--gold-bright);
+      filter: drop-shadow(0 0 6px rgba(232, 200, 112, 0.7))
+              drop-shadow(0 0 16px rgba(200, 168, 78, 0.4));
+    }
+    40% {
+      fill: #fff6d8;
+      filter: drop-shadow(0 0 13px rgba(255, 246, 216, 0.95))
+              drop-shadow(0 0 32px rgba(232, 200, 112, 0.65));
+    }
+  }
+
+  /* the core flares once, then goes back to breathing */
+  body.forged .pineal { animation: forge-core 1.4s ease-out; }
+  @keyframes forge-core {
+    0%, 100% { opacity: 0.92; filter: brightness(1); }
+    30%      { opacity: 1;    filter: brightness(1.5); }
+  }
+
+  /* one ring — smaller and slower than the activation burst, so it
+     reads as a result rather than another awakening */
+  body.forged #sigil-1 { animation: forge-ring 1.5s ease-out; }
+  @keyframes forge-ring {
+    0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.55; border-width: 1.5px; }
+    100% { transform: translate(-50%, -50%) scale(1.9);  opacity: 0;    border-width: 0.5px; }
+  }
+
+  /* ─── the toast, right under the sigil ─────────────────────────
+     It takes the status line's own slot, because only one line should
+     speak for Kaiso at a time. */
+  .ktoast {
+    position: fixed;
+    left: 50%; top: calc(50% + 168px);
+    z-index: 70;
+    transform: translate(-50%, 10px);
+    background: rgba(10, 9, 14, 0.95);
+    border: 1px solid rgba(200, 168, 78, 0.35);
+    border-radius: 999px;
+    padding: 11px 20px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    max-width: calc(100vw - 32px);
+    color: var(--gold-bright);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6),
+                0 0 26px rgba(200, 168, 78, 0.16);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .ktoast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+
+  /* Both pills sit in the same slot under the sigil. When the ready one is
+     up, the shared pill stacks below it rather than on top of it — the A+
+     readiness note is the one that lands on the same exchange. */
+  body:has(#kready.show) #ktoast.show { transform: translate(-50%, 52px); }
+
+  /* The pill is the live region; the button inside is the target. */
+  .ktoast-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: -11px -20px;
+    padding: 11px 20px;
+    border: 0;
+    border-radius: inherit;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ktoast-msg { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .ktoast-go {
+    letter-spacing: 0;
+    font-size: 12px;
+    opacity: 0.6;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .ktoast:has(.ktoast-btn:hover),
+  .ktoast:has(.ktoast-btn:focus-visible) {
+    border-color: rgba(232, 200, 112, 0.6);
+    background: rgba(16, 13, 8, 0.96);
+  }
+  .ktoast-btn:hover .ktoast-go,
+  .ktoast-btn:focus-visible .ktoast-go { opacity: 1; transform: translateX(3px); }
+  .ktoast-btn:focus-visible { outline: none; }
+  .ktoast-btn:active { transform: scale(0.99); }
+
+  /* the status line steps aside for it — only one line speaks at a time */
+  body.forged #kaisoPhase { opacity: 0; transition: opacity 0.3s ease; }
+
+  /* At phone width the nudge button sits closer under the sigil and the
+     caption is closer still, so there is no room to push anything: the
+     toast rides a little higher instead, into the slot the status line
+     has just vacated. */
+  @media (max-width: 820px) {
+    .ktoast { top: calc(50% + 150px); font-size: 10.5px; padding: 10px 16px; }
+    .ktoast-btn { margin: -10px -16px; padding: 10px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body.forged .hex-line,
+    body.forged .pineal,
+    body.forged #sigil-1 { animation: none; }
+  }
+
+  /* ─── Ask Kaiso to change this — desktop (KAIZ-218) ──────────
+     The desktop half of KAIZ-207. Mobile opens a sheet over a
+     scrimmed document because a phone has one column and no pointer.
+     Desktop has both, so the ask happens in the panel the founder is
+     already reading, and the target is whatever they point at. */
+
+  /* ─ The way in: a bar that stays at the foot while the doc scrolls ─
+     Sticky rather than fixed, so it belongs to the panel and not to
+     the window. bottom: -24px cancels .kpanel's own padding so the
+     bar reaches the panel's edge instead of floating above it. */
+  .kedit-bar {
+    position: sticky; bottom: -24px; z-index: 4;
+    margin: 18px -24px -24px; padding: 14px 24px 18px;
+    display: flex; align-items: center; gap: 10px;
+    background: linear-gradient(180deg, rgba(8,7,12,0) 0%, rgba(8,7,12,0.92) 38%, rgba(8,7,12,0.98) 100%);
+    backdrop-filter: blur(6px);
+  }
+  .kedit-open {
+    flex: 1; display: flex; align-items: center; gap: 10px;
+    border: 1px solid rgba(200,168,78,0.26); border-radius: 999px;
+    background: rgba(234,227,200,0.03); color: rgba(234,227,200,0.6);
+    font: inherit; font-size: 13px; text-align: left;
+    padding: 11px 16px; cursor: pointer; transition: all 0.2s ease;
+  }
+  .kedit-open:hover { border-color: var(--gold-bright); color: var(--gold-bright); background: rgba(200,168,78,0.07); }
+  .kedit-open svg { flex: none; opacity: 0.8; }
+  /* Says what it does. A bare field with a microphone under a document
+     reads as search -- which is exactly how it was misread. The verb
+     carries it, and the target name removes the last of the doubt. */
+  .kedit-open b { font-weight: 600; color: rgba(234,227,200,0.85); }
+
+  /* ─ Pointing at the thing you want changed ─
+     A pointer is the desktop's advantage over a phone. Hovering a
+     section offers it as the target, so "this" is resolved by aim
+     rather than by picking from a list afterwards. */
+  .kedit-target { position: relative; transition: box-shadow 0.2s ease; }
+  .kedit-target::after {
+    content: "change this"; position: absolute; top: 6px; right: 6px;
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold-bright); background: rgba(10,8,16,0.9);
+    border: 1px solid rgba(200,168,78,0.35); border-radius: 999px;
+    padding: 3px 9px; opacity: 0; pointer-events: none;
+    transition: opacity 0.18s ease; z-index: 2;
+  }
+  body:not(.kedit-busy) .kedit-target:hover {
+    box-shadow: inset 2px 0 0 var(--gold-bright), 0 0 24px rgba(200,168,78,0.08);
+    cursor: pointer;
+  }
+  body:not(.kedit-busy) .kedit-target:hover::after { opacity: 1; }
+
+  /* ─ The ask ─ */
+  .kedit-sheet { display: none; flex-direction: column; gap: 12px; width: 100%; }
+  .kedit-sheet.show { display: flex; animation: kedit-rise 0.26s cubic-bezier(0.2,0.7,0.2,1); }
+  @keyframes kedit-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .kedit-head { display: flex; align-items: center; gap: 10px; }
+  .kedit-eyebrow {
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); opacity: 0.8;
+  }
+  .kedit-scope {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold-bright); border: 1px solid rgba(200,168,78,0.3);
+    border-radius: 999px; padding: 4px 10px; background: rgba(200,168,78,0.07);
+  }
+  .kedit-scope::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--gold-bright); }
+  .kedit-x {
+    border: 0; background: none; color: rgba(234,227,200,0.45);
+    font: inherit; font-size: 15px; line-height: 1; cursor: pointer; padding: 2px 4px;
+  }
+  .kedit-x:hover { color: var(--gold-bright); }
+
+  .kedit-lede { font-size: 12px; color: rgba(234,227,200,0.6); margin: 0; }
+
+  /* The passage Kaiso is about to touch, quoted. Without it "this" is
+     a promise; with it, it is a thing on screen you can disagree with. */
+  .kedit-quote {
+    margin: 0; padding: 11px 14px; border-left: 2px solid rgba(200,168,78,0.4);
+    background: rgba(234,227,200,0.03); border-radius: 0 8px 8px 0;
+    font-size: 13px; line-height: 1.55; color: rgba(234,227,200,0.82);
+    max-height: 96px; overflow: hidden;
+  }
+
+  .kedit-row { display: flex; gap: 10px; align-items: center; }
+  .kedit-input {
+    flex: 1; border: 1px solid rgba(200,168,78,0.26); border-radius: 999px;
+    background: rgba(8,7,12,0.7); color: var(--ink); font: inherit; font-size: 13px;
+    padding: 11px 16px; outline: none; transition: border-color 0.2s ease;
+  }
+  .kedit-input::placeholder { color: rgba(234,227,200,0.35); }
+  .kedit-input:focus { border-color: var(--gold-bright); }
+  /* Voice is the large target: the product is spoken. The field is
+     there because nobody wants to dictate "five two billion". */
+  .kedit-mic {
+    flex: none; width: 42px; height: 42px; border-radius: 50%; border: 0;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    color: #140e04; cursor: pointer; display: grid; place-items: center;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .kedit-mic:hover { transform: scale(1.06); box-shadow: 0 0 22px rgba(200,168,78,0.35); }
+  .kedit-mic.live { animation: kedit-pulse 1.3s ease-in-out infinite; }
+  @keyframes kedit-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,200,112,0.45); }
+    50%      { box-shadow: 0 0 0 10px rgba(232,200,112,0); }
+  }
+
+  .kedit-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .kedit-chip {
+    border: 1px solid rgba(200,168,78,0.24); border-radius: 999px;
+    background: rgba(234,227,200,0.02); color: rgba(234,227,200,0.7);
+    font: inherit; font-size: 11px; padding: 6px 12px; cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .kedit-chip:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+
+  /* What it costs, before it is spent. */
+  .kedit-cost { font-size: 11px; color: rgba(234,227,200,0.45); margin: 0; }
+  .kedit-cost b { color: var(--gold-bright); font-weight: 600; }
+
+  /* ─ Applied ─ */
+  .kedit-changed {
+    box-shadow: inset 2px 0 0 var(--gold-bright);
+    background: rgba(200,168,78,0.045);
+    border-radius: 0 8px 8px 0;
+    animation: kedit-land 0.6s ease-out;
+  }
+  @keyframes kedit-land {
+    from { background: rgba(200,168,78,0.18); }
+    to   { background: rgba(200,168,78,0.045); }
+  }
+  /* Marked in place, so nobody re-reads the document to find what moved. */
+  .kedit-tag {
+    display: inline-block; margin-left: 8px; vertical-align: middle;
+    font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold-bright); border: 1px solid rgba(200,168,78,0.4);
+    border-radius: 999px; padding: 2px 7px;
+  }
+
+  .kedit-result { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .kedit-said { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(234,227,200,0.72); }
+  .kedit-said b { color: var(--ink); font-weight: 600; }
+  .kedit-said .kedit-spent { margin-left: auto; font-size: 11px; color: rgba(234,227,200,0.42); }
+  /* The line that makes this an editor and not a find-and-replace. */
+  .kedit-note {
+    margin: 0; padding: 9px 12px; border-radius: 8px;
+    background: rgba(234,227,200,0.03); border: 1px solid rgba(200,168,78,0.14);
+    font-size: 11.5px; line-height: 1.5; color: rgba(234,227,200,0.6);
+  }
+  /* Revert carries the same weight as Keep: this document may already
+     have gone to an investor. */
+  .kedit-acts { display: flex; gap: 10px; }
+  .kedit-acts .kbtn { flex: 1; }
+
+  .kedit-working { display: flex; align-items: center; gap: 9px; font-size: 12px; color: var(--gold-bright); }
+  .kedit-working .kedit-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--gold-bright);
+    animation: kedit-blink 1s ease-in-out infinite;
+  }
+  @keyframes kedit-blink { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+
+  @media (max-width: 560px) {
+    .kedit-quote { max-height: 76px; }
+    .kedit-acts { flex-direction: column; }
+    .kedit-target::after { display: none; }
+  }
+
+
+      html, body { height: auto !important; overflow: visible !important;
+        background: #ffffff !important; margin: 0; padding: 0;
+        -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { display: block !important; padding: 28px;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      @media print { body { padding: 0; } }
+    @media print { @page { size: A4; margin: 14mm; } }
+        .org-doc { background: #fff !important; border: none !important; max-width: 860px; margin: 0 auto; }
+        .org-head { background: #faf7ed !important; border-bottom: 1px solid #d8c98f !important; }
+        .org-eyebrow, .org-fn { color: #8a6a1c !important; }
+        .org-co { color: #1a1a1a !important; }
+        .org-sub, .org-who, .org-key { color: #555 !important; }
+        .org-node { background: #fff !important; border-color: #d8c98f !important; }
+        .org-node.open { background: transparent !important; }
+        .org-node.gap { background: #fdf3e8 !important; border-color: #d09a5a !important; }
+        .org-role { color: #1a1a1a !important; }
+        .org-tag { color: #8a6a1c !important; border-color: #d8c98f !important; }
+        .org-node.gap .org-tag { color: #a86a20 !important; border-color: #d09a5a !important; }
+        .org-spine, .org-rail, .org-drop { background: #d8c98f !important; }
+        /* every role's reasoning prints — the page is the handout */
+        .org-detail { grid-template-rows: 1fr !important; }
+        .org-detail-p { color: #333 !important; border-top-color: #e4dcc2 !important; }
+        .org-key i { border-color: #d8c98f !important; background: #f3ecd8 !important; }
+        .org-key.is-open i { background: transparent !important; }
+        .org-key.is-gap i { border-color: #d09a5a !important; background: #fdf3e8 !important; }
+        .org-branch, .org-node, .org-legend { break-inside: avoid; page-break-inside: avoid; }
+      
+  body { background: #fff; display: block; overflow: auto; }
+  @media screen { body { padding: 28px; } }
+  @media print { body { padding: 0 !important; margin: 0 !important; } }
+</style>
+</head>
+<body>
+<article class="org-doc" id="orgPrintable">
+      <header class="org-head">
+        <div class="org-eyebrow">Org Chart &middot; Today and twelve months out</div>
+        <h1 class="org-co exec-co">Helm</h1>
+        <p class="org-sub">2 in seat &middot; 5 target hires &middot; 1 co-founder gap</p>
+      </header>
+
+      <div class="org-tree">
+        <div class="org-tier">
+          <button class="org-node" type="button">
+            <span class="org-node-top"><span class="org-role">Co-founder &amp; CEO</span><span class="org-tag">In seat</span></span>
+            <span class="org-who">8 years scaling DTC operations, ex-Shopify Plus.</span>
+            <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Owns fundraising, partnerships and the first fifty customer conversations. Carries sales until the founding AE lands.</span></span></span>
+          </button>
+          <button class="org-node" type="button">
+            <span class="org-node-top"><span class="org-role">Co-founder &amp; CTO</span><span class="org-tag">In seat</span></span>
+            <span class="org-who">Former ML lead, two prior exits in workflow automation.</span>
+            <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Owns the agent architecture and the integration layer &mdash; the reason automated actions are safe to run unattended.</span></span></span>
+          </button>
+        </div>
+
+        <div class="org-spine"></div>
+        <div class="org-rail"></div>
+
+        <div class="org-branches">
+          <div class="org-branch">
+            <div class="org-drop"></div>
+            <div class="org-fn">Engineering</div>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Integrations Engineer</span><span class="org-tag">Q3 hire</span></span>
+              <span class="org-who">Shopify, 3PL and support connectors.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">First hire out of the raise. The roadmap is integration-bound, not model-bound &mdash; every connector widens the addressable market.</span></span></span>
+            </button>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Agent Reliability Eng.</span><span class="org-tag">Q4 hire</span></span>
+              <span class="org-who">Evaluation harness and guardrails.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Owns the tests that decide whether an action is safe to run without a human. Blocks the move from approve-each to approve-by-exception.</span></span></span>
+            </button>
+          </div>
+
+          <div class="org-branch">
+            <div class="org-drop"></div>
+            <div class="org-fn">Operations</div>
+            <button class="org-node gap" type="button">
+              <span class="org-node-top"><span class="org-role">Head of Customer Ops</span><span class="org-tag">Gap</span></span>
+              <span class="org-who">Nobody on the team has run support at volume.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Flagged in the People pillar as co-founder shaped rather than a hire &mdash; a senior operator who has carried a support queue through a scale event, at equity level.</span></span></span>
+            </button>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Onboarding Specialist</span><span class="org-tag">Q4 hire</span></span>
+              <span class="org-who">Migrates a brand&rsquo;s workflows in week one.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Churn is decided in the first week. This role exists to make the first automated action happen inside a customer&rsquo;s first session.</span></span></span>
+            </button>
+          </div>
+
+          <div class="org-branch">
+            <div class="org-drop"></div>
+            <div class="org-fn">Growth</div>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Founding AE</span><span class="org-tag">Q3 hire</span></span>
+              <span class="org-who">Converts the 1,400-brand waitlist.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Reports to the CEO until there is a second seller. Hired against a proven motion, not to invent one.</span></span></span>
+            </button>
+            <button class="org-node open" type="button">
+              <span class="org-node-top"><span class="org-role">Content &amp; Lifecycle</span><span class="org-tag">Q1 2027</span></span>
+              <span class="org-who">Top of funnel once the motion repeats.</span>
+              <span class="org-detail"><span class="org-detail-in"><span class="org-detail-p">Deliberately late. Paid acquisition before the sales motion is repeatable buys churn, not growth.</span></span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="org-legend">
+        <span class="org-key"><i></i> In seat</span>
+        <span class="org-key is-open"><i></i> Target hire</span>
+        <span class="org-key is-gap"><i></i> Co-founder gap</span>
+      </div>
+    </article>
+</body>
+</html>

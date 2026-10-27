@@ -53,20 +53,29 @@
         -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       body { display: block !important; padding: 28px;
         font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      @media print { @page { size: A4; margin: 14mm; } body { padding: 0; } }
+      @media print { body { padding: 0; } }
     `;
 
+    // Every output declares its own page. Deliberately not in BASE_PRINT:
+    // a second @page later in the sheet sets the paper but not the layout
+    // width, so the landscape deck was laid out against a portrait page
+    // and silently scaled to fit.
+    const PAGE_A4 = `@media print { @page { size: A4; margin: 14mm; } }`;
+
     window.kaisoPrintStyles = {
-      exec: BASE_PRINT + `
+      exec: BASE_PRINT + PAGE_A4 + `
         .exec-doc { background: #fff !important; border: none !important; max-width: 860px; margin: 0 auto;
           color: #1a1a1a !important; }
         .exec-banner-mark, .exec-eyebrow, .exec-sec-title, .es-val, .exec-foot-co { color: #8a6a1c !important; }
         .exec-co { color: #1a1a1a !important; }
         .exec-sec-body, .exec-tag { color: #2a2a2a !important; }
+        .exec-sec-body b { color: #8a6a1c !important; }
+        .exec-meta, .exec-dot, .exec-foot-contact, .exec-foot-mark { color: #666 !important; }
+        .es-lbl { color: #555 !important; }
         .exec-stat { background: #faf7ed !important; border: 0.5px solid #d8c98f !important; }
         .exec-sec, .exec-band, .exec-foot, .exec-banner { break-inside: avoid; page-break-inside: avoid; }
       `,
-      org: BASE_PRINT + `
+      org: BASE_PRINT + PAGE_A4 + `
         .org-doc { background: #fff !important; border: none !important; max-width: 860px; margin: 0 auto; }
         .org-head { background: #faf7ed !important; border-bottom: 1px solid #d8c98f !important; }
         .org-eyebrow, .org-fn { color: #8a6a1c !important; }
@@ -87,7 +96,7 @@
         .org-key.is-gap i { border-color: #d09a5a !important; background: #fdf3e8 !important; }
         .org-branch, .org-node, .org-legend { break-inside: avoid; page-break-inside: avoid; }
       `,
-      brand: BASE_PRINT + `
+      brand: BASE_PRINT + PAGE_A4 + `
         .brand-doc { background: #fff !important; border: none !important; max-width: 860px; margin: 0 auto; }
         .brand-head { background: #faf7ed !important; border-bottom: 1px solid #d8c98f !important; }
         .brand-eyebrow, .brand-lbl { color: #8a6a1c !important; }
@@ -96,7 +105,7 @@
         .brand-swatch, .brand-voice-col, .brand-type-row { border-color: #d8c98f !important; }
         .brand-swatch b, .brand-sample { color: #1a1a1a !important; }
         .brand-sample.body { color: #333 !important; }
-        .brand-sample.caption, .brand-hex, .brand-spec { color: #666 !important; }
+        .brand-sample.caption, .brand-hex, .brand-spec { color: #555 !important; opacity: 1 !important; }
         .brand-voice-col.say b { color: #8a6a1c !important; }
         .brand-voice-col.avoid b { color: #a86a20 !important; }
         .brand-lock.on-dark { background: #10141c !important; }
@@ -114,16 +123,66 @@
         .brand-mark-foot .kbtn { display: none !important; }
         .brand-block, .brand-swatch, .brand-voice, .brand-lockups, .brand-mark-opt { break-inside: avoid; page-break-inside: avoid; }
       `,
-      deck: BASE_PRINT + `
-        .deck-doc { max-width: 720px; margin: 0 auto; gap: 0 !important; }
-        .deck-slide { aspect-ratio: auto !important; min-height: 0 !important; height: auto !important;
-          background: #faf7ed !important; border: 0.5px solid #d8c98f !important;
-          color: #1a1a1a !important; margin-bottom: 16px;
-          break-inside: avoid; page-break-inside: avoid; page-break-after: always; }
-        .deck-title { color: #111 !important; }
-        .deck-body, .deck-sub { color: #333 !important; }
-        .deck-eyebrow, .deck-glyph, .deck-cell b { color: #8a6a1c !important; }
-        .deck-cell { border-color: #d8c98f !important; background: #fff !important; }
+      pitch: BASE_PRINT + PAGE_A4 + `
+        .pitch-doc { background: #fff !important; border: none !important; max-width: 760px; margin: 0 auto; }
+        .pitch-hero { background: #faf7ed !important; border-bottom: 1px solid #d8c98f !important; }
+        .pitch-eyebrow, .pitch-dur { color: #8a6a1c !important; }
+        .pitch-co { color: #1a1a1a !important; }
+        .pitch-line { color: #2a2a2a !important; }
+        .pitch-line em { color: #8a6a1c !important; }
+        .pitch-body { color: #2a2a2a !important; }
+        .pitch-when, .pitch-count, .pitch-foot { color: #666 !important; }
+        .pitch-block { border-color: #d8c98f !important; }
+        .pitch-block { break-inside: avoid; page-break-inside: avoid; }
+      `,
+      landing: BASE_PRINT + PAGE_A4 + `
+        .land-doc { background: #fff !important; border: none !important; max-width: 860px; margin: 0 auto; }
+        .land-hero { background: #faf7ed !important; border-bottom: 1px solid #d8c98f !important; }
+        .land-logo, .land-lbl, .land-stat b { color: #8a6a1c !important; }
+        .land-hero h1 { color: #111 !important; -webkit-text-fill-color: #111 !important;
+          background: none !important; }
+        .land-tag { color: #1a1a1a !important; }
+        .land-feat b { color: #1a1a1a !important; }
+        .land-stat span { color: #666 !important; }
+        .land-body, .land-feat span { color: #2a2a2a !important; }
+        .land-stat, .land-feat { background: #fff !important; border-color: #d8c98f !important; }
+        .land-cta, .land-foot { color: #555 !important; }
+        .land-cta .kbtn { border-color: #8a6a1c !important; color: #8a6a1c !important; background: #faf7ed !important; }
+        .land-block, .land-feat, .land-stat { break-inside: avoid; page-break-inside: avoid; }
+      `,
+      // A deck prints as a handout: portrait, two slides to a page, each
+      // slide a 16:9 card. Landscape was the obvious answer and it does
+      // not work -- headless Chrome lays the page out at the PORTRAIT
+      // width whatever `@page { size: A4 landscape }` says, then scales
+      // the overflow down by 210/297 to fit. A minimal document of twelve
+      // 297mm-wide blocks reproduces it: the slides come back 0.707 scale,
+      // one and a half to a page, and four of the twelve fall off the end.
+      // Laying out at the width Chrome is actually using avoids the scale
+      // entirely, and every slide survives.
+      deck: BASE_PRINT + PAGE_A4 + `
+        .deck-doc { display: block !important; max-width: none; margin: 0; gap: 0 !important; }
+        .deck-slide {
+          box-sizing: border-box; width: 100%; aspect-ratio: 16 / 9 !important;
+          min-height: 0 !important; height: auto !important;
+          padding: 14mm 16mm !important; margin: 0 0 10mm !important;
+          border: 0.5px solid #d8c98f !important; border-radius: 6px !important;
+          background: #faf7ed !important; color: #1a1a1a !important;
+          display: flex !important; flex-direction: column; justify-content: center;
+          break-inside: avoid; page-break-inside: avoid; }
+        .deck-slide:nth-of-type(2n) { page-break-after: always; }
+        .deck-title { font-size: 21px !important; color: #111 !important; margin-bottom: 8px; }
+        .deck-slide.cover .deck-title { font-size: 30px !important; }
+        .deck-body { font-size: 11.5px !important; color: #333 !important; max-width: 62ch; }
+        .deck-slide.cover .deck-body { font-size: 13px !important; max-width: none; }
+        .deck-sub { font-size: 10.5px !important; color: #555 !important; }
+        .deck-sub b { color: #8a6a1c !important; }
+        .deck-eyebrow { font-size: 9px !important; }
+        .deck-glyph { font-size: 16px !important; }
+        .deck-eyebrow, .deck-glyph, .deck-cell b, .deck-num { color: #8a6a1c !important; opacity: 1 !important; }
+        .deck-num { font-size: 9px !important; }
+        .deck-cell, .deck-cell span { border-color: #d8c98f !important; background: #fff !important;
+          font-size: 10.5px !important; color: #333 !important; opacity: 1 !important; }
+        .deck-cell span { background: none !important; }
       `,
     };
 

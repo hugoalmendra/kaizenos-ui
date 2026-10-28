@@ -1,6 +1,6 @@
 # Flat renders of the desktop screens
 
-`python3 make.py` writes one PNG per screen at 2x. Takes about four
+`python3 make.py` writes one PNG per screen at 2x. Takes about three
 minutes for all 71. `index.json` comes out alongside, carrying each
 render's title, page, grid position, source file and the state recipe
 that produced it.
@@ -15,11 +15,24 @@ prototypes, `index.html` (sign-in and the founder intake) and
   `K`, whose helpers drive the real modules through hooks the app already
   has — `K.engage()`, `K.exchanges(12)`, `K.panel('exec')`, `K.acct('refund')`,
   `K.intake(3)`. Nothing is a hand-built likeness of a state.
-- Headless Chrome runs the clock forward with `--virtual-time-budget` and
-  takes the shot.
+- `cdp.py` drives Chrome over the DevTools protocol and takes the shot
+  when the driver says the state is set, not before.
 
 Nothing reaches a network. The prototype's own calls fail and are caught
 where they are made, which is what happens with the Wi-Fi off anyway.
+
+**Why CDP and not `--headless --screenshot`.** That flag decides for
+itself when a page is finished, and it decides wrong: it fires mid-paint
+and a whole panel comes back missing — silently, and differently each
+run. Two renders of the same 71 screens disagreed on 62 of them, and
+three of the set that first went to Figma were wrong: Terms and Privacy
+part-rendered, and "Ask Kaiso to change · the way in" with no panel at
+all. Chasing it through GPU flags and parallelism did not fix it; the
+only honest fix was to stop guessing. The driver now raises
+`data-shot-ready` when the state is set and settled, and `cdp.py` waits
+for that. One browser serves all 71 and the driver is injected with
+`Page.addScriptToEvaluateOnNewDocument`, so nothing is written into the
+repo to carry it and two runs at once cannot collide.
 
 Three things the driver has to do that are worth knowing about:
 
@@ -29,13 +42,16 @@ Three things the driver has to do that are worth knowing about:
   an animation, not a state, and at shot time it is a white sheet.
 - **`K.freeze()`** stops timers longer than 800 ms, for the states that
   exist only between two of them — "Confirming payment", "Outcome
-  unknown". Without it the clock runs straight past them.
+  unknown". Without it the clock runs straight past them. `hold()` then
+  cancels every pending timer once the recipe has had `SETTLE`, which
+  also stops the session meter ticking the balance down between the
+  state being set and the camera firing.
 
-Each Chrome run gets its own `--user-data-dir`. A shared profile makes
-Chrome treat the runs as one browser: it hands the URL to whichever
-instance got there first and silently takes no shot.
+`Math.random` is seeded before any module runs, so the star field
+scatters the same way every time and a re-render can be diffed against
+the last one.
 
-**The PNGs are gitignored.** 62 MB of renders that regenerate in four
+**The PNGs are gitignored.** 68 MB of renders that regenerate in three
 minutes do not belong in the repo.
 
 ## In Figma

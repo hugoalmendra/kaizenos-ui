@@ -108,10 +108,10 @@ SCREENS = [
     app('e8', 'Ask Kaiso to change · the way in', 'E · Outputs',
         TALK + "K.panel('exec'); K.aim('#panelExec .exec-sec');"),
     app('e9', 'Ask Kaiso to change · the ask', 'E · Outputs',
-        TALK + "K.panel('exec'); K.click('#panelExec .kedit-open');"),
+        TALK + "K.panel('exec'); K.click('#panelExec .kedit-open'); K.top('#panelExec');"),
     app('e10', 'Ask Kaiso to change · changed', 'E · Outputs',
         TALK + "K.panel('exec'); K.click('#panelExec .kedit-open');"
-        "K.click('#panelExec .kedit-chip');"),
+        "K.click('#panelExec .kedit-chip'); K.top('#panelExec');"),
 
     # ── F · Account ─────────────────────────────────────────────
     app('f1', 'Manage account', 'F · Account', TALK + "K.acct('root');"),

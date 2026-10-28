@@ -7,7 +7,7 @@
   "x": 0,
   "y": 0,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(0);"
  },
@@ -19,7 +19,7 @@
   "x": 1580,
   "y": 0,
   "w": 1440,
-  "h": 912,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(0); K.click('[data-mode=\"up\"]');"
  },
@@ -55,7 +55,7 @@
   "x": 0,
   "y": 2123,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.intake(3);"
  },
@@ -67,7 +67,7 @@
   "x": 1580,
   "y": 2123,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.intake(4);"
  },
@@ -79,7 +79,7 @@
   "x": 3160,
   "y": 2123,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(2);"
  },
@@ -91,7 +91,7 @@
   "x": 4740,
   "y": 2123,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(3);"
  },
@@ -101,9 +101,9 @@
   "title": "Talk with Kaiso",
   "page": "A \u00b7 First run",
   "x": 0,
-  "y": 3163,
+  "y": 3203,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(4);"
  },
@@ -113,9 +113,9 @@
   "title": "Create your account",
   "page": "A \u00b7 First run",
   "x": 1580,
-  "y": 3163,
+  "y": 3203,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(5);"
  },
@@ -125,9 +125,9 @@
   "title": "Free tokens granted",
   "page": "A \u00b7 First run",
   "x": 3160,
-  "y": 3163,
+  "y": 3203,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(6);"
  },
@@ -137,9 +137,9 @@
   "title": "Voice session",
   "page": "A \u00b7 First run",
   "x": 4740,
-  "y": 3163,
+  "y": 3203,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(7);"
  },
@@ -149,9 +149,9 @@
   "title": "Sneak peek",
   "page": "A \u00b7 First run",
   "x": 0,
-  "y": 4203,
+  "y": 4283,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(8);"
  },
@@ -161,9 +161,9 @@
   "title": "Choose plan & pay",
   "page": "A \u00b7 First run",
   "x": 1580,
-  "y": 4203,
+  "y": 4283,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(9);"
  },
@@ -173,9 +173,9 @@
   "title": "Generated outputs",
   "page": "A \u00b7 First run",
   "x": 3160,
-  "y": 4203,
+  "y": 4283,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(10);"
  },
@@ -185,9 +185,9 @@
   "title": "Outputs library",
   "page": "A \u00b7 First run",
   "x": 4740,
-  "y": 4203,
+  "y": 4283,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(11);"
  },
@@ -197,9 +197,9 @@
   "title": "Returning sign-in",
   "page": "A \u00b7 First run",
   "x": 0,
-  "y": 5243,
+  "y": 5363,
   "w": 1440,
-  "h": 900,
+  "h": 940,
   "source": "index.html",
   "state": "K.screen(12);"
  },
@@ -609,7 +609,7 @@
   "w": 1440,
   "h": 900,
   "source": "mentor.html",
-  "state": "K.engage(); K.exchanges(12); K.quiet();K.panel('exec'); K.click('#panelExec .kedit-open');"
+  "state": "K.engage(); K.exchanges(12); K.quiet();K.panel('exec'); K.click('#panelExec .kedit-open'); K.top('#panelExec');"
  },
  {
   "id": "e10",
@@ -621,7 +621,7 @@
   "w": 1440,
   "h": 900,
   "source": "mentor.html",
-  "state": "K.engage(); K.exchanges(12); K.quiet();K.panel('exec'); K.click('#panelExec .kedit-open');K.click('#panelExec .kedit-chip');"
+  "state": "K.engage(); K.exchanges(12); K.quiet();K.panel('exec'); K.click('#panelExec .kedit-open');K.click('#panelExec .kedit-chip'); K.top('#panelExec');"
  },
  {
   "id": "f1",
@@ -787,7 +787,7 @@
   "x": 2080,
   "y": 0,
   "w": 900,
-  "h": 811,
+  "h": 900,
   "source": "store/outputs/landing-page.html",
   "state": null
  },
@@ -799,7 +799,7 @@
   "x": 3120,
   "y": 0,
   "w": 900,
-  "h": 831,
+  "h": 900,
   "source": "store/outputs/org-chart.html",
   "state": null
  },

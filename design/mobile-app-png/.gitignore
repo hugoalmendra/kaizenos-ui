@@ -1,0 +1,2 @@
+# 22 MB of renders, all regenerable from the artboards by make.py
+*.png

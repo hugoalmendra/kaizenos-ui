@@ -27,8 +27,10 @@ and a whole panel comes back missing — silently, and differently each
 run. Two renders of the same 71 screens disagreed on 62 of them, and
 three of the set that first went to Figma were wrong: Terms and Privacy
 part-rendered, and "Ask Kaiso to change · the way in" with no panel at
-all. Chasing it through GPU flags and parallelism did not fix it; the
-only honest fix was to stop guessing. The driver now raises
+all. Chasing it through GPU flags and parallelism did not fix it, and both
+of those turned out to be red herrings: `--disable-gpu` does not drop
+backdrop-filter, it just loses the race more often. The only honest fix
+was to stop guessing. The driver now raises
 `data-shot-ready` when the state is set and settled, and `cdp.py` waits
 for that. One browser serves all 71 and the driver is injected with
 `Page.addScriptToEvaluateOnNewDocument`, so nothing is written into the

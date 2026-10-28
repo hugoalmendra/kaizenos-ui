@@ -103,8 +103,16 @@ class Browser:
 
     def __init__(self, extra_args=()):
         self.profile = tempfile.mkdtemp(prefix='kaiso-cdp-')
+        # The GPU is left on its default, which on macOS is already ANGLE
+        # over Metal. Measured over this protocol, --disable-gpu is the
+        # slower of the two (19.2s against 12.8s for five screens) and its
+        # blur rasterises differently, so the shots are not comparable
+        # with the ones in the Figma file. It does not drop backdrop-filter
+        # layers, which is what a parallel session and I both believed for
+        # a while: that symptom was --screenshot firing mid-paint, and it
+        # went away with the protocol, not with the flag.
         self.proc = subprocess.Popen(
-            [CHROME, '--headless', '--use-angle=metal', '--hide-scrollbars',
+            [CHROME, '--headless', '--hide-scrollbars',
              '--no-first-run', '--no-default-browser-check', '--mute-audio',
              '--remote-debugging-port=0', f'--user-data-dir={self.profile}',
              *extra_args, 'about:blank'],

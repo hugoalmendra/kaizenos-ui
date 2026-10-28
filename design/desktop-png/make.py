@@ -112,6 +112,9 @@ def main():
     finally:
         b.close()
 
+    if len(done) != len(todo):
+        raise SystemExit(f'only {len(done)} of {len(todo)} screens rendered')
+
     size = {i: (w, h) for i, w, h in done}
     if not wanted:
         (HERE / 'index.json').write_text(json.dumps(layout(size), indent=1) + '\n')

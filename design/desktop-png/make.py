@@ -1,103 +1,100 @@
 #!/usr/bin/env python3
 """Render every desktop screen to a PNG for the Figma reference file.
 
-Mobile is 45 files, one artboard each, so make.py there is a loop over a
-directory. Desktop is one running prototype, so each screen is a state:
-a throwaway copy of mentor.html carries a driver that puts the app into
-that state, and headless Chrome runs the clock forward and takes the
-shot. Standalone pages (the landing page, the forged documents, the
-email templates, the legal pages) are measured first and captured whole.
-
     python3 design/desktop-png/make.py [id ...]
 
-Takes about three minutes for all of them. Nothing here reaches a
-network; the prototype's own calls fail and are caught where they are
-made, which is the same thing that happens with the Wi-Fi off.
+Mobile is 45 static artboards, one file each, so make.py there is a loop
+over a directory. Desktop has no artboards — it has two running
+prototypes, index.html (sign-in and the founder intake) and mentor.html
+(the app) — so a screen here is a state: `screens.py` names it and the
+recipe that reaches it, `driver.js` drives the app's own hooks to get
+there, and this takes the picture.
+
+Chrome is driven over the DevTools protocol rather than with
+`--headless --screenshot`. That flag decides for itself when a page is
+finished and it decides wrong: it fires mid-paint, and a panel comes
+back missing — differently on each run, so two renders of the same 71
+screens disagreed on 62 of them. Here the driver says when the state is
+set and settled and the shot is taken then.
+
+One browser serves every screen, and the driver is injected with
+Page.addScriptToEvaluateOnNewDocument, so nothing is written into the
+repo to carry it and two runs at once cannot collide. Takes about three
+minutes for all 71. `index.json` comes out alongside, carrying each
+render's title, page, grid position, source and state recipe.
+
+Nothing reaches a network. The prototype's own calls fail and are caught
+where they are made, which is what happens with the Wi-Fi off anyway.
 """
 import json
-import re
-import shutil
-import subprocess
 import sys
-import tempfile
-from concurrent.futures import ThreadPoolExecutor
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+from cdp import Browser  # noqa: E402
 from screens import SCREENS  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
-OUT = Path(__file__).parent / 'png'
-CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+HERE = Path(__file__).parent
+ROOT = HERE.resolve().parents[1]
+OUT = HERE / 'png'
 SCALE = 2
-BUDGET = 2500          # virtual ms — the clock runs forward this far, fast
-MEASURE_BUDGET = 2500
 MAX_FULL_H = 12000     # a page taller than this is a mistake, not a page
 COLS, GAP = 4, 140     # the grid the frames land on in Figma
 
-# scrollHeight believes whatever min-height the page claims, which on a
-# centred card is a screenful of nothing under it. The real bottom is the
-# lowest thing actually drawn.
-TAG = '<script src="__shot-driver.js"></script>'
-
-MEASURE = (
-    "<script>addEventListener('load',function(){setTimeout(function(){"
-    "var b=0;document.querySelectorAll('body *').forEach(function(e){"
-    "var r=e.getBoundingClientRect();"
-    "if(r.width&&r.height)b=Math.max(b,r.bottom+window.scrollY);});"
-    "document.title='KH:'+Math.ceil(b+40);},600);});</script>"
-)
+READY = "document.documentElement.getAttribute('data-shot-ready')"
+HEIGHT = "+document.documentElement.getAttribute('data-shot-height')"
 
 
-def chrome(url, out, w, h, budget=BUDGET, dump=False):
-    # Metal, not --disable-gpu. Half this interface is glass: the HUD
-    # rail, the modal scrim and the panels all sit on backdrop-filter,
-    # and software rasterisation drops those layers entirely — the shot
-    # comes back with the stage and nothing on it.
-    cmd = [CHROME, '--headless', '--use-angle=metal', '--hide-scrollbars',
-           '--no-first-run', '--no-default-browser-check',
-           f'--window-size={w},{h}', f'--virtual-time-budget={budget}']
-    if dump:
-        cmd.append('--dump-dom')
-    else:
-        cmd += [f'--force-device-scale-factor={SCALE}', f'--screenshot={out}']
-    cmd.append(url)
-    r = subprocess.run(cmd, capture_output=True, text=True)
-    return r.stdout
+def driver_source():
+    recipes = {s['id']: s['recipe'] for s in SCREENS if s['recipe'] is not None}
+    return 'window.__RECIPES = ' + json.dumps(recipes) + ';\n' + (HERE / 'driver.js').read_text()
 
 
-def measure(path: Path, w: int) -> int:
-    """How tall the page actually runs, asked of the page itself."""
-    src = path.read_text()
-    probe = path.with_name(path.stem + '.__measure.html')
-    probe.write_text(src.replace('</head>', MEASURE + '</head>', 1)
-                     if '</head>' in src else MEASURE + src)
-    try:
-        dom = chrome(probe.as_uri(), None, w, 900, MEASURE_BUDGET, dump=True)
-    finally:
-        probe.unlink(missing_ok=True)
-    m = re.search(r'<title>KH:(\d+)</title>', dom)
-    return min(int(m.group(1)), MAX_FULL_H) if m else 900
-
-
-def shoot(s, harness):
+def shoot(b, s):
     out = OUT / (s['id'] + '.png')
-    if s['recipe'] is not None and s['src'] in harness:
-        url = harness[s['src']].as_uri() + '?shot=' + s['id']
-        h = s['h']
-        if s['full']:
-            dom = chrome(url, None, s['w'], s['h'], MEASURE_BUDGET, dump=True)
-            found = re.search(r'<title>KH:(\d+)</title>', dom)
-            if found:
-                h = max(s['h'], min(int(found.group(1)), MAX_FULL_H))
-        chrome(url, out, s['w'], h)
-    else:
-        path = ROOT / s['src']
-        h = measure(path, s['w'])
-        chrome(path.as_uri(), out, s['w'], h)
-    if not out.exists():
-        raise RuntimeError('no png for ' + s['id'])
+    url = (ROOT / s['src']).as_uri() + '?shot=' + s['id']
+
+    # First pass at the nominal size: the state has to exist before the
+    # page can say how tall it is.
+    b.viewport(s['w'], s['h'], SCALE)
+    if not b.goto(url, READY):
+        raise RuntimeError('never became ready: ' + s['id'])
+
+    h = s['h']
+    if s['full']:
+        measured = b.evaluate(HEIGHT)
+        h = max(s['h'], min(int(measured), MAX_FULL_H))
+        if h != s['h']:
+            # Re-lay it out at its real height and let it settle again,
+            # so nothing is half-way through a reflow in the picture.
+            b.viewport(s['w'], h, SCALE)
+            time.sleep(0.3)
+
+    b.screenshot(out)
+    if not out.exists() or out.stat().st_size < 4096:
+        raise RuntimeError('implausible png for ' + s['id'])
     return s['id'], s['w'], h
+
+
+def layout(size):
+    """Each page is its own board, four frames to a row."""
+    index, by_page = [], {}
+    for s in SCREENS:
+        by_page.setdefault(s['page'], []).append(s)
+    for page, group in by_page.items():
+        col, x, y, row_h = 0, 0, 0, 0
+        for s in group:
+            w, h = size.get(s['id'], (s['w'], s['h']))
+            if col == COLS:
+                col, x, y, row_h = 0, 0, y + row_h + GAP, 0
+            index.append(dict(id=s['id'], png=s['id'] + '.png', title=s['title'],
+                              page=page, x=x, y=y, w=w, h=h,
+                              source=s['src'], state=s['recipe'] or None))
+            col += 1
+            x += w + GAP
+            row_h = max(row_h, h)
+    return index
 
 
 def main():
@@ -105,47 +102,19 @@ def main():
     todo = [s for s in SCREENS if not wanted or s['id'] in wanted]
     OUT.mkdir(exist_ok=True)
 
-    # A harness has to sit beside the page it copies or every relative
-    # path in it breaks. They are deleted again below, whatever happens.
-    driver = ROOT / '__shot-driver.js'
-    recipes = {s['id']: s['recipe'] for s in SCREENS if s['recipe'] is not None}
-    driver.write_text('window.__RECIPES = ' + json.dumps(recipes) + ';\n'
-                      + (Path(__file__).parent / 'driver.js').read_text())
-    harness = {}
-    for src in sorted({s['src'] for s in SCREENS if s['recipe']}):
-        page = ROOT / src
-        h = page.with_name(page.stem + '.__shot.html')
-        h.write_text(page.read_text().replace('</head>', TAG + '</head>', 1))
-        harness[src] = h
-
+    b = Browser()
     try:
-        with ThreadPoolExecutor(max_workers=4) as pool:
-            done = list(pool.map(lambda s: shoot(s, harness), todo))
+        b.on_new_document(driver_source())
+        done = []
+        for i, s in enumerate(todo, 1):
+            done.append(shoot(b, s))
+            print('%3d/%d  %s' % (i, len(todo), s['id']), flush=True)
     finally:
-        for h in harness.values():
-            h.unlink(missing_ok=True)
-        driver.unlink(missing_ok=True)
+        b.close()
 
     size = {i: (w, h) for i, w, h in done}
-
-    # Lay the grid out per page, so a page reads as its own board.
-    index, by_page = [], {}
-    for s in SCREENS:
-        by_page.setdefault(s['page'], []).append(s)
-    for page, group in by_page.items():
-        rows, x, y, row_h = [], 0, 0, 0
-        for s in group:
-            w, h = size.get(s['id'], (s['w'], s['h']))
-            if len(rows) == COLS:
-                x, y, row_h, rows = 0, y + row_h + GAP, 0, []
-            index.append(dict(id=s['id'], png=s['id'] + '.png', title=s['title'],
-                              page=page, x=x, y=y, w=w, h=h,
-                              source=s['src'], state=s['recipe'] or None))
-            rows.append(s)
-            x += w + GAP
-            row_h = max(row_h, h)
-
-    (Path(__file__).parent / 'index.json').write_text(json.dumps(index, indent=1) + '\n')
+    if not wanted:
+        (HERE / 'index.json').write_text(json.dumps(layout(size), indent=1) + '\n')
     print(f'{len(done)} screens → {OUT}')
 
 

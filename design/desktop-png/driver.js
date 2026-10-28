@@ -1,21 +1,40 @@
-/* Shot driver — injected into a throwaway copy of mentor.html.
+/* Shot driver — evaluated on every new document by make.py over CDP.
  *
- * It is never served: make.py writes the copy, takes the shots and
- * deletes both. Every helper drives the app through a hook the app
- * already exposes, so a screen here is the real state and not a
- * hand-built likeness of one.
+ * Nothing is written into the repo to carry it: Chrome is told to run
+ * this before any of the page's own scripts, so the real mentor.html
+ * and index.html are the ones photographed. Every helper drives the app
+ * through a hook the app already exposes, so a screen here is the real
+ * state and not a hand-built likeness of one.
+ *
+ * When the state is set and settled it raises `data-shot-ready` on
+ * <html> and puts the page's true height in `data-shot-height`. The
+ * renderer waits for that and only then takes the shot — the whole
+ * point of the exercise, since Chrome's own --screenshot fires
+ * mid-paint and drops whole panels.
  */
 (function () {
+  // A seeded Math.random, installed before any module runs. The star
+  // field scatters itself randomly, so without this no two renders of
+  // the same screen are the same file, and a re-run cannot be diffed
+  // against the last one to see what actually changed.
+  var seed = 0x2f6e2b1;
+  Math.random = function () {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    return seed / 0x7fffffff;
+  };
+
   // Chrome takes the shot early in virtual time, so the state has to be
   // in place early and nothing may still be easing towards it. Killing
   // transitions is what makes a shot the state rather than the way in.
   var FREEZE_CSS = '*,*::before,*::after{transition:none !important}';
-  var SETTLE = 3000;   // how long a recipe's own timers get to finish
+  var SETTLE = 1800;   // real ms a recipe's own chains get to finish
+                       // (the longest is the edit apply, at 1200)
   var params = new URLSearchParams(location.search);
   var id = params.get('shot');
   if (!id) return;
-  var recipe = (window.__RECIPES || {})[id];
-  if (recipe === undefined) return;
+  // A page with no recipe — a forged document, a legal page — still
+  // wants the seed, the consent answer and the readiness signal.
+  var recipe = (window.__RECIPES || {})[id] || '';
 
   // ── Holding the clock still ────────────────────────────────
   // --screenshot keeps the page alive well past the point where
@@ -155,6 +174,14 @@
 
     panel: function (name) { window.KaisoPanels.open(name); },
 
+    // Focusing the ask input scrolls the panel, and the document it is
+    // asking about ends up above the viewport. The founder would scroll
+    // back; the camera has to be told to.
+    top: function (sel) {
+      var el = document.querySelector(sel);
+      if (el) el.scrollTop = 0;
+    },
+
     acct: function (view) {
       window.KaisoPanels.open('account');
       window.KaisoAccount.show(view);
@@ -199,16 +226,18 @@
 
   function run() {
     try { eval(recipe); } catch (e) { console.error('[shot] ' + id + ': ' + e.message); }
-    // How tall the state turned out, for the pass that takes the shot.
-    // The entry flow scrolls the document, so a screenful is not the
-    // screen; the app does not, and ignores this.
+  }
+
+  // How tall the state turned out. The entry flow and the standalone
+  // documents scroll the page, so a screenful is not the screen; the
+  // app does not scroll, and ignores this.
+  function height() {
     var bottom = 0;
     document.querySelectorAll('body *').forEach(function (el) {
       var r = el.getBoundingClientRect();
       if (r.width && r.height) bottom = Math.max(bottom, r.bottom + window.scrollY);
     });
-    document.title = 'KH:' + Math.ceil(bottom + 40);
-    document.documentElement.setAttribute('data-shot-ready', id);
+    return Math.ceil(bottom + 40);
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -218,6 +247,11 @@
     run();
     // On the native timer, so a recipe that called K.freeze() cannot
     // drop the hold that is meant to come after it.
-    NT(hold, SETTLE);
+    NT(function () {
+      hold();
+      var el = document.documentElement;
+      el.setAttribute('data-shot-height', String(height()));
+      el.setAttribute('data-shot-ready', id || 'page');
+    }, SETTLE);
   });
 })();

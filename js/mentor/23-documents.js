@@ -154,6 +154,7 @@
         doc.state = facts.length ? 'read' : 'nothing';
         facts.forEach(apply);
         render();
+        markProvenance();
         announce(doc);
       };
 
@@ -181,7 +182,13 @@
       fact.stepIndex = step;
       // A guess from the filename is not an answer. It marks the node as
       // half-known and leaves the question standing until confirmed.
-      W.fillNode(step, { pct: fact.sure ? 100 : 50, source: fact.source, value: fact.value });
+      const r = W.fillNode(step, {
+        pct: fact.sure ? 100 : 50, source: fact.source, value: fact.value,
+      });
+      // The founder already answered this one out loud and the document
+      // says something else. Neither of them gets to win quietly: Kaiso
+      // asks which is right, so the conflict stays an open question.
+      fact.conflict = r === 'conflict';
     }
 
     function announce(doc) {
@@ -206,23 +213,30 @@
     };
 
     function render() {
-      const facts = docs.reduce((n, d) => n + d.facts.length, 0);
-      const sure = docs.reduce((n, d) => n + d.facts.filter((f) => f.sure).length, 0);
+      const all = docs.reduce((a, d) => a.concat(d.facts), []);
+      const answered = all.filter((f) => f.sure && !f.conflict).length;
+      const clash = all.filter((f) => f.conflict).length;
+      const open = all.length - answered - clash;
       emptyEl.hidden = docs.length > 0;
       if (countEl) {
-        countEl.textContent = !facts ? ''
-          : sure + ' answered · ' + (facts - sure) + ' to confirm';
+        const bits = [];
+        if (answered) bits.push(answered + ' answered');
+        if (open) bits.push(open + ' to confirm');
+        if (clash) bits.push(clash + ' to check');
+        countEl.textContent = bits.join(' · ');
       }
 
       listEl.innerHTML = docs.map((d) => {
         // A guess from the filename has answered nothing yet, and a row
         // that counts it as an answer is the panel telling the founder
         // something it has not earned.
-        const sure = d.facts.filter((f) => f.sure).length;
-        const open = d.facts.length - sure;
+        const sure = d.facts.filter((f) => f.sure && !f.conflict).length;
+        const clash = d.facts.filter((f) => f.conflict).length;
+        const open = d.facts.length - sure - clash;
         const parts = [];
         if (sure) parts.push(sure + (sure === 1 ? ' answer' : ' answers'));
         if (open) parts.push(open + ' to confirm');
+        if (clash) parts.push(clash + ' to check');
         const sub = d.state === 'read'
           ? parts.join(' · ') + ' · ' + fmtSize(d.size)
           : STATE_TEXT[d.state] || '';
@@ -235,20 +249,27 @@
 
       const rows = [];
       docs.forEach((d) => d.facts.forEach((f, i) => {
-        const cls = 'doc-fact' + (f.sure ? '' : ' unsure');
+        const cls = 'doc-fact' + (f.conflict ? ' clash' : f.sure ? '' : ' unsure');
+        const src = f.conflict ? f.source
+          : f.sure ? f.source
+          : 'likely in ' + (f.kind || f.source);
+        const note = f.conflict
+          ? 'You already told Kaiso something else. It will ask which is right.'
+          : f.sure ? 'Kaiso won’t ask about this.'
+          : 'Kaiso will still ask, briefly.';
         rows.push('<div class="' + cls + '">' +
           '<div class="doc-fact-head">' +
             '<span class="doc-fact-node">' + esc(f.node) + '</span>' +
-            '<span class="doc-fact-src">' + esc(f.sure ? f.source : 'likely in ' + (f.kind || f.source)) + '</span>' +
+            (f.conflict ? '<span class="doc-fact-flag">needs checking</span>' : '') +
+            '<span class="doc-fact-src">' + esc(src) + '</span>' +
           '</div>' +
           (f.value
             ? '<blockquote class="doc-fact-value">' + esc(f.value) + '</blockquote>'
             : '<p class="doc-fact-value empty">Kaiso will ask you to confirm this one — it could not read the file, only recognise what it is.</p>') +
           '<div class="doc-fact-acts">' +
-            '<span class="doc-fact-note">' + (f.sure
-              ? 'Kaiso won’t ask about this.'
-              : 'Kaiso will still ask, briefly.') + '</span>' +
-            '<button class="kbtn" type="button" data-unfill="' + d.id + ':' + i + '">Ask me anyway</button>' +
+            '<span class="doc-fact-note">' + note + '</span>' +
+            '<button class="kbtn" type="button" data-unfill="' + d.id + ':' + i + '">' +
+              (f.conflict ? 'Ignore the document' : 'Ask me anyway') + '</button>' +
           '</div>' +
         '</div>');
       }));
@@ -266,6 +287,7 @@
         });
         docs.splice(at, 1);
         render();
+        markProvenance();
         return;
       }
       const unfill = e.target.closest('[data-unfill]');
@@ -279,7 +301,82 @@
         }
         doc.facts.splice(+i, 1);
         render();
+        markProvenance();
       }
+    });
+
+    /* ── Provenance, into the outputs ────────────────────
+     * A claim that came from the founder's own deck should say so where
+     * they read it, not only in the panel where it was taken. Otherwise
+     * the exec summary asserts a number nobody can trace, which is the
+     * one thing an investor-facing document cannot afford.
+     *
+     * The sections of an output are titled after the nodes they are
+     * built from, so the title is the join. One map, applied to every
+     * panel that has titled sections.
+     */
+    const SECTION_NODE = {
+      'the problem':        ['product', 'Problem'],
+      'the solution':       ['product', 'What it Is'],
+      'what it is':         ['product', 'What it Is'],
+      'how helm works':     ['product', 'What it Is'],
+      'business model':     ['finance', 'Unit Economics'],
+      'pricing':            ['finance', 'Unit Economics'],
+      'why now':            ['company', 'Why Now'],
+      'market opportunity': ['product', 'Distribution'],
+      'traction':           ['product', 'Traction'],
+      'team':               ['people', 'Co-founders'],
+      'why this team':      ['people', 'Founder Edge'],
+      'roadmap':            ['product', 'Roadmap'],
+      'use of funds':       ['finance', 'Use of Funds'],
+      'the ask':            ['finance', 'The Ask'],
+    };
+
+    const PANEL_SECTIONS = {
+      panelExec:    ['.exec-sec, .exec-band', '.exec-sec-title'],
+      panelLanding: ['.land-block', '.land-lbl'],
+      panelDeck:    ['.deck-slide', '.deck-title'],
+    };
+
+    function markProvenance() {
+      const W = window.KaisoWheel;
+      if (!W) return;
+      const by = {};
+      W.fills().forEach((f) => {
+        if (f.conflict || f.pct < 100) return;
+        by[f.pillar + '/' + f.node] = f.source;
+      });
+
+      Object.keys(PANEL_SECTIONS).forEach((id) => {
+        const panel = document.getElementById(id);
+        if (!panel) return;
+        const [secSel, titleSel] = PANEL_SECTIONS[id];
+        panel.querySelectorAll(secSel).forEach((sec) => {
+          const t = sec.querySelector(titleSel);
+          const old = sec.querySelector('.doc-from');
+          if (old) old.remove();
+          if (!t) return;
+          // Titles carry their own punctuation ("Roadmap · 12 months"),
+          // so match on the part before it.
+          const key = t.textContent.split('·')[0].trim().toLowerCase();
+          const node = SECTION_NODE[key];
+          const src = node && by[node[0] + '/' + node[1]];
+          sec.classList.toggle('from-doc', !!src);
+          if (!src) return;
+          const tag = document.createElement('span');
+          tag.className = 'doc-from';
+          tag.textContent = 'from ' + src;
+          tag.title = 'Kaiso read this from ' + src;
+          t.appendChild(tag);
+        });
+      });
+    }
+
+    // Marked when a panel opens, so a document added mid-session shows
+    // up in an output the founder has already looked at once.
+    window.addEventListener('kaiso:open-forge', markProvenance);
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-panel], .lib-item .kbtn')) setTimeout(markProvenance, 0);
     });
 
     /* ── Beat 1: the way in ──────────────────────────────── */
@@ -321,8 +418,14 @@
     // What the harness needs to stop asking what it has been told.
     window.KaisoDocs = {
       documents: () => docs.map((d) => ({ name: d.name, facts: d.facts.length })),
+      // Only settled facts. A filename guess has answered nothing, and a
+      // contradiction is a question Kaiso still has to ask.
       known: () => docs.flatMap((d) => d.facts
-        .filter((f) => f.sure)
+        .filter((f) => f.sure && !f.conflict)
+        .map((f) => ({ pillar: f.pillar, node: f.node, value: f.value, source: f.source }))),
+      // What Kaiso has to raise: the document disagrees with the founder.
+      conflicts: () => docs.flatMap((d) => d.facts
+        .filter((f) => f.conflict)
         .map((f) => ({ pillar: f.pillar, node: f.node, value: f.value, source: f.source }))),
       add: take,
     };

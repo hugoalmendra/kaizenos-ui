@@ -54,6 +54,17 @@
       body { display: block !important; padding: 28px;
         font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
       @media print { body { padding: 0; } }
+
+      /* Where a claim came from, carried into the document itself.
+         The panel shows it as a gold chip against the dark stage; on
+         white paper the same fact is a quiet footnote beside the
+         heading. An investor reading the PDF can trace the number --
+         which is the whole reason the provenance is kept. */
+      .doc-from {
+        margin-left: 8px; font-size: 8.5px; font-weight: 500;
+        font-style: italic; letter-spacing: 0.04em; text-transform: none;
+        color: #8a7434 !important; white-space: nowrap;
+      }
     `;
 
     // Every output declares its own page. Deliberately not in BASE_PRINT:

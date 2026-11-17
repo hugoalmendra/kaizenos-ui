@@ -123,6 +123,11 @@ SCREENS = [
     app('d5', 'Documents · nothing yet', 'D · Library', ENGAGE + "K.panel('docs');"),
     app('d6', 'Documents · what Kaiso read', 'D · Library', READ + "K.panel('docs');"),
     app('d7', 'Your plan · filled from a document', 'D · Library', READ + "K.panel('kos');"),
+    # The founder answered Mission out loud, then handed over a deck that
+    # says something else. Neither wins quietly.
+    app('d8', 'Documents · the deck disagrees', 'D · Library',
+        ENGAGE + "K.exchanges(1); K.quiet();"
+        + "K.doc('helm-pitch-deck.md', " + json.dumps(DECK) + ");K.panel('docs');"),
 
     # ── E · Outputs ─────────────────────────────────────────────
     app('e1', 'Elevator Pitch', 'E · Outputs', TALK + "K.panel('pitch');"),
@@ -136,6 +141,8 @@ SCREENS = [
         TALK + "K.panel('exec'); K.aim('#panelExec .exec-sec');"),
     app('e9', 'Ask Kaiso to change · the ask', 'E · Outputs',
         TALK + "K.panel('exec'); K.click('#panelExec .kedit-open'); K.top('#panelExec');"),
+    app('e11', 'Executive Summary · claims traced to the deck', 'E · Outputs',
+        READ + "K.panel('exec');"),
     app('e10', 'Ask Kaiso to change · changed', 'E · Outputs',
         TALK + "K.panel('exec'); K.click('#panelExec .kedit-open');"
         "K.click('#panelExec .kedit-chip'); K.top('#panelExec');"),

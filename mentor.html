@@ -42,6 +42,7 @@
 <link rel="stylesheet" href="css/mentor/33-live-caption.css">
 <link rel="stylesheet" href="css/mentor/34-forge-flare.css">
 <link rel="stylesheet" href="css/mentor/35-ask-kaiso-edit.css">
+<link rel="stylesheet" href="css/mentor/36-documents.css">
 <link rel="stylesheet" href="css/shared/consent.css">
 <link rel="stylesheet" href="css/shared/loader.css">
 </head>
@@ -113,6 +114,14 @@
     <button class="chat-mic" type="button" id="chatMic" aria-label="Mute microphone" title="Mute microphone">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
         <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/>
+      </svg>
+    </button>
+    <button class="chat-attach" type="button" id="chatAttach"
+            aria-label="Give Kaiso a document" title="Give Kaiso a document">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+           stroke-width="1.8" aria-hidden="true">
+        <path d="M20 11.5 11 20a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L8.8 17.6a1.6 1.6 0 0 1-2.3-2.3l8-8"
+              stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>
     <input id="chatInput" type="text" placeholder="Type" aria-label="Message Kaiso"/>
@@ -411,6 +420,9 @@
     </svg>
   </button>
 </div>
+<input type="file" id="docsFile" multiple hidden
+       accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,.md,.markdown,.json,.html,.htm,.rtf,.pages,.key,.numbers"/>
+<div class="docs-veil" aria-hidden="true"><span>Drop it anywhere &mdash; Kaiso will read it</span></div>
 <div class="time-banner" id="timeBanner" role="status" hidden>
   <span class="tb-dot" aria-hidden="true"></span>
   <span class="tb-txt"><b id="tbLeft">12 min left</b> &mdash; add time so Kaiso doesn&rsquo;t stop mid-thought.</span>
@@ -429,6 +441,10 @@
   <button id="companyOverviewBtn" type="button">
     <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11" stroke-linejoin="round"/><path d="M9 20v-6h6v6" stroke-linejoin="round"/></svg></span>
     Your Company
+  </button>
+  <button data-panel="docs">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8l4 4v13H6z" stroke-linejoin="round"/><path d="M14 3.5v4h4" stroke-linejoin="round"/><path d="M9 12.5h6M9 16h4" stroke-linecap="round"/></svg></span>
+    Your Documents
   </button>
   <button data-panel="feedback">
     <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" stroke-linejoin="round"/></svg></span>
@@ -529,6 +545,34 @@
       <button class="kbtn" id="deckOpenBtn" disabled>Forging</button>
     </div>
     <p class="kp-note">Stored in your account — always yours, even between sessions.</p>
+  </section>
+
+  <!-- Documents — what the founder has already written down -->
+  <section class="kpanel kpanel-docs" id="panelDocs" aria-label="Your documents">
+    <div class="kp-head">
+      <span class="tm-dot"></span>
+      <span class="kp-title">Kaiso &middot; Documents</span>
+      <span class="docs-count" id="docsCount"></span>
+      <button class="kp-close" data-close aria-label="Close">&#10005;</button>
+    </div>
+    <p class="kp-sub">Hand Kaiso what you have already written. Anything it can place
+      fills in that part of your plan, and it stops asking you for it.</p>
+
+    <div class="docs-drop" data-docs-add role="button" tabindex="0">
+      <span class="docs-drop-mark" aria-hidden="true">&#8595;</span>
+      <b>Add a document</b>
+      <span>or drop one anywhere on the stage &middot; deck, cap table, model, roadmap</span>
+    </div>
+
+    <div class="docs-list" id="docsList"></div>
+
+    <p class="docs-empty" id="docsEmpty">Nothing yet. A pitch deck answers five or six
+      nodes on its own.</p>
+
+    <div class="docs-facts" id="docsFacts"></div>
+
+    <p class="kp-note">Read in your browser &mdash; nothing is uploaded in this prototype.
+      Kaiso shows you every answer it took, and you can hand any of them back.</p>
   </section>
 
   <!-- KOS plan — node progress (opened from top-centre indicator) -->
@@ -1603,6 +1647,7 @@
 <script src="js/mentor/20-scribe-sessions.js"></script>
 <script src="js/mentor/21-live-caption.js"></script>
 <script src="js/mentor/22-ask-kaiso-edit.js"></script>
+<script src="js/mentor/23-documents.js"></script>
 <script src="js/shared/consent.js"></script>
 
 </body>

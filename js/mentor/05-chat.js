@@ -155,7 +155,14 @@
         const resp = await fetch(cfg.apiUrl + '/api/chat-stream', {
           method: 'POST',
           headers: reqHeaders(),
-          body: JSON.stringify({ text, history: chatHistory.slice(-20) }),
+          // Everything a document already answered travels with the turn.
+          // Without it the harness asks for the revenue that is sitting
+          // in the model the founder handed over a minute ago (KAIZ-241).
+          body: JSON.stringify({
+            text,
+            history: chatHistory.slice(-20),
+            known: window.KaisoDocs ? window.KaisoDocs.known() : [],
+          }),
         });
         if (!resp.ok || !resp.body) {
           throw new Error('HTTP ' + resp.status);

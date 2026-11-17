@@ -504,6 +504,42 @@
   "state": "K.engage(); K.exchanges(12); K.quiet();window.KaisoCompany.open();"
  },
  {
+  "id": "d5",
+  "png": "d5.png",
+  "title": "Documents \u00b7 nothing yet",
+  "page": "D \u00b7 Library",
+  "x": 0,
+  "y": 1040,
+  "w": 1440,
+  "h": 900,
+  "source": "mentor.html",
+  "state": "K.engage();K.panel('docs');"
+ },
+ {
+  "id": "d6",
+  "png": "d6.png",
+  "title": "Documents \u00b7 what Kaiso read",
+  "page": "D \u00b7 Library",
+  "x": 1580,
+  "y": 1040,
+  "w": 1440,
+  "h": 900,
+  "source": "mentor.html",
+  "state": "K.engage();K.exchanges(3); K.quiet();K.doc('helm-pitch-deck.md', \"Our mission is to give every independent store the operations team it cannot afford to hire. The problem: independent online stores lose 12+ hours a week stitching together inventory, fulfillment and customer support across disconnected tools. We are building an AI operations layer that connects a store's existing tools and runs the repetitive work. Why now: agentic AI finally makes reliable low-cost operations automation possible. Traction: 11 of 14 agencies asked for this unprompted, and we are at 18k MRR across 42 paying customers. We are raising $2.5M to reach Series A metrics. Runway: 14 months of cash at the current burn rate. Our moat is the integration graph.\");K.doc('cap-table.xlsx', '');K.panel('docs');"
+ },
+ {
+  "id": "d7",
+  "png": "d7.png",
+  "title": "Your plan \u00b7 filled from a document",
+  "page": "D \u00b7 Library",
+  "x": 3160,
+  "y": 1040,
+  "w": 1440,
+  "h": 900,
+  "source": "mentor.html",
+  "state": "K.engage();K.exchanges(3); K.quiet();K.doc('helm-pitch-deck.md', \"Our mission is to give every independent store the operations team it cannot afford to hire. The problem: independent online stores lose 12+ hours a week stitching together inventory, fulfillment and customer support across disconnected tools. We are building an AI operations layer that connects a store's existing tools and runs the repetitive work. Why now: agentic AI finally makes reliable low-cost operations automation possible. Traction: 11 of 14 agencies asked for this unprompted, and we are at 18k MRR across 42 paying customers. We are raising $2.5M to reach Series A metrics. Runway: 14 months of cash at the current burn rate. Our moat is the integration graph.\");K.doc('cap-table.xlsx', '');K.panel('kos');"
+ },
+ {
   "id": "e1",
   "png": "e1.png",
   "title": "Elevator Pitch",

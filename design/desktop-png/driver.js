@@ -174,6 +174,13 @@
 
     panel: function (name) { window.KaisoPanels.open(name); },
 
+    // Hand Kaiso a document, the way a drop would. The text is the
+    // thing being photographed, so it is a real read and not a fixture
+    // posing as one.
+    doc: function (name, text) {
+      window.KaisoDocs.add([new File([text], name, { type: 'text/markdown' })]);
+    },
+
     // Focusing the ask input scrolls the panel, and the document it is
     // asking about ends up above the viewport. The founder would scroll
     // back; the camera has to be told to.

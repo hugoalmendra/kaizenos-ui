@@ -63,15 +63,20 @@
         // ever said it out loud.
         return {
           pct: 100,
-          status: filled ? 'From ' + filled.source + '.' : 'Complete.',
+          status: filled
+            ? (filled.conflict ? 'You said otherwise — Kaiso will ask.'
+                               : 'From ' + filled.source + '.')
+            : 'Complete.',
           done: true, current: false, filled,
         };
       }
       if (filled) {
         return {
           pct: filled.pct,
-          status: 'From ' + filled.source + '.',
-          done: filled.pct >= 100,
+          status: filled.conflict
+            ? 'You said otherwise — Kaiso will ask.'
+            : 'From ' + filled.source + '.',
+          done: filled.pct >= 100 && !filled.conflict,
           current: stepIndex === idx,
           filled,
         };
@@ -117,10 +122,14 @@
         const rows = nodes.map((s) => {
           const st = stepState(s.stepIndex);
           const cls = ['plan-node', st.done ? 'done' : '', st.current ? 'current' : '',
-            st.filled ? 'from-doc' : ''].filter(Boolean).join(' ');
+            st.filled ? 'from-doc' : '',
+            st.filled && st.filled.conflict ? 'in-conflict' : ''].filter(Boolean).join(' ');
           const style = st.current ? ' style="--pillar-color:' + s.pillar.color + '"' : '';
-          const mark = st.filled ? '<span class="plan-node-doc" title="Read from ' +
-            esc(st.filled.source) + '">doc</span>' : '';
+          const mark = !st.filled ? ''
+            : st.filled.conflict
+              ? '<span class="plan-node-doc conflict" title="' + esc(st.filled.source) +
+                ' says something else">check</span>'
+              : '<span class="plan-node-doc" title="Read from ' + esc(st.filled.source) + '">doc</span>';
           return '<div class="' + cls + '" data-step="' + s.stepIndex + '"' + style + '>' +
             '<div class="plan-node-main">' +
               '<span class="plan-node-name">' + s.node + mark + '</span>' +
@@ -241,14 +250,21 @@
           s.pillar.id === pillarId &&
           s.node.toLowerCase() === String(nodeLabel).toLowerCase());
       },
+      // True when the founder already answered this one out loud. A
+      // document landing on it is a contradiction, not an answer, and
+      // the caller needs to know before it silences anything.
+      spokenAt(stepIndex) { return nodePct[stepIndex] >= 100; },
+
       fillNode(stepIndex, { pct = 100, source = 'a document', value = '' } = {}) {
         if (stepIndex < 0 || stepIndex >= STEPS.length) return false;
-        nodeFill[stepIndex] = { pct, source, value };
+        const conflict = nodePct[stepIndex] >= 100;
+        nodeFill[stepIndex] = { pct, source, value, conflict };
         // If the wheel is sitting on a node a document has just answered,
-        // move off it rather than ask the question anyway.
-        if (stepIndex === idx && pct >= 100) idx = nextOpen(idx + 1);
+        // move off it rather than ask the question anyway. A conflict is
+        // the exception: that question is not settled, it is reopened.
+        if (stepIndex === idx && pct >= 100 && !conflict) idx = nextOpen(idx + 1);
         render();
-        return true;
+        return conflict ? 'conflict' : true;
       },
       clearNode(stepIndex) {
         if (!nodeFill[stepIndex]) return false;
@@ -270,6 +286,7 @@
           out.push({
             stepIndex: i, pillar: STEPS[i].pillar.id, pillarName: STEPS[i].pillar.name,
             node: STEPS[i].node, pct: f.pct, source: f.source, value: f.value,
+            conflict: !!f.conflict,
           });
         });
         return out;

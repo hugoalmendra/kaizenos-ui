@@ -38,6 +38,9 @@
     const panelKos  = document.getElementById('panelKos');
     if (!ind || !pillarEl) return;
 
+    const esc = (v) => String(v == null ? '' : v).replace(/[<>&"]/g, (c) => (
+      { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+
     function hexToRgba(hex, a) {
       const n = parseInt(hex.slice(1), 16);
       return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
@@ -46,9 +49,32 @@
     let idx = 0;
     const nodePct = new Array(STEPS.length).fill(0);
 
+    // Talking fills nodes in order. A document does not: a cap table
+    // answers Co-founders and Org Shape and nothing in between, so a
+    // fill has to be able to land anywhere in the wheel and stay there
+    // while the conversation walks past it.
+    const nodeFill = new Array(STEPS.length).fill(null);
+
     function stepState(stepIndex) {
+      const filled = nodeFill[stepIndex];
       if (stepIndex < idx) {
-        return { pct: 100, status: 'Complete.', done: true, current: false };
+        // A node the conversation has walked past still says where its
+        // answer came from. "Complete." would hide the fact that nobody
+        // ever said it out loud.
+        return {
+          pct: 100,
+          status: filled ? 'From ' + filled.source + '.' : 'Complete.',
+          done: true, current: false, filled,
+        };
+      }
+      if (filled) {
+        return {
+          pct: filled.pct,
+          status: 'From ' + filled.source + '.',
+          done: filled.pct >= 100,
+          current: stepIndex === idx,
+          filled,
+        };
       }
       if (stepIndex === idx) {
         const pct = nodePct[stepIndex] || 0;
@@ -57,9 +83,10 @@
           status: pct > 0 ? 'In progress…' : 'Not started yet.',
           done: false,
           current: true,
+          filled: null,
         };
       }
-      return { pct: 0, status: 'Not started yet.', done: false, current: false };
+      return { pct: 0, status: 'Not started yet.', done: false, current: false, filled: null };
     }
 
     function overallReady() {
@@ -89,12 +116,15 @@
         const nodes = STEPS.filter((s) => s.pillar.id === p.id);
         const rows = nodes.map((s) => {
           const st = stepState(s.stepIndex);
-          const cls = ['plan-node', st.done ? 'done' : '', st.current ? 'current' : ''].filter(Boolean).join(' ');
+          const cls = ['plan-node', st.done ? 'done' : '', st.current ? 'current' : '',
+            st.filled ? 'from-doc' : ''].filter(Boolean).join(' ');
           const style = st.current ? ' style="--pillar-color:' + s.pillar.color + '"' : '';
+          const mark = st.filled ? '<span class="plan-node-doc" title="Read from ' +
+            esc(st.filled.source) + '">doc</span>' : '';
           return '<div class="' + cls + '" data-step="' + s.stepIndex + '"' + style + '>' +
             '<div class="plan-node-main">' +
-              '<span class="plan-node-name">' + s.node + '</span>' +
-              '<span class="plan-node-status">' + st.status + '</span>' +
+              '<span class="plan-node-name">' + s.node + mark + '</span>' +
+              '<span class="plan-node-status">' + esc(st.status) + '</span>' +
             '</div>' +
             '<span class="plan-node-pct">' + st.pct + '%</span>' +
           '</div>';
@@ -112,12 +142,21 @@
       renderPlan();
     }
 
+    // Walking on from the node just answered. Anything a document has
+    // already filled is stepped over rather than asked about — that is
+    // the whole point of having read it.
+    function nextOpen(from) {
+      let i = from;
+      while (i < STEPS.length - 1 && nodeFill[i] && nodeFill[i].pct >= 100) i += 1;
+      return i;
+    }
+
     function advance() {
       if (idx < STEPS.length) {
         nodePct[idx] = 100;
         if (idx < STEPS.length - 1) {
-          idx += 1;
-          nodePct[idx] = Math.max(nodePct[idx], 25);
+          idx = nextOpen(idx + 1);
+          if (!nodeFill[idx]) nodePct[idx] = Math.max(nodePct[idx], 25);
         }
       }
       render();
@@ -126,6 +165,7 @@
     function reset() {
       idx = 0;
       nodePct.fill(0);
+      nodeFill.fill(null);
       render();
     }
 
@@ -192,6 +232,48 @@
       },
       next: advance,
       reset,
+
+      /* ── what a document knows ── */
+      // `value` is the passage the fact was read from, so the founder can
+      // see what Kaiso thinks it learned and say otherwise.
+      findStep(pillarId, nodeLabel) {
+        return STEPS.findIndex((s) =>
+          s.pillar.id === pillarId &&
+          s.node.toLowerCase() === String(nodeLabel).toLowerCase());
+      },
+      fillNode(stepIndex, { pct = 100, source = 'a document', value = '' } = {}) {
+        if (stepIndex < 0 || stepIndex >= STEPS.length) return false;
+        nodeFill[stepIndex] = { pct, source, value };
+        // If the wheel is sitting on a node a document has just answered,
+        // move off it rather than ask the question anyway.
+        if (stepIndex === idx && pct >= 100) idx = nextOpen(idx + 1);
+        render();
+        return true;
+      },
+      clearNode(stepIndex) {
+        if (!nodeFill[stepIndex]) return false;
+        nodeFill[stepIndex] = null;
+        // The wheel may have walked past this node only because the
+        // document answered it. Take the document away and nobody ever
+        // answered it, so it becomes the open question again rather
+        // than sitting there reading "Complete."
+        if (stepIndex < idx && !nodePct[stepIndex]) idx = stepIndex;
+        render();
+        return true;
+      },
+      // Everything a document has answered, for the founder's review and
+      // for the harness, so it stops asking what it has been told.
+      fills() {
+        const out = [];
+        nodeFill.forEach((f, i) => {
+          if (!f) return;
+          out.push({
+            stepIndex: i, pillar: STEPS[i].pillar.id, pillarName: STEPS[i].pillar.name,
+            node: STEPS[i].node, pct: f.pct, source: f.source, value: f.value,
+          });
+        });
+        return out;
+      },
     };
 
     window.addEventListener('kaiso:node', (e) => {

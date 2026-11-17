@@ -1,3 +1,5 @@
+import json
+
 # The desktop surface, screen by screen.
 #
 # The mobile set is 45 static artboards, one file each. Desktop is two
@@ -35,6 +37,28 @@ ENGAGE = "K.engage();"
 # readiness meter has a verdict and the wheel has moved off its first node.
 TALK = "K.engage(); K.exchanges(12); K.quiet();"
 BUY = "K.panel('plan'); K.click('#buyContinue');"
+
+# A founder three turns in who has just handed over the deck. Short
+# enough that the conversation has not yet reached the nodes the
+# document answers, which is the whole point being shown.
+DECK = (
+    'Our mission is to give every independent store the operations team it '
+    'cannot afford to hire. The problem: independent online stores lose 12+ '
+    'hours a week stitching together inventory, fulfillment and customer '
+    'support across disconnected tools. We are building an AI operations '
+    'layer that connects a store\'s existing tools and runs the repetitive '
+    'work. Why now: agentic AI finally makes reliable low-cost operations '
+    'automation possible. Traction: 11 of 14 agencies asked for this '
+    'unprompted, and we are at 18k MRR across 42 paying customers. We are '
+    'raising $2.5M to reach Series A metrics. Runway: 14 months of cash at '
+    'the current burn rate. Our moat is the integration graph.'
+)
+# json.dumps, not repr: repr picks its own quote character depending on
+# what is inside the string, so the escaping would hold or not hold
+# depending on whether the deck happened to contain an apostrophe.
+READ = (ENGAGE + "K.exchanges(3); K.quiet();"
+        + "K.doc('helm-pitch-deck.md', " + json.dumps(DECK) + ");"
+        + "K.doc('cap-table.xlsx', '');")
 
 
 SCREENS = [
@@ -96,6 +120,9 @@ SCREENS = [
     app('d2', 'Library · all six ready', 'D · Library', TALK + "K.panel('library');"),
     app('d3', 'Your plan · KOS nodes', 'D · Library', TALK + "K.panel('kos');"),
     app('d4', 'Your Company', 'D · Library', TALK + "window.KaisoCompany.open();"),
+    app('d5', 'Documents · nothing yet', 'D · Library', ENGAGE + "K.panel('docs');"),
+    app('d6', 'Documents · what Kaiso read', 'D · Library', READ + "K.panel('docs');"),
+    app('d7', 'Your plan · filled from a document', 'D · Library', READ + "K.panel('kos');"),
 
     # ── E · Outputs ─────────────────────────────────────────────
     app('e1', 'Elevator Pitch', 'E · Outputs', TALK + "K.panel('pitch');"),

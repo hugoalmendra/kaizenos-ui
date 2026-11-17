@@ -202,6 +202,8 @@
       if (panelOrg) panelOrg.classList.toggle('show', which === 'org');
       if (panelBrand) panelBrand.classList.toggle('show', which === 'brand');
       if (panelYcApply) panelYcApply.classList.toggle('show', which === 'yc');
+      const panelDocs = document.getElementById('panelDocs');
+      if (panelDocs) panelDocs.classList.toggle('show', which === 'docs');
       const panelFeedback = document.getElementById('panelFeedback');
       const panelAccount  = document.getElementById('panelAccount');
       if (panelFeedback) panelFeedback.classList.toggle('show', which === 'feedback');

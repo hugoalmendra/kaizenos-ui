@@ -109,32 +109,46 @@ waiver to their terms. Deliberately not written in: it is a real choice
 with real consequences for consumers, and it is the lawyer's call, not a
 drafting default.
 
-## The voice provider is Hume, and it does more than transcribe
+## The voice provider is ElevenLabs, and it only transcribes and speaks
 
-Hume AI runs the whole voice side: it converts speech to text, **measures
-vocal expression** — tone, pace, emphasis — and generates Kaiso's voice.
-Section 3 of the policy says all three, in that order, and says the middle
-one plainly rather than burying it. Reading emotion from someone's voice
-without telling them is the kind of omission that turns a privacy policy
-into a misrepresentation, and it is the sort of thing that gets found.
+**Changed 18 November 2026, when the voice side moved from Hume to
+ElevenLabs.** Keep the history in mind when reading older drafts of this
+file: what follows describes the current build.
 
-Two things follow that are not the policy's job to fix:
+ElevenLabs runs the whole voice side: it converts speech to text and
+generates Kaiso's voice. Two things, not three. Section 3 of the policy
+says both.
 
-- **Hume's audio retention is confirmed: none.** Hume keeps the
-  transcript and not the audio, so the strong sentence is back — the audio
-  is not stored, by us or by Hume. That is now a verified claim rather than
-  an aspiration, and it is the best sentence in the document: there is no
-  recording of anyone's voice to hand over, to leak, or to be asked for.
-- **Hume holds a copy of the transcript**, which is disclosed, and which
-  deletion has to reach. The policy says that deleting a transcript or
-  closing an account instructs Hume to delete its copy too, because
-  deleting from KaizenOS and leaving a copy elsewhere is not deleting.
-  **Make sure that call is actually wired up**, and that it is covered by
-  the 90-day commitment. This is now the open item that was Hume retention.
-- **The app should say it too, not only this page.** Under the EU AI Act,
-  people exposed to an emotion recognition system have to be told they
-  are. A line at the moment the microphone is first requested does that
-  far better than a policy nobody opens, and it is also just fair warning.
+The removal is the substantive part of this change, not the rename:
+
+- **Nothing measures vocal expression any more.** Hume read tone, pace
+  and emphasis; ElevenLabs does not, and nothing else in the build has
+  taken that over. The policy no longer discloses an emotion read because
+  there is no longer an emotion read, and section 3 now says so as a
+  negative — *we do not measure vocal expression, emotion or mood* — which
+  is worth stating outright rather than leaving as an absence a reader has
+  to notice.
+- **The EU AI Act disclosure obligation falls away with it.** The old
+  note here said the app had to tell people at the microphone prompt that
+  they were exposed to an emotion recognition system. It is not one any
+  more, so that requirement no longer applies. If expression reading ever
+  comes back, the obligation comes back with it and this file changes
+  before the build ships.
+- **The consent basis narrowed.** Microphone consent used to cover
+  hearing *and* reading expression. It now covers hearing only, and the
+  legal-basis table says exactly that.
+- **ElevenLabs audio retention is confirmed: none.** Zero retention is
+  enabled on the account, so the strongest sentence in the document
+  survives the swap intact — there is no recording of anyone's voice to
+  hand over, to leak, or to be asked for.
+- **Nobody but us holds the transcript.** This is the one that got
+  simpler. Hume kept a copy, so deletion had to reach them and that was a
+  standing open item. Under zero retention ElevenLabs produces the
+  transcript and keeps nothing, so deleting it here deletes it, and the
+  cross-provider deletion call that was owed for Hume is no longer owed.
+  **Confirm that reading of zero retention covers the transcription output
+  and not only the audio** — the policy now asserts it, and it is the one
+  claim in this change that was inferred rather than told to me directly.
 
 ## Claims that must stay true
 
@@ -145,13 +159,14 @@ build ever retains audio or sends content to a provider that trains on
 it, the policy has to change first.
 
 The voice claim is the strongest one here and it is verified on both
-sides. Hume keeps the transcript and not the audio, confirmed with them;
+sides. ElevenLabs runs under zero retention, confirmed on the account;
 and audio storage is switched off in our own build too, so there is no
 copy on either side of the wire. The policy said this before the build
 did — it is now describing rather than promising, which is the right way
-round. If that ever changes — a different provider,
-a changed setting, a debugging flag that keeps a buffer — this file changes
-first, before the build ships.
+round. If that ever changes — a different provider, a changed setting, a
+debugging flag that keeps a buffer — this file changes first, before the
+build ships. The move from Hume to ElevenLabs is exactly that case, and
+it is why this file and the policy changed on 18 November 2026.
 
 A fourth arrives with Gemini. The policy now says **we use Google's paid
 Gemini API, where prompts and responses are not used to improve its

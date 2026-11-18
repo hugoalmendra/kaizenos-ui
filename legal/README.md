@@ -141,14 +141,27 @@ The removal is the substantive part of this change, not the rename:
   enabled on the account, so the strongest sentence in the document
   survives the swap intact — there is no recording of anyone's voice to
   hand over, to leak, or to be asked for.
-- **Nobody but us holds the transcript.** This is the one that got
-  simpler. Hume kept a copy, so deletion had to reach them and that was a
-  standing open item. Under zero retention ElevenLabs produces the
-  transcript and keeps nothing, so deleting it here deletes it, and the
-  cross-provider deletion call that was owed for Hume is no longer owed.
-  **Confirm that reading of zero retention covers the transcription output
-  and not only the audio** — the policy now asserts it, and it is the one
-  claim in this change that was inferred rather than told to me directly.
+- **ElevenLabs holds a copy of the transcript, and the policy says so.**
+  Corrected 18 November 2026, same day. The first draft of this change
+  said we were the only ones holding it, reasoning that zero retention
+  would cover the transcription output as well as the audio. It does not:
+  zero retention is about the recording, and the text made from it is
+  retained. Confirmed by Hugo.
+
+  This is the one thing the swap did **not** simplify. The cross-provider
+  deletion call that was owed for Hume is still owed — it moved to
+  ElevenLabs, it did not go away. Section 3 now states that the transcript
+  exists in two places, and section 9 states that deleting it here means
+  deleting their copy too.
+
+  **That makes it an engineering obligation, not just wording.** Account
+  deletion and single-transcript deletion both have to reach ElevenLabs —
+  an API call, or a documented process under the DPA — and until that path
+  exists and is tested, section 9 promises something the build does not
+  do. Two things still to pin down: how long ElevenLabs keeps the
+  transcript on its own clock, and whether their terms let us delete on
+  request or only wait out a retention window. If it is only a window, the
+  90-day sentence in section 9 has to be checked against it.
 
 ## Claims that must stay true
 
@@ -161,7 +174,9 @@ it, the policy has to change first.
 The voice claim is the strongest one here and it is verified on both
 sides. ElevenLabs runs under zero retention, confirmed on the account;
 and audio storage is switched off in our own build too, so there is no
-copy on either side of the wire. The policy said this before the build
+copy on either side of the wire. Read it narrowly: it is a claim about the
+recording only. The transcript is retained on both sides, which is a
+different matter and is covered above. The policy said this before the build
 did — it is now describing rather than promising, which is the right way
 round. If that ever changes — a different provider, a changed setting, a
 debugging flag that keeps a buffer — this file changes first, before the

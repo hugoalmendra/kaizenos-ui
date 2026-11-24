@@ -246,3 +246,14 @@
     body.shell-on .hud-top,
     body.shell-on .kos-indicator { opacity: 0; pointer-events: none; }
   }
+
+  /* The ready pills sit under the sigil, which used to mean the middle of
+     the screen. In the shell the sigil is a band at the top, so without
+     this they land in the middle of the document they are announcing. */
+  body.shell-on .ktoast {
+    top: calc(var(--kaiso-h) + 16px);
+    left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2);
+  }
+  @media (max-width: 900px) {
+    body.shell-on .ktoast { top: calc(var(--kaiso-h) + 70px); left: 50%; }
+  }

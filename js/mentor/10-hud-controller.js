@@ -186,6 +186,14 @@
 
     // ─ Modal ─────────────────────────────────────────────────
     function openPanel(which, context) {
+      // The forged assets are the deliverable, not a detour, so they
+      // open in the dock beside the conversation rather than in a modal
+      // over it. Everything genuinely interruptive still opens here.
+      if (window.KaisoForge && window.KaisoForge.keys.indexOf(which) !== -1) {
+        closeModal();
+        window.KaisoForge.open(which);
+        return;
+      }
       panelLibrary.classList.toggle('show', which === 'library');
       panelPlan.classList.toggle('show', which === 'plan');
       const panelKos = document.getElementById('panelKos');

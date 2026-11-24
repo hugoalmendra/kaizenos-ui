@@ -431,10 +431,6 @@
   <button class="tb-x" id="tbClose" type="button" aria-label="Dismiss">&#10005;</button>
 </div>
 <nav class="account-menu" id="accountMenu" aria-label="Account">
-  <button data-panel="library">
-    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6v14H4zM14 5h6v14h-6z" stroke-linejoin="round"/></svg></span>
-    Library
-  </button>
   <button data-panel="plan">
     <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z" stroke-linejoin="round"/></svg></span>
     Plan &amp; Tokens
@@ -484,7 +480,14 @@
   <div class="kmodal-backdrop" data-close></div>
 
   <!-- Library panel -->
-  <section class="kpanel" id="panelLibrary" aria-label="Library">
+  <!-- The Library is no longer a screen: the Forge dock shows the assets
+       as they build, so there is nothing left for a list of them to do and
+       it has come out of the account menu. The markup stays because it is
+       now the forge's data source — each .lib-item[data-output] carries the
+       data-need that 07-output-forge.js and 24-forge-dock.js read to know
+       how many exchanges an asset takes, and the toast opens an asset
+       through its button. Delete this and the forge stops building. -->
+  <section class="kpanel" id="panelLibrary" aria-label="Library" hidden>
     <div class="kp-head">
       <span class="tm-dot"></span>
       <span class="kp-title">Kaiso · Library</span>
@@ -1568,7 +1571,7 @@
     <!-- ── cancel plan ── -->
     <div class="acct-view" data-view="cancel-plan" hidden>
       <p class="kp-sub">Your plan stays active until <b data-renews></b>, and you keep the time you&rsquo;ve already paid for.</p>
-      <p class="kp-sub" style="margin-top:10px">After that, plan time ends. Any top-up time stays yours to use, and so does everything in your Library.</p>
+      <p class="kp-sub" style="margin-top:10px">After that, plan time ends. Any top-up time stays yours to use, and so does everything you have forged.</p>
       <div class="acct-actions">
         <button class="kbtn" type="button" data-go="billing">Keep my plan</button>
         <button class="kbtn danger" type="button" id="billConfirmCancel">Cancel plan</button>

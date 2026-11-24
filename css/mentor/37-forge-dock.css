@@ -1,63 +1,137 @@
-  /* ─── Forge dock — the assets live on screen, not in a pop-up ──
-     The documents are what the user came for, so they get a surface
-     of their own that persists: it sits beside the conversation,
-     fills in section by section as the nodes complete, and keeps
-     every asset forged so far on a shelf you can flip through.
-     The modal stays for the things that really are detours — plan,
-     billing, account, feedback. */
+  /* ─── The forge shell ─────────────────────────────────────
+     Assets are the product, so they get the layout, not a panel in it.
+     Three regions once the forge is running:
 
-  :root { --fdock-w: clamp(400px, 40vw, 620px); }
+       rail (left)   every asset and how far along it is, always there
+       Kaiso (top)   the sigil, small, over the document it is building
+       asset (rest)  the open document, filling in as the nodes complete
 
-  .fdock {
-    position: fixed; top: 0; right: 0; bottom: 0;
-    width: var(--fdock-w); z-index: 40;
+     The scribe still rises from the floor when it is wanted, and takes
+     its height out of the asset rather than covering it. Before the
+     first exchange none of this exists: Kaiso is the whole screen, the
+     way it was. */
+
+  :root { --rail-w: 256px; --kaiso-h: 210px; }
+  body.rail-min { --rail-w: 68px; }
+
+  /* ─── Rail ──────────────────────────────────────────────── */
+  .krail {
+    position: fixed; top: 0; left: 0; bottom: 0; width: var(--rail-w); z-index: 36;
     display: flex; flex-direction: column;
-    background:
-      radial-gradient(120% 60% at 100% 0%, rgba(120, 90, 160, 0.10), transparent 60%),
-      linear-gradient(200deg, rgba(14, 12, 20, 0.96), rgba(6, 5, 10, 0.985));
-    border-left: 1px solid rgba(200, 168, 78, 0.22);
-    box-shadow: -26px 0 72px rgba(0, 0, 0, 0.62), inset 1px 0 0 rgba(200, 168, 78, 0.05);
+    background: linear-gradient(170deg, rgba(13, 11, 19, 0.96), rgba(6, 5, 10, 0.985));
+    border-right: 1px solid rgba(200, 168, 78, 0.16);
     backdrop-filter: blur(14px);
-    transform: translateX(100%);
-    transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
-    will-change: transform;
+    transform: translateX(-100%);
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
-  body.fdock-open .fdock { transform: none; }
+  body.shell-on .krail { transform: none; }
 
-  /* The rest of the room makes space rather than being covered. */
-  body.fdock-open .stage       { right: var(--fdock-w); }
-  body.fdock-open .chat-window { right: var(--fdock-w); border-radius: 28px 0 0 0; }
-  body.fdock-open .hud-top     { right: calc(var(--fdock-w) + 24px); }
-  .stage, .chat-window, .hud-top { transition: right 0.55s cubic-bezier(0.2, 0.7, 0.2, 1); }
-
-  /* ─── Handle — how you get it back ──────────────────────── */
-  .fdock-handle {
-    position: fixed; top: 50%; right: 0; z-index: 38;
-    transform: translateY(-50%) translateX(102%);
-    display: flex; align-items: center; gap: 8px;
-    padding: 13px 12px 13px 14px;
-    border: 1px solid rgba(200, 168, 78, 0.28); border-right: 0;
-    border-radius: 14px 0 0 14px;
-    background: linear-gradient(180deg, rgba(18, 15, 24, 0.95), rgba(8, 7, 12, 0.97));
-    color: rgba(234, 227, 200, 0.82); cursor: pointer;
-    font: inherit; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
-    writing-mode: vertical-rl;
-    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.2s ease, border-color 0.2s ease;
+  .krail-head {
+    display: flex; align-items: center; gap: 9px; flex: 0 0 auto;
+    /* The brand mark is fixed at top-left and now lands inside the rail,
+       so the rail starts under it and the wordmark reads as its
+       masthead. Without this the collapse control sits behind the logo
+       and a collapsed rail cannot be opened again. */
+    padding: 60px 16px 14px; border-bottom: 1px solid rgba(200, 168, 78, 0.1);
   }
-  body.fdock-ready .fdock-handle { transform: translateY(-50%) translateX(0); }
-  body.fdock-open  .fdock-handle { transform: translateY(-50%) translateX(102%); }
-  .fdock-handle:hover { color: var(--gold-bright); border-color: rgba(232, 200, 112, 0.5); }
-  .fdock-handle b { font-weight: 600; color: var(--gold-bright); }
+  .krail-head .tm-dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 6px;
+    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright); }
+  .krail-ttl { font-size: 9.5px; letter-spacing: 0.38em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.85); white-space: nowrap; overflow: hidden; }
+  .krail-min { margin-left: auto; background: transparent; border: 0; cursor: pointer;
+    color: rgba(234, 227, 200, 0.4); font: inherit; font-size: 13px; line-height: 1; padding: 4px 2px;
+    transition: color 0.2s ease; }
+  .krail-min:hover { color: var(--gold-bright); }
 
-  /* ─── Head ──────────────────────────────────────────────── */
+  .krail-list { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; padding: 10px 10px 16px;
+    scrollbar-width: thin; scrollbar-color: rgba(200, 168, 78, 0.2) transparent; }
+  .krail-list::-webkit-scrollbar { width: 5px; }
+  .krail-list::-webkit-scrollbar-thumb { background: rgba(200, 168, 78, 0.18); border-radius: 3px; }
+
+  .krow {
+    display: flex; align-items: center; gap: 11px; width: 100%;
+    padding: 10px 11px; margin-bottom: 4px; border-radius: 11px;
+    border: 1px solid transparent; background: transparent; cursor: pointer; font: inherit;
+    text-align: left; color: rgba(234, 227, 200, 0.55);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .krow:hover { background: rgba(234, 227, 200, 0.035); color: rgba(234, 227, 200, 0.85); }
+  .krow.active { background: rgba(200, 168, 78, 0.08); border-color: rgba(200, 168, 78, 0.3);
+    color: var(--gold-bright); }
+  .krow-ring {
+    width: 24px; height: 24px; flex: 0 0 24px; border-radius: 50%; display: grid; place-items: center;
+    background: conic-gradient(var(--gold-bright) calc(var(--p, 0) * 1%), rgba(200, 168, 78, 0.14) 0);
+    transition: background 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .krow-ring::after { content: ''; width: 16px; height: 16px; border-radius: 50%; background: #0a0810; }
+  .krow.done .krow-ring::after {
+    background: radial-gradient(circle, rgba(232, 200, 112, 0.34), #0a0810 72%); }
+  .krow-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .krow-name { font-size: 12px; font-weight: 500; letter-spacing: 0.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .krow-state { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.34); white-space: nowrap; }
+  .krow.done .krow-state { color: rgba(232, 200, 112, 0.6); }
+  .krow.flare { animation: krowFlare 1.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  @keyframes krowFlare {
+    0%   { box-shadow: inset 0 0 0 1px rgba(232, 200, 112, 0.5), 0 0 18px rgba(232, 200, 112, 0.22); }
+    100% { box-shadow: inset 0 0 0 1px rgba(232, 200, 112, 0), 0 0 0 rgba(232, 200, 112, 0); }
+  }
+
+  .krail-foot { flex: 0 0 auto; padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgba(200, 168, 78, 0.1);
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.36); white-space: nowrap; overflow: hidden; }
+  .krail-foot b { color: rgba(232, 200, 112, 0.85); font-weight: 600; }
+
+  /* Collapsed: rings only, names on hover via the title attribute. */
+  body.rail-min .krail-ttl, body.rail-min .krow-main, body.rail-min .krail-foot { display: none; }
+  body.rail-min .krow { justify-content: center; padding: 10px 0; }
+  body.rail-min .krail-head { justify-content: center; padding: 60px 0 14px; }
+
+  /* ─── Kaiso, small, over the document ───────────────────── */
+  body.shell-on .stage {
+    left: var(--rail-w); right: 0; top: 0; bottom: auto; height: var(--kaiso-h);
+    border-bottom: 1px solid rgba(200, 168, 78, 0.1);
+  }
+  body.shell-on .glyph-area { transform: scale(0.3); transform-origin: 50% 50%; }
+  /* The scribe's own shrink-and-lift is for a full-screen Kaiso. In the
+     shell Kaiso is already small and already at the top. */
+  body.shell-on.chat-open .stage { transform: none; }
+  body.shell-on .moons,
+  body.shell-on .moon-orbit,
+  body.shell-on .moon-aura-rot { opacity: 0; pointer-events: none; }
+  body.shell-on .hud-top { right: 24px; }
+  .stage, .chat-window, .hud-top { transition: right 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+    left 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .glyph-area { transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+  /* ─── Asset region ──────────────────────────────────────── */
+  .fdock {
+    position: fixed; left: var(--rail-w); right: 0; top: var(--kaiso-h); bottom: 0; z-index: 30;
+    display: flex; flex-direction: column; opacity: 0; pointer-events: none;
+    background:
+      radial-gradient(120% 60% at 100% 0%, rgba(120, 90, 160, 0.09), transparent 62%),
+      linear-gradient(200deg, rgba(12, 10, 18, 0.72), rgba(6, 5, 10, 0.88));
+    transition: opacity 0.45s ease, left 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+      bottom 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), top 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  body.shell-on .fdock { opacity: 1; pointer-events: auto; }
+  /* The scribe takes its height out of the document instead of over it.
+     Kaiso gives up height too: once the conversation is on screen in
+     full, the sigil is the smaller of the two ways to see it. */
+  body.shell-on.chat-open { --kaiso-h: 164px; }
+  body.shell-on.chat-open .glyph-area { transform: scale(0.19); }
+  body.shell-on.chat-open .fdock { bottom: 44vh; }
+  body.shell-on.chat-open .chat-window { left: var(--rail-w); height: 44vh; border-radius: 22px 0 0 0; }
+
   .fdock-head {
-    display: flex; align-items: center; gap: 10px;
-    padding: 16px 18px 12px; flex: 0 0 auto;
-    border-bottom: 1px solid rgba(200, 168, 78, 0.12);
+    display: flex; align-items: center; gap: 10px; flex: 0 0 auto;
+    padding: 13px 20px 11px; border-bottom: 1px solid rgba(200, 168, 78, 0.1);
   }
-  .fdock-head .tm-dot { width: 6px; height: 6px; border-radius: 50%;
-    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright); flex: 0 0 6px; }
-  .fdock-title { font-size: 10px; letter-spacing: 0.42em; text-transform: uppercase;
+  .fdock-head .tm-dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 6px;
+    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright); }
+  .fdock-title { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
     color: rgba(232, 200, 112, 0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .fdock-state { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
     color: rgba(234, 227, 200, 0.36); margin-left: auto; white-space: nowrap; }
@@ -66,60 +140,25 @@
     transition: color 0.2s ease; }
   .fdock-act:hover { color: var(--gold-bright); }
 
-  /* ─── Shelf — the assets pile up where you can see them ──── */
-  .fdock-shelf {
-    display: flex; gap: 8px; padding: 12px 18px 14px; flex: 0 0 auto;
-    overflow-x: auto; scrollbar-width: none;
-    border-bottom: 1px solid rgba(200, 168, 78, 0.1);
-  }
-  .fdock-shelf::-webkit-scrollbar { display: none; }
-  .fchip {
-    flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
-    padding: 7px 12px 7px 7px; border-radius: 999px; cursor: pointer; font: inherit;
-    border: 1px solid rgba(200, 168, 78, 0.14);
-    background: rgba(234, 227, 200, 0.025);
-    color: rgba(234, 227, 200, 0.5);
-    transition: all 0.25s ease;
-  }
-  .fchip:hover { border-color: rgba(200, 168, 78, 0.34); color: rgba(234, 227, 200, 0.8); }
-  .fchip-ring {
-    width: 22px; height: 22px; border-radius: 50%; flex: 0 0 22px; display: grid; place-items: center;
-    background: conic-gradient(var(--gold-bright) calc(var(--p, 0) * 1%), rgba(200, 168, 78, 0.13) 0);
-    transition: background 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
-  }
-  .fchip-ring::after {
-    content: ''; width: 15px; height: 15px; border-radius: 50%;
-    background: #0a0810; display: block;
-  }
-  .fchip-name { font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
-  .fchip.ready { border-color: rgba(232, 200, 112, 0.4); color: rgba(241, 233, 207, 0.9); }
-  .fchip.ready .fchip-ring::after { background: radial-gradient(circle, rgba(232,200,112,0.3), #0a0810 70%); }
-  .fchip.active { border-color: var(--gold-bright); color: var(--gold-bright);
-    background: rgba(200, 168, 78, 0.08); box-shadow: 0 0 0 1px rgba(232, 200, 112, 0.12); }
-  .fchip.flare { animation: fchipFlare 1.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
-  @keyframes fchipFlare {
-    0%   { box-shadow: 0 0 0 0 rgba(232, 200, 112, 0.55); }
-    70%  { box-shadow: 0 0 0 12px rgba(232, 200, 112, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(232, 200, 112, 0); }
-  }
-
-  /* ─── Document stage ────────────────────────────────────── */
   .fdock-stage {
-    flex: 1 1 auto; overflow: auto; padding: 18px 18px 0;
+    flex: 1 1 auto; overflow: auto; padding: 20px clamp(16px, 3vw, 40px) 0;
     scrollbar-width: thin; scrollbar-color: rgba(200, 168, 78, 0.22) transparent;
   }
   .fdock-stage::-webkit-scrollbar { width: 6px; }
   .fdock-stage::-webkit-scrollbar-thumb { background: rgba(200, 168, 78, 0.2); border-radius: 3px; }
 
-  /* Panels moved out of the modal keep their content styling and lose
-     the modal's box: no card, no max-height, no centring. */
+  /* Panels out of the modal keep their content styling, lose the box. */
   .fdock-stage .kpanel {
-    display: none; position: static; width: 100%; max-width: none; max-height: none;
-    overflow: visible; background: none; border: 0; border-radius: 0;
+    display: none; position: static; width: 100%; max-width: 1000px; margin: 0 auto;
+    max-height: none; overflow: visible; background: none; border: 0; border-radius: 0;
     padding: 0; box-shadow: none; animation: none;
   }
   .fdock-stage .kpanel.fasset-on { display: block; }
   .fdock-stage .kp-head { display: none; }
+  /* The ask bar cancels .kpanel's 24px padding with a negative offset;
+     in here the panel has none, so it would float off the floor. */
+  .fdock-stage .kedit-bar { bottom: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;
+    padding-left: 0; padding-right: 0; }
 
   /* ─── The document is the progress bar ──────────────────── */
   .fsec { position: relative; transition:
@@ -131,8 +170,7 @@
   .fsec.fsec-skel::after {
     content: ''; position: absolute; inset: -2px; border-radius: 8px; pointer-events: none;
     background: linear-gradient(100deg, transparent 32%, rgba(200, 168, 78, 0.10) 50%, transparent 68%);
-    background-size: 260% 100%;
-    animation: fskel 2.8s linear infinite;
+    background-size: 260% 100%; animation: fskel 2.8s linear infinite;
   }
   @keyframes fskel { from { background-position: 180% 0; } to { background-position: -80% 0; } }
 
@@ -142,79 +180,41 @@
     45%  { opacity: 1; filter: blur(0) saturate(1.3) brightness(1.12); }
     100% { opacity: 1; filter: none; transform: none; }
   }
-  /* A line of light passes over the section as it sets. */
   .fsec.fsec-land::before {
     content: ''; position: absolute; left: -4px; right: -4px; top: 0; height: 100%;
     pointer-events: none; border-radius: 8px;
     background: linear-gradient(180deg, transparent, rgba(232, 200, 112, 0.14), transparent);
-    background-size: 100% 38%;
-    animation: fscan 0.95s cubic-bezier(0.3, 0.6, 0.3, 1);
+    background-size: 100% 38%; animation: fscan 0.95s cubic-bezier(0.3, 0.6, 0.3, 1);
   }
   @keyframes fscan { from { background-position: 0 -120%; } to { background-position: 0 220%; } }
 
+  /* ─── The pen ───────────────────────────────────────────── */
+  .fforge-cursor {
+    display: flex; align-items: center; gap: 9px; margin: 16px 0; padding: 9px 13px;
+    border: 1px dashed rgba(200, 168, 78, 0.26); border-radius: 10px;
+    background: rgba(200, 168, 78, 0.035);
+    font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.72);
+  }
+  .ffc-dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 6px;
+    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright);
+    animation: ffcPulse 1.6s ease-in-out infinite; }
+  @keyframes ffcPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.72); } }
+
   @media (prefers-reduced-motion: reduce) {
-    .fsec, .fdock, .fdock-handle { transition-duration: 0.01ms; }
-    .fsec.fsec-land, .fsec.fsec-land::before, .fsec.fsec-skel::after, .fchip.flare { animation: none; }
+    .fsec, .fdock, .krail, .stage, .glyph-area { transition-duration: 0.01ms; }
+    .fsec.fsec-land, .fsec.fsec-land::before, .fsec.fsec-skel::after,
+    .krow.flare, .ffc-dot { animation: none; }
   }
 
-  /* ─── Empty state ───────────────────────────────────────── */
-  .fdock-empty { padding: 34px 6px; text-align: center; }
-  .fdock-empty-mark { font-size: 22px; color: rgba(200, 168, 78, 0.5); margin-bottom: 14px; }
-  .fdock-empty h4 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: rgba(241, 233, 207, 0.85); }
-  .fdock-empty p { margin: 0; font-size: 11.5px; line-height: 1.6; color: rgba(234, 227, 200, 0.42); }
-
-  /* ─── Read mode — the document at the size it deserves ──── */
-  .fdock-veil {
-    position: fixed; inset: 0; z-index: 39; opacity: 0; pointer-events: none;
-    background: rgba(2, 2, 7, 0.72); backdrop-filter: blur(5px);
-    transition: opacity 0.4s ease;
-  }
+  /* ─── Read mode ─────────────────────────────────────────── */
+  .fdock-veil { position: fixed; inset: 0; z-index: 38; opacity: 0; pointer-events: none;
+    background: rgba(2, 2, 7, 0.76); backdrop-filter: blur(5px); transition: opacity 0.4s ease; }
   body.fdock-read .fdock-veil { opacity: 1; pointer-events: auto; }
-  body.fdock-read { --fdock-w: min(1180px, 95vw); }
-  body.fdock-read .fdock { border-left-color: rgba(200, 168, 78, 0.34); }
-  body.fdock-read .fdock-stage { padding: 30px clamp(18px, 5vw, 64px) 0; }
-  /* Read mode is about the document, so the room stops making space. */
-  body.fdock-read .stage, body.fdock-read .chat-window { right: 0; }
-  body.fdock-read .hud-top { right: 24px; }
-
-  @media (max-width: 900px) {
-    :root { --fdock-w: 100vw; }
-    body.fdock-open .stage, body.fdock-open .chat-window { right: 0; }
-    .fdock { border-left: 0; }
-    .fdock-handle { top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 86px); }
-    /* At phone width the dock is the whole screen, so it is read mode by
-       another name: the HUD would otherwise lie across the document. */
-    body.fdock-open .hud-top,
-    body.fdock-open .kos-indicator,
-    body.fdock-open #ktoast,
-    body.fdock-open #kready,
-    body.fdock-open .session-timer,
-    body.fdock-open .scroll-toggle,
-    body.fdock-open .meta,
-    body.fdock-open .meta-r,
-    body.fdock-open .reset { opacity: 0; pointer-events: none; }
-    .fdock-head { padding-top: max(16px, env(safe-area-inset-top, 0px)); }
-  }
-
-  /* The shelf scrolls, so it has to look like it scrolls: the last chip
-     fades out rather than being sliced off by the edge of the dock. */
-  .fdock-shelf {
-    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 46px), transparent 100%);
-            mask-image: linear-gradient(90deg, #000 calc(100% - 46px), transparent 100%);
-  }
-
-  /* The ask bar cancels .kpanel's 24px padding with a negative offset.
-     In the dock the panel has no padding, so the same rule pushed the
-     bar a hair off the bottom edge and over the last line of the
-     document. Here it sits on the floor it was drawn for. */
-  .fdock-stage .kedit-bar { bottom: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;
-    padding-left: 0; padding-right: 0; }
-
-  /* ─── Read mode gets the room to itself ──────────────────
-     At full width the dock is under the whole HUD, so the session
-     meter, the wheel indicator and the readiness toast end up lying
-     across the document. Reading is a mode: everything that is not
-     the document steps back for it. */
+  body.fdock-read .fdock { left: 0; top: 0; bottom: 0; z-index: 40;
+    background: linear-gradient(200deg, rgba(12, 10, 18, 0.99), rgba(5, 4, 9, 1)); }
+  body.fdock-read.chat-open .fdock { bottom: 0; }
+  body.fdock-read .fdock-stage { padding: 28px clamp(18px, 5vw, 70px) 0; }
   body.fdock-read .hud-top,
   body.fdock-read .kos-indicator,
   body.fdock-read #ktoast,
@@ -223,30 +223,26 @@
   body.fdock-read .scroll-toggle,
   body.fdock-read .meta,
   body.fdock-read .meta-r,
-  body.fdock-read .reset {
-    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-  }
+  body.fdock-read .reset { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 
-  /* ─── The pen ────────────────────────────────────────────
-     Sits at the boundary between what is built and what is not, so a
-     half-built document cannot be mistaken for a finished one just
-     because the rest of it is below the fold. */
-  .fforge-cursor {
-    display: flex; align-items: center; gap: 9px;
-    margin: 16px 0; padding: 9px 13px;
-    border: 1px dashed rgba(200, 168, 78, 0.26); border-radius: 10px;
-    background: rgba(200, 168, 78, 0.035);
-    font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: rgba(232, 200, 112, 0.72);
+  /* ─── Phone ─────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    :root { --kaiso-h: 128px; }
+    /* The rail lies down: a scrolling strip of rings under Kaiso. */
+    .krail { top: var(--kaiso-h); bottom: auto; left: 0; right: 0; width: auto;
+      flex-direction: row; align-items: center; transform: translateY(-120%);
+      border-right: 0; border-bottom: 1px solid rgba(200, 168, 78, 0.14); }
+    body.shell-on .krail { transform: none; }
+    .krail-head, .krail-foot { display: none; }
+    .krail-list { display: flex; gap: 6px; padding: 9px 12px; overflow-x: auto; overflow-y: hidden;
+      -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent 100%);
+              mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent 100%); }
+    .krow { width: auto; flex: 0 0 auto; margin: 0; border-radius: 999px;
+      border-color: rgba(200, 168, 78, 0.14); padding: 7px 13px 7px 8px; }
+    .krow-state { display: none; }
+    body.shell-on .stage { left: 0; }
+    .fdock { left: 0; top: calc(var(--kaiso-h) + 58px); }
+    body.shell-on.chat-open .chat-window { left: 0; border-radius: 22px 22px 0 0; }
+    body.shell-on .hud-top,
+    body.shell-on .kos-indicator { opacity: 0; pointer-events: none; }
   }
-  .ffc-dot {
-    width: 6px; height: 6px; border-radius: 50%; flex: 0 0 6px;
-    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright);
-    animation: ffcPulse 1.6s ease-in-out infinite;
-  }
-  @keyframes ffcPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.72); } }
-  @media (prefers-reduced-motion: reduce) { .ffc-dot { animation: none; } }
-
-  .fdock-handle.has { border-color: rgba(232, 200, 112, 0.45);
-    color: rgba(241, 233, 207, 0.92);
-    box-shadow: -6px 0 22px rgba(200, 168, 78, 0.12); }

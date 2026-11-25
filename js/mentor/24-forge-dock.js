@@ -44,8 +44,10 @@
       + '<span class="krail-ttl">The Forge</span>'
       + '<button class="krail-min" id="krailMin" type="button" title="Collapse" aria-label="Collapse the rail">&#8249;</button>'
       + '</div>'
+      + '<div class="krail-top" id="krailTop"></div>'
+      + '<div class="krail-count" id="krailFoot"></div>'
       + '<div class="krail-list" id="krailList" role="list"></div>'
-      + '<div class="krail-foot" id="krailFoot"></div>';
+      + '<div class="krail-base" id="krailBase"></div>';
 
     // ── Document region ──────────────────────────────────────────
     const dock = document.createElement('section');
@@ -65,7 +67,21 @@
     const veil = document.createElement('div');
     veil.className = 'fdock-veil';
 
+    // On a phone the rail cannot lie down any more: it carries the
+    // clock, the readiness grade and the account now, and a strip of
+    // pills has nowhere to put those. It becomes a drawer instead.
+    const railVeil = document.createElement('div');
+    railVeil.className = 'krail-veil';
+    const railOpen = document.createElement('button');
+    railOpen.type = 'button';
+    railOpen.className = 'krail-open';
+    railOpen.id = 'krailOpen';
+    railOpen.setAttribute('aria-label', 'Your assets and session');
+    railOpen.innerHTML = '<span></span><span></span><span></span>';
+
     document.body.appendChild(veil);
+    document.body.appendChild(railVeil);
+    document.body.appendChild(railOpen);
     document.body.appendChild(rail);
     document.body.appendChild(dock);
 
@@ -73,6 +89,27 @@
     const stateEl = dock.querySelector('#fdockState');
     const listEl = rail.querySelector('#krailList');
     const footEl = rail.querySelector('#krailFoot');
+
+    // The session HUD moves into the rail. The nodes themselves are
+    // moved rather than rebuilt, so every id the meters, the readiness
+    // grade, the YC button and the account menu are wired to still
+    // resolves — none of that code knows the furniture changed. The
+    // empty rail it leaves behind goes with it.
+    const hudTop = document.getElementById('hudTop');
+    const readiness = document.getElementById('readiness');
+    const tokenMeter = document.getElementById('tokenMeter');
+    const accountBtn = document.getElementById('accountBtn');
+    if (readiness) rail.querySelector('#krailTop').appendChild(readiness);
+    const base = rail.querySelector('#krailBase');
+    if (tokenMeter) base.appendChild(tokenMeter);
+    if (accountBtn) {
+      const lbl = document.createElement('span');
+      lbl.className = 'account-btn-lbl';
+      lbl.textContent = 'Account';
+      accountBtn.appendChild(lbl);
+      base.appendChild(accountBtn);
+    }
+    if (hudTop && !hudTop.children.length) hudTop.remove();
     const docStage = dock.querySelector('#fdockStage');
 
     // ── Move the asset panels out of the modal ───────────────────
@@ -117,7 +154,11 @@
         + '<span class="krow-state"></span>'
         + '</span>';
       row.querySelector('.krow-name').textContent = o.cfg.label;
-      row.addEventListener('click', () => { userPicked = true; focus(o.cfg.key); });
+      row.addEventListener('click', () => {
+        userPicked = true;
+        focus(o.cfg.key);
+        document.body.classList.remove('rail-out');   // the drawer has served
+      });
       listEl.appendChild(row);
       o.row = row;
     });
@@ -252,6 +293,8 @@
     }
 
     // ── Controls ─────────────────────────────────────────────────
+    railOpen.addEventListener('click', () => document.body.classList.toggle('rail-out'));
+    railVeil.addEventListener('click', () => document.body.classList.remove('rail-out'));
     rail.querySelector('#krailMin').addEventListener('click', () => {
       const min = document.body.classList.toggle('rail-min');
       rail.querySelector('#krailMin').innerHTML = min ? '&#8250;' : '&#8249;';
@@ -263,8 +306,9 @@
     veil.addEventListener('click', () => document.body.classList.remove('fdock-read'));
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Escape') return;
-      // Out of read mode first, then out of the document.
-      if (document.body.classList.contains('fdock-read')) document.body.classList.remove('fdock-read');
+      // Out of the drawer, then read mode, then the document.
+      if (document.body.classList.contains('rail-out')) document.body.classList.remove('rail-out');
+      else if (document.body.classList.contains('fdock-read')) document.body.classList.remove('fdock-read');
       else if (document.body.classList.contains('asset-open')) closeAsset();
     });
 

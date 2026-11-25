@@ -13,7 +13,7 @@
      and the rail carries the same progress for the five you are not
      looking at. */
 
-  :root { --rail-w: 256px; }
+  :root { --rail-w: 268px; }
   body.rail-min { --rail-w: 68px; }
 
   /* ─── Rail ──────────────────────────────────────────────── */
@@ -26,7 +26,7 @@
     transform: translateX(-100%);
     transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
-  body.shell-on .krail { transform: none; }
+  body.active .krail { transform: none; }
 
   .krail-head {
     display: flex; align-items: center; gap: 9px; flex: 0 0 auto;
@@ -80,14 +80,67 @@
     100% { box-shadow: inset 0 0 0 1px rgba(232, 200, 112, 0), 0 0 0 rgba(232, 200, 112, 0); }
   }
 
-  .krail-foot { flex: 0 0 auto; padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
-    border-top: 1px solid rgba(200, 168, 78, 0.1);
+  /* ─── The session, where the assets are ─────────────────
+     The time meter, the readiness grade and the account used to be a
+     glass rail in the top-right corner. That corner is the document's
+     now, and these were never about the document — they are about the
+     session. They belong with the one other thing that is. */
+  .krail-top { flex: 0 0 auto; padding: 14px 12px 4px; }
+  .krail .readiness {
+    /* It was a segment of a horizontal rail: stretched, with a divider
+       on its left and a cap on its width. Here it is a card. */
+    align-self: auto; max-width: none; border-left: 0;
+    padding: 11px 12px; border-radius: 12px;
+    border: 1px solid rgba(200, 168, 78, 0.14);
+    background: rgba(234, 227, 200, 0.025);
+  }
+  .krail .readiness.funded { max-width: none; }
+  /* The scribe collapses it out of the horizontal rail for room. There
+     is room here. */
+  body.chat-open .krail .readiness {
+    max-width: none; padding: 11px 12px; opacity: 1; pointer-events: auto;
+    border-left-color: rgba(200, 168, 78, 0.14);
+  }
+  .krail .rd-yc-btn { margin-left: auto; }
+
+  .krail-count { flex: 0 0 auto; padding: 14px 18px 8px;
     font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(234, 227, 200, 0.36); white-space: nowrap; overflow: hidden; }
-  .krail-foot b { color: rgba(232, 200, 112, 0.85); font-weight: 600; }
+    color: rgba(234, 227, 200, 0.34); white-space: nowrap; overflow: hidden; }
+  .krail-count b { color: rgba(232, 200, 112, 0.85); font-weight: 600; }
+
+  .krail-base { flex: 0 0 auto; padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgba(200, 168, 78, 0.1); }
+  .krail .token-meter { width: auto; padding: 8px 6px 10px; }
+  .krail .account-btn {
+    position: relative; width: 100%; align-self: auto; border-left: 0;
+    display: flex; align-items: center; gap: 11px;
+    padding: 9px 8px; border-radius: 10px; height: 42px;
+    justify-content: flex-start;
+  }
+  .krail .account-btn::before { left: 5px; width: 32px; height: 32px; }
+  .krail .account-btn svg { margin-left: 11px; }
+  .account-btn-lbl { font-size: 12px; letter-spacing: 0.02em;
+    color: rgba(234, 227, 200, 0.72); }
+  .krail .account-btn:hover .account-btn-lbl { color: var(--gold-bright); }
+  /* The menu hung off the top-right corner the button used to be in. */
+  body.active .account-menu {
+    top: auto; right: auto; bottom: 68px; left: 12px;
+    width: calc(var(--rail-w) - 24px); z-index: 43;
+    transform: translateY(8px);
+  }
+  body.active .account-menu.open { transform: none; }
+
+  body.rail-min .krail-top,
+  body.rail-min .krail-count,
+  body.rail-min .token-meter,
+  body.rail-min .account-btn-lbl { display: none; }
+  body.rail-min .krail .account-btn { justify-content: center; padding: 9px 0; }
+  body.rail-min .krail .account-btn svg { margin-left: 0; }
+  body.rail-min .krail .account-btn::before { left: 50%; transform: translateX(-50%); }
+  body.rail-min .account-menu { width: 214px; left: 76px; }
 
   /* Collapsed: rings only, names on hover via the title attribute. */
-  body.rail-min .krail-ttl, body.rail-min .krow-main, body.rail-min .krail-foot { display: none; }
+  body.rail-min .krail-ttl, body.rail-min .krow-main { display: none; }
   body.rail-min .krow { justify-content: center; padding: 10px 0; }
   body.rail-min .krail-head { justify-content: center; padding: 60px 0 14px; }
 
@@ -95,9 +148,9 @@
      Kaiso is left exactly as it was: full height of whatever space is
      free, and the scribe's own shrink-and-lift still does its job. The
      columns only change where that space starts and ends. */
-  body.shell-on .stage,
-  body.shell-on .chat-window { left: var(--rail-w); }
-  body.shell-on.chat-open .chat-window { border-radius: 22px 22px 0 0; }
+  body.active .stage,
+  body.active .chat-window { left: var(--rail-w); }
+  body.active.chat-open .chat-window { border-radius: 22px 22px 0 0; }
   .stage, .chat-window, .hud-top {
     transition: right 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
                 left 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -253,34 +306,51 @@
   body.asset-open .hud-top { z-index: 42; right: 24px; }
 
   /* ─── Things centred on a window whose middle has moved ── */
-  body.shell-on .ktoast,
-  body.shell-on .caption { left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2); }
-  body.shell-on .caption { width: min(720px, calc(100% - var(--rail-w) - 56px)); }
+  body.active .ktoast,
+  body.active .caption { left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2); }
+  body.active .caption { width: min(720px, calc(100% - var(--rail-w) - 56px)); }
   /* The corner controls would sit under the rail. */
-  body.shell-on .scroll-toggle,
-  body.shell-on .meta { left: calc(var(--rail-w) + 32px); }
+  body.active .scroll-toggle,
+  body.active .meta { left: calc(var(--rail-w) + 32px); }
 
-  /* ─── Phone ─────────────────────────────────────────────
-     The rail lies down as a strip of rings under the brand, and an
-     opened asset takes the screen outright. */
+  /* ─── Phone — the rail becomes a drawer ─────────────────
+     It cannot lie down as a strip any more: it carries the clock, the
+     readiness grade and the account, and a row of pills has nowhere to
+     put those. So it stays itself and slides. */
+  .krail-open {
+    position: fixed; top: 20px; right: 18px; z-index: 44;
+    display: none; width: 40px; height: 40px; padding: 0;
+    align-content: center; justify-items: center; gap: 4px;
+    border: 1px solid rgba(200, 168, 78, 0.26); border-radius: 11px;
+    background: rgba(10, 9, 14, 0.82); cursor: pointer;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .krail-open span { display: block; width: 15px; height: 1.5px; border-radius: 2px;
+    background: rgba(232, 200, 112, 0.85); }
+  .krail-veil { position: fixed; inset: 0; z-index: 35; opacity: 0; pointer-events: none;
+    background: rgba(2, 2, 7, 0.68); transition: opacity 0.35s ease; }
+
   @media (max-width: 900px) {
-    .krail { top: 62px; bottom: auto; left: 0; right: 0; width: auto;
-      flex-direction: row; align-items: center; transform: translateY(-170%);
-      border-right: 0; border-bottom: 1px solid rgba(200, 168, 78, 0.14); }
-    body.shell-on .krail { transform: none; }
-    .krail-head, .krail-foot { display: none; }
-    .krail-list { display: flex; gap: 6px; padding: 9px 12px; overflow-x: auto; overflow-y: hidden;
-      -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent 100%);
-              mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent 100%); }
-    .krow { width: auto; flex: 0 0 auto; margin: 0; border-radius: 999px;
-      border-color: rgba(200, 168, 78, 0.14); padding: 7px 13px 7px 8px; }
-    .krow-state { display: none; }
-    body.shell-on .stage { left: 0; top: 118px; }
-    body.shell-on .chat-window { left: 0; }
-    body.shell-on .scroll-toggle, body.shell-on .meta { left: 32px; }
-    body.shell-on .ktoast, body.shell-on .caption { left: 50%; }
-    body.shell-on .caption { width: min(720px, calc(100vw - 56px)); }
+    .krail-open { display: grid; }
+    body.active .krail-open { opacity: 1; pointer-events: auto; }
+    body.rail-out .krail-veil { opacity: 1; pointer-events: auto; }
+    .krail { width: min(320px, 86vw); z-index: 45; transform: translateX(-100%); }
+    body.active .krail { transform: translateX(-100%); }
+    body.active.rail-out .krail { transform: none; }
+    .krail-head { padding-top: 20px; }
+    /* Nothing is beside anything: Kaiso and an opened asset each take
+       the screen, and the drawer comes over the top of whichever. */
+    body.active .stage, body.active .chat-window { left: 0; }
+    body.active .scroll-toggle, body.active .meta { left: 32px; }
+    body.active .ktoast, body.active .caption { left: 50%; }
+    body.active .caption { width: min(720px, calc(100vw - 56px)); }
     .fdock { left: 0; border-left: 0; }
-    .fdock-head { padding-top: max(16px, env(safe-area-inset-top, 0px)); }
-    body.asset-open .hud-top { opacity: 0; pointer-events: none; }
+    .fdock-head { padding-top: max(18px, env(safe-area-inset-top, 0px)); padding-right: 68px; }
+    body.active .account-menu { left: 12px; width: min(296px, 80vw); z-index: 46; }
+    body.fdock-read .krail-open { opacity: 0; pointer-events: none; }
+    /* These were trimmed for a cramped top-right rail. The drawer is
+       not cramped, so they come back. */
+    .krail .readiness { display: flex; }
+    .krail .token-meter .tm-rate { display: block; }
+    .krail .account-btn { width: 100%; flex: 0 0 auto; }
   }

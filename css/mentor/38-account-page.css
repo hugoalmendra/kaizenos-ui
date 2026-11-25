@@ -109,3 +109,9 @@
       border-color: rgba(200, 168, 78, 0.14); padding: 7px 13px; }
     .kacct-main { padding: 16px 16px 40px; }
   }
+
+  /* The plan is a tall list of nodes; it reads better with the column
+     the company gets than with the narrow measure of the panels. */
+  #panelKos.kacct-pane { max-width: 860px; }
+  .kacct-main .plan-kp-head { display: flex; }
+  .kacct-main #panelKos .kp-close { display: none; }

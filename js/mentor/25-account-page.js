@@ -30,6 +30,7 @@
     const GROUPS = [
       { label: 'Your venture', items: [
         { id: 'company',  label: 'Your Company',   pane: 'companySurface', ic: '#companyOverviewBtn' },
+        { id: 'kos',      label: 'Your Plan',      pane: 'panelKos',       ic: '[data-panel="plan"]' },
         { id: 'docs',     label: 'Your Documents', pane: 'panelDocs',      ic: '[data-panel="docs"]' },
       ] },
       { label: 'Session', items: [
@@ -145,6 +146,10 @@
       if (id === 'plan') {
         window.dispatchEvent(new CustomEvent('kaiso:open-plan', { detail: { context: 'menu' } }));
       }
+      if (id === 'kos' && window.KaisoWheel) window.KaisoWheel.renderPlan();
+      // The KOS indicator lights while the plan is the open section, so
+      // every section change has to say which one it is.
+      window.dispatchEvent(new CustomEvent('kaiso:account-section', { detail: { section: id } }));
     }
 
     let last = 'company';
@@ -155,6 +160,7 @@
     }
     function close() {
       document.body.classList.remove('account-open');
+      window.dispatchEvent(new CustomEvent('kaiso:account-section', { detail: { section: null } }));
       // The company surface locks body scroll while it is "open".
       if (window.KaisoCompany) window.KaisoCompany.close();
       document.body.style.overflow = '';

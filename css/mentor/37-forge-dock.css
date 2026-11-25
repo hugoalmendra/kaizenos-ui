@@ -141,14 +141,24 @@
   .krail-base { flex: 0 0 auto; padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
     border-top: 1px solid rgba(200, 168, 78, 0.1); }
   .krail .token-meter { width: auto; padding: 8px 6px 10px; }
+  /* The ring is a ::before and the icon an svg. Left to absolute
+     offsets they drift apart — the ring was centred on 21 and the icon
+     on 28.5. They share one grid cell instead, each centred in it, so
+     they are concentric whatever either one measures. */
   .krail .account-btn {
     position: relative; width: 100%; align-self: auto; border-left: 0;
-    display: flex; align-items: center; gap: 11px;
-    padding: 9px 8px; border-radius: 10px; height: 42px;
-    justify-content: flex-start;
+    display: grid; grid-template-columns: 32px 1fr; align-items: center;
+    gap: 11px; padding: 5px 8px; border-radius: 10px; height: 42px;
   }
-  .krail .account-btn::before { left: 5px; width: 32px; height: 32px; }
-  .krail .account-btn svg { margin-left: 11px; }
+  .krail .account-btn::before {
+    position: static; grid-column: 1; grid-row: 1;
+    width: 32px; height: 32px; justify-self: center; align-self: center;
+  }
+  .krail .account-btn svg {
+    position: static; grid-column: 1; grid-row: 1;
+    justify-self: center; align-self: center; margin: 0;
+  }
+  .account-btn-lbl { grid-column: 2; grid-row: 1; justify-self: start; }
   .account-btn-lbl { font-size: 12px; letter-spacing: 0.02em;
     color: rgba(234, 227, 200, 0.72); }
   .krail .account-btn:hover .account-btn-lbl { color: var(--gold-bright); }
@@ -164,9 +174,9 @@
   body.rail-min .krail-count,
   body.rail-min .token-meter,
   body.rail-min .account-btn-lbl { display: none; }
-  body.rail-min .krail .account-btn { justify-content: center; padding: 9px 0; }
-  body.rail-min .krail .account-btn svg { margin-left: 0; }
-  body.rail-min .krail .account-btn::before { left: 50%; transform: translateX(-50%); }
+  body.rail-min .krail .account-btn {
+    grid-template-columns: 32px; justify-content: center; padding: 5px 0;
+  }
   body.rail-min .account-menu { width: 214px; left: 76px; }
 
   /* Collapsed: rings only, names on hover via the title attribute. */

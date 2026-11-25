@@ -174,6 +174,16 @@
 
     panel: function (name) { window.KaisoPanels.open(name); },
 
+    // The account page and its sections. KaisoPanels routes most of
+    // these too, but the company surface only renders through the page.
+    acctPage: function (section) { window.KaisoAccountPage.open(section); },
+
+    // An asset in the column beside the rail, and the same read full.
+    asset: function (key) { window.KaisoForge.focus(key); },
+    read: function (key) { window.KaisoForge.focus(key); document.body.classList.add('fdock-read'); },
+    shut: function () { window.KaisoForge.close(); },
+    narrow: function () { document.body.classList.add('rail-min'); },
+
     // Hand Kaiso a document, the way a drop would. The text is the
     // thing being photographed, so it is a real read and not a fixture
     // posing as one.

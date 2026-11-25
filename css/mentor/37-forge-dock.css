@@ -101,7 +101,13 @@
     max-width: none; padding: 11px 12px; opacity: 1; pointer-events: auto;
     border-left-color: rgba(200, 168, 78, 0.14);
   }
-  .krail .rd-yc-btn { margin-left: auto; }
+  /* At A+ the card grows an Apply to YC button. Inline, in a column
+     this narrow, it squeezes the verdict into three lines; it takes a
+     row of its own instead. */
+  .krail .readiness { flex-wrap: wrap; }
+  .krail .rd-yc-btn {
+    width: 100%; margin: 10px 0 0; text-align: center; justify-content: center;
+  }
 
   /* The wheel indicator, as a row rather than a floating pill. */
   .krail .kos-indicator {

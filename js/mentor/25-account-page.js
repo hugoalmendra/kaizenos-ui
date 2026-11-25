@@ -153,13 +153,33 @@
     }
 
     let last = 'company';
+    // The account page has its own nav, so the rail beside it is a
+    // second list of places to be. It narrows to its rings while the
+    // page is open and comes back when the page closes — unless the
+    // user set the width themselves in the meantime, in which case it
+    // is theirs and we leave it.
+    let restoreWide = false;
+    window.addEventListener('kaiso:rail-toggled', () => { restoreWide = false; });
+
     function open(id) {
       document.body.classList.add('account-open');
+      if (!document.body.classList.contains('rail-min')) {
+        restoreWide = true;
+        document.body.classList.add('rail-min');
+        const btn = document.getElementById('krailMin');
+        if (btn) btn.innerHTML = '&#8250;';
+      }
       menu.classList.remove('open');
       show(id && panes[id] ? (last = id) : last);
     }
     function close() {
       document.body.classList.remove('account-open');
+      if (restoreWide) {
+        restoreWide = false;
+        document.body.classList.remove('rail-min');
+        const btn = document.getElementById('krailMin');
+        if (btn) btn.innerHTML = '&#8249;';
+      }
       window.dispatchEvent(new CustomEvent('kaiso:account-section', { detail: { section: null } }));
       // The company surface locks body scroll while it is "open".
       if (window.KaisoCompany) window.KaisoCompany.close();

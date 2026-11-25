@@ -39,9 +39,9 @@
     rail.id = 'kaisoRail';
     rail.setAttribute('aria-label', 'Your assets');
     rail.innerHTML =
+      // No title: the wordmark above is the masthead and the count below
+      // says what the list is. The head is the collapse control.
       '<div class="krail-head">'
-      + '<span class="tm-dot"></span>'
-      + '<span class="krail-ttl">The Forge</span>'
       + '<button class="krail-min" id="krailMin" type="button" title="Collapse" aria-label="Collapse the rail">&#8249;</button>'
       + '</div>'
       + '<div class="krail-top" id="krailTop"></div>'
@@ -305,10 +305,14 @@
 
     // ── Controls ─────────────────────────────────────────────────
     railOpen.addEventListener('click', () => document.body.classList.toggle('rail-out'));
+    // Say so when the width is the user's choice, so nothing restores
+    // over it later.
+    const announce = () => window.dispatchEvent(new Event('kaiso:rail-toggled'));
     railVeil.addEventListener('click', () => document.body.classList.remove('rail-out'));
     rail.querySelector('#krailMin').addEventListener('click', () => {
       const min = document.body.classList.toggle('rail-min');
       rail.querySelector('#krailMin').innerHTML = min ? '&#8250;' : '&#8249;';
+      announce();
     });
     dock.querySelector('#fdockRead').addEventListener('click', () => {
       document.body.classList.toggle('fdock-read');

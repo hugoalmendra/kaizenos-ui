@@ -1315,9 +1315,25 @@
     </div>
     <p class="kp-sub">Review and copy each answer into the matching field at ycombinator.com/apply. You'll need to log in to YC first.</p>
 
+    <!-- Said once, plainly, because it is the thing that decides the
+         outcome: these are drafted from the founder's own words, and an
+         application that reads as machine-written does them no favours. -->
+    <p class="yc-read-aloud">Kaiso drafted these from what you said. <b>Read each one out loud before you paste it</b> — if it doesn&rsquo;t sound like you, change it.</p>
+
     <div class="yc-actions">
       <button class="kbtn" id="ycDownloadMdBtn" type="button">Download Markdown</button>
-      <button class="kbtn primary" id="ycOpenApplyBtn" type="button">Open YC Application</button>
+      <button class="kbtn primary" id="ycOpenApplyBtn" type="button">Open YC application</button>
+    </div>
+
+    <div class="yc-applybar">
+      <div class="yc-applybar-top">
+        <span class="tm-dot"></span>
+        <span class="yc-applybar-ttl">Applying to YC</span>
+        <span class="yc-progress-text" id="ycProgressText">0 copied</span>
+        <button class="fdock-act" id="ycExitApplyBtn" type="button" title="Leave apply mode" aria-label="Leave apply mode">&#10005;</button>
+      </div>
+      <div class="yc-progress"><span id="ycProgressFill"></span></div>
+      <p class="yc-applybar-note">YC is open in the other tab. Tap a field, paste it, come back.</p>
     </div>
 
     <div class="yc-fields" id="ycFields"></div>

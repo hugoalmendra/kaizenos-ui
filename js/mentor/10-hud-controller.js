@@ -177,7 +177,14 @@
     if (chatForm) chatForm.addEventListener('submit', () => spend(2));
 
     // ─ Account menu ──────────────────────────────────────────
-    accountBtn.addEventListener('click', (e) => { e.stopPropagation(); accountMenu.classList.toggle('open'); });
+    accountBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Account is a page with its own nav now, not a dropdown of
+      // modals. The menu stays in the DOM as the wiring for the items
+      // that are actions rather than sections.
+      if (window.KaisoAccountPage) { window.KaisoAccountPage.open(); return; }
+      accountMenu.classList.toggle('open');
+    });
     document.addEventListener('click', (e) => {
       if (!accountMenu.contains(e.target) && e.target !== accountBtn) accountMenu.classList.remove('open');
     });
@@ -192,6 +199,15 @@
       if (window.KaisoForge && window.KaisoForge.keys.indexOf(which) !== -1) {
         closeModal();
         window.KaisoForge.open(which);
+        return;
+      }
+      // Plan, documents, feedback and the account itself are sections of
+      // the account page. Everything that still opens here is a genuine
+      // interruption — the time banner's top-up, a restart prompt.
+      if (window.KaisoAccountPage
+          && window.KaisoAccountPage.sections.indexOf(which) !== -1) {
+        closeModal();
+        window.KaisoAccountPage.open(which);
         return;
       }
       panelLibrary.classList.toggle('show', which === 'library');

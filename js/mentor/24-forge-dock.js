@@ -188,6 +188,9 @@
     function focus(key) {
       const o = live.find((x) => x.cfg.key === key);
       if (!o) return;
+      // Picking an asset is leaving the account page, not opening a
+      // document behind it.
+      if (window.KaisoAccountPage) window.KaisoAccountPage.close();
       active = key;
       live.forEach((x) => {
         x.panel.classList.toggle('fasset-on', x === o);

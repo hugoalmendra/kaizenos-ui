@@ -103,6 +103,30 @@
   }
   .krail .rd-yc-btn { margin-left: auto; }
 
+  /* The wheel indicator, as a row rather than a floating pill. */
+  .krail .kos-indicator {
+    position: static; transform: none; opacity: 1; pointer-events: auto;
+    display: grid; grid-template-columns: 9px 1fr auto; align-items: center;
+    gap: 8px 9px; width: 100%; margin-top: 8px;
+    padding: 10px 12px; border-radius: 12px; text-align: left;
+    background: rgba(234, 227, 200, 0.025);
+  }
+  body.active .krail .kos-indicator { transform: none; }
+  .krail .kos-indicator .kos-gem { grid-row: 1; }
+  .krail .kos-indicator .kos-pillar { grid-column: 2; }
+  .krail .kos-indicator .kos-sep { display: none; }
+  .krail .kos-indicator .kos-ready-pill { grid-column: 3; grid-row: 1; }
+  .krail .kos-indicator .kos-node {
+    grid-column: 2; grid-row: 2; font-size: 12px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .krail .kos-indicator .kos-count { grid-column: 3; grid-row: 2; margin-left: 0; }
+  .krail .kos-indicator .kos-chevron { display: none; }
+  .krail .kos-indicator:hover { background: rgba(200, 168, 78, 0.06); }
+  body.account-open .krail .kos-indicator.open {
+    border-color: var(--gold-bright); background: rgba(200, 168, 78, 0.09);
+  }
+
   .krail-count { flex: 0 0 auto; padding: 14px 18px 8px;
     font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
     color: rgba(234, 227, 200, 0.34); white-space: nowrap; overflow: hidden; }
@@ -309,9 +333,19 @@
   body.active .ktoast,
   body.active .caption { left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2); }
   body.active .caption { width: min(720px, calc(100% - var(--rail-w) - 56px)); }
-  /* The corner controls would sit under the rail. */
-  body.active .scroll-toggle,
-  body.active .meta { left: calc(var(--rail-w) + 32px); }
+  /* The corner controls would sit under the rail. The quill and the
+     caption toggle are a pair, 56px apart, and only the quill was moved
+     — which put them on top of each other the moment the rail was
+     collapsed and left the caption toggle behind the rail when it was
+     not. They move together. */
+  body.active .scroll-toggle { left: calc(var(--rail-w) + 32px); }
+  body.active .caption-toggle { left: calc(var(--rail-w) + 88px); }
+  /* Both belong to Kaiso, so both stand down for a document. */
+  body.asset-open .caption-toggle,
+  body.account-open .caption-toggle,
+  body.account-open .scroll-toggle,
+  body.account-open .caption,
+  body.account-open .session-timer { opacity: 0; pointer-events: none; }
 
   /* ─── Phone — the rail becomes a drawer ─────────────────
      It cannot lie down as a strip any more: it carries the clock, the
@@ -341,7 +375,8 @@
     /* Nothing is beside anything: Kaiso and an opened asset each take
        the screen, and the drawer comes over the top of whichever. */
     body.active .stage, body.active .chat-window { left: 0; }
-    body.active .scroll-toggle, body.active .meta { left: 32px; }
+    body.active .scroll-toggle { left: 32px; }
+    body.active .caption-toggle { left: 88px; }
     body.active .ktoast, body.active .caption { left: 50%; }
     body.active .caption { width: min(720px, calc(100vw - 56px)); }
     .fdock { left: 0; border-left: 0; }

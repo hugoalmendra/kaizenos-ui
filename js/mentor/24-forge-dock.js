@@ -99,7 +99,15 @@
     const readiness = document.getElementById('readiness');
     const tokenMeter = document.getElementById('tokenMeter');
     const accountBtn = document.getElementById('accountBtn');
-    if (readiness) rail.querySelector('#krailTop').appendChild(readiness);
+    const topSlot = rail.querySelector('#krailTop');
+    if (readiness) topSlot.appendChild(readiness);
+    // The wheel indicator was a pill floating at the top centre of the
+    // screen, which was the middle of Kaiso and is now the middle of a
+    // document. It says where you are in the plan; readiness says how
+    // fundable that is. They are the same question, so they sit
+    // together, and it still opens the plan when clicked.
+    const kosInd = document.getElementById('kosIndicator');
+    if (kosInd) topSlot.appendChild(kosInd);
     const base = rail.querySelector('#krailBase');
     if (tokenMeter) base.appendChild(tokenMeter);
     if (accountBtn) {

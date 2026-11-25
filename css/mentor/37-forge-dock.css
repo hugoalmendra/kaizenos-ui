@@ -1,17 +1,18 @@
   /* ─── The forge shell ─────────────────────────────────────
      Assets are the product, so they get the layout, not a panel in it.
-     Three regions once the forge is running:
 
-       rail (left)   every asset and how far along it is, always there
-       Kaiso (top)   the sigil, small, over the document it is building
-       asset (rest)  the open document, filling in as the nodes complete
+       rail (left)    every asset and how far along it is, always there
+       Kaiso (middle) unchanged — the sigil and the scribe as they were
+       asset (right)  the open document, full height, closable
 
-     The scribe still rises from the floor when it is wanted, and takes
-     its height out of the asset rather than covering it. Before the
-     first exchange none of this exists: Kaiso is the whole screen, the
-     way it was. */
+     The asset is a column of its own rather than something laid over
+     the conversation: opening one narrows the room, it does not cover
+     it. Closing it gives the room back. Each document is there from the
+     first exchange as a skeleton and fills in section by section as the
+     nodes complete — the document is the progress bar, and the rail
+     carries the same progress for the five you are not looking at. */
 
-  :root { --rail-w: 256px; --kaiso-h: 210px; }
+  :root { --rail-w: 256px; --asset-w: clamp(420px, 42vw, 680px); }
   body.rail-min { --rail-w: 68px; }
 
   /* ─── Rail ──────────────────────────────────────────────── */
@@ -89,41 +90,36 @@
   body.rail-min .krow { justify-content: center; padding: 10px 0; }
   body.rail-min .krail-head { justify-content: center; padding: 60px 0 14px; }
 
-  /* ─── Kaiso, small, over the document ───────────────────── */
-  body.shell-on .stage {
-    left: var(--rail-w); right: 0; top: 0; bottom: auto; height: var(--kaiso-h);
-    border-bottom: 1px solid rgba(200, 168, 78, 0.1);
+  /* ─── The room the rail and the asset leave ─────────────
+     Kaiso is left exactly as it was: full height of whatever space is
+     free, and the scribe's own shrink-and-lift still does its job. The
+     columns only change where that space starts and ends. */
+  body.shell-on .stage,
+  body.shell-on .chat-window { left: var(--rail-w); }
+  body.asset-open .stage,
+  body.asset-open .chat-window { right: var(--asset-w); }
+  body.asset-open .hud-top { right: calc(var(--asset-w) + 24px); }
+  body.shell-on.chat-open .chat-window { border-radius: 22px 22px 0 0; }
+  .stage, .chat-window, .hud-top {
+    transition: right 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+                left 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
-  body.shell-on .glyph-area { transform: scale(0.3); transform-origin: 50% 50%; }
-  /* The scribe's own shrink-and-lift is for a full-screen Kaiso. In the
-     shell Kaiso is already small and already at the top. */
-  body.shell-on.chat-open .stage { transform: none; }
-  body.shell-on .moons,
-  body.shell-on .moon-orbit,
-  body.shell-on .moon-aura-rot { opacity: 0; pointer-events: none; }
-  body.shell-on .hud-top { right: 24px; }
-  .stage, .chat-window, .hud-top { transition: right 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
-    left 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
-  .glyph-area { transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
 
-  /* ─── Asset region ──────────────────────────────────────── */
+  /* ─── Asset region ─────────────────────────────────────── */
   .fdock {
-    position: fixed; left: var(--rail-w); right: 0; top: var(--kaiso-h); bottom: 0; z-index: 30;
-    display: flex; flex-direction: column; opacity: 0; pointer-events: none;
+    position: fixed; top: 0; right: 0; bottom: 0; width: var(--asset-w); z-index: 37;
+    display: flex; flex-direction: column;
     background:
-      radial-gradient(120% 60% at 100% 0%, rgba(120, 90, 160, 0.09), transparent 62%),
-      linear-gradient(200deg, rgba(12, 10, 18, 0.72), rgba(6, 5, 10, 0.88));
-    transition: opacity 0.45s ease, left 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
-      bottom 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), top 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+      radial-gradient(120% 50% at 100% 0%, rgba(120, 90, 160, 0.10), transparent 62%),
+      linear-gradient(200deg, rgba(14, 12, 20, 0.96), rgba(6, 5, 10, 0.985));
+    border-left: 1px solid rgba(200, 168, 78, 0.22);
+    box-shadow: -26px 0 72px rgba(0, 0, 0, 0.62);
+    backdrop-filter: blur(14px);
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+                width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
-  body.shell-on .fdock { opacity: 1; pointer-events: auto; }
-  /* The scribe takes its height out of the document instead of over it.
-     Kaiso gives up height too: once the conversation is on screen in
-     full, the sigil is the smaller of the two ways to see it. */
-  body.shell-on.chat-open { --kaiso-h: 164px; }
-  body.shell-on.chat-open .glyph-area { transform: scale(0.19); }
-  body.shell-on.chat-open .fdock { bottom: 44vh; }
-  body.shell-on.chat-open .chat-window { left: var(--rail-w); height: 44vh; border-radius: 22px 0 0 0; }
+  body.asset-open .fdock { transform: none; }
 
   .fdock-head {
     display: flex; align-items: center; gap: 10px; flex: 0 0 auto;
@@ -211,9 +207,10 @@
   .fdock-veil { position: fixed; inset: 0; z-index: 38; opacity: 0; pointer-events: none;
     background: rgba(2, 2, 7, 0.76); backdrop-filter: blur(5px); transition: opacity 0.4s ease; }
   body.fdock-read .fdock-veil { opacity: 1; pointer-events: auto; }
-  body.fdock-read .fdock { left: 0; top: 0; bottom: 0; z-index: 40;
+  body.fdock-read { --asset-w: 100vw; }
+  body.fdock-read .fdock { z-index: 41; border-left: 0;
     background: linear-gradient(200deg, rgba(12, 10, 18, 0.99), rgba(5, 4, 9, 1)); }
-  body.fdock-read.chat-open .fdock { bottom: 0; }
+  body.fdock-read .stage, body.fdock-read .chat-window { right: 0; }
   body.fdock-read .fdock-stage { padding: 28px clamp(18px, 5vw, 70px) 0; }
   body.fdock-read .hud-top,
   body.fdock-read .kos-indicator,
@@ -225,12 +222,13 @@
   body.fdock-read .meta-r,
   body.fdock-read .reset { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 
-  /* ─── Phone ─────────────────────────────────────────────── */
+  /* ─── Phone ─────────────────────────────────────────────
+     Nothing sits beside anything: the rail lies down as a strip of
+     rings under the brand, and an opened asset takes the screen. */
   @media (max-width: 900px) {
-    :root { --kaiso-h: 128px; }
-    /* The rail lies down: a scrolling strip of rings under Kaiso. */
-    .krail { top: var(--kaiso-h); bottom: auto; left: 0; right: 0; width: auto;
-      flex-direction: row; align-items: center; transform: translateY(-120%);
+    :root { --asset-w: 100vw; }
+    .krail { top: 62px; bottom: auto; left: 0; right: 0; width: auto;
+      flex-direction: row; align-items: center; transform: translateY(-170%);
       border-right: 0; border-bottom: 1px solid rgba(200, 168, 78, 0.14); }
     body.shell-on .krail { transform: none; }
     .krail-head, .krail-foot { display: none; }
@@ -240,20 +238,55 @@
     .krow { width: auto; flex: 0 0 auto; margin: 0; border-radius: 999px;
       border-color: rgba(200, 168, 78, 0.14); padding: 7px 13px 7px 8px; }
     .krow-state { display: none; }
-    body.shell-on .stage { left: 0; }
-    .fdock { left: 0; top: calc(var(--kaiso-h) + 58px); }
-    body.shell-on.chat-open .chat-window { left: 0; border-radius: 22px 22px 0 0; }
-    body.shell-on .hud-top,
-    body.shell-on .kos-indicator { opacity: 0; pointer-events: none; }
+    body.shell-on .stage { left: 0; top: 118px; }
+    body.shell-on .chat-window { left: 0; }
+    body.asset-open .stage, body.asset-open .chat-window { right: 0; }
+    body.asset-open .hud-top { right: 24px; }
+    .fdock { border-left: 0; }
+    .fdock-head { padding-top: max(14px, env(safe-area-inset-top, 0px)); }
+    /* The asset covers the screen, so the HUD would lie across it. */
+    body.asset-open .hud-top,
+    body.asset-open .kos-indicator { opacity: 0; pointer-events: none; }
   }
 
-  /* The ready pills sit under the sigil, which used to mean the middle of
-     the screen. In the shell the sigil is a band at the top, so without
-     this they land in the middle of the document they are announcing. */
-  body.shell-on .ktoast {
-    top: calc(var(--kaiso-h) + 16px);
-    left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2);
+  /* ─── Things that were centred on the window ─────────────
+     The sigil moves with the stage, so it is already right. These are
+     fixed to the window on their own, and the middle of the window is
+     no longer the middle of the room: the rail takes from the left and
+     an open asset takes from the right. */
+  body.shell-on .ktoast,
+  body.shell-on .caption { left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2); }
+  /* The wheel indicator is the exception: re-centring it on the room
+     the rail leaves pushes it right, into the HUD rail it used to clear.
+     With no asset open it stays where it always was. */
+  body.asset-open .ktoast,
+  body.asset-open .kos-indicator,
+  body.asset-open .caption {
+    left: calc(var(--rail-w) + (100% - var(--rail-w) - var(--asset-w)) / 2);
   }
+  /* The corner controls would sit under the rail. */
+  body.shell-on .scroll-toggle,
+  body.shell-on .meta { left: calc(var(--rail-w) + 32px); }
+  body.shell-on .caption { width: min(720px, calc(100% - var(--rail-w) - 56px)); }
+  body.asset-open .caption {
+    width: min(720px, calc(100% - var(--rail-w) - var(--asset-w) - 56px)); }
+
+  /* The wheel indicator is centred and the HUD rail is right-aligned;
+     with an asset open there is no longer room for both on one line, so
+     the indicator drops under it rather than being cut in half. */
+  body.asset-open .kos-indicator { top: 96px; }
+
+  /* The HUD rail is wider than the room an open asset leaves, so it
+     loses the readiness segment the same way it does for the scribe. */
+  body.asset-open .readiness {
+    max-width: 0; padding-left: 0; padding-right: 0;
+    opacity: 0; pointer-events: none; border-left-color: transparent;
+  }
+
   @media (max-width: 900px) {
-    body.shell-on .ktoast { top: calc(var(--kaiso-h) + 70px); left: 50%; }
+    body.shell-on .ktoast, body.asset-open .ktoast,
+    body.shell-on .kos-indicator, body.asset-open .kos-indicator,
+    body.shell-on .caption, body.asset-open .caption { left: 50%; }
+    body.shell-on .scroll-toggle, body.shell-on .meta { left: 32px; }
+    body.shell-on .caption, body.asset-open .caption { width: min(720px, calc(100vw - 56px)); }
   }

@@ -9,9 +9,10 @@
   // So the layout belongs to them. A rail on the left carries every
   // asset and how far along it is, always visible, so the work in
   // progress is never something you have to go and find. Picking one
-  // opens it in the main region. Kaiso shrinks to a band above the
-  // document it is building, because once there is a document on screen
-  // the sigil is the narrator, not the subject.
+  // opens it as a column down the whole right side — a column rather
+  // than an overlay, so opening a document narrows the room instead of
+  // covering it, and closing it gives the room back. Kaiso and the
+  // scribe are untouched in between.
   //
   // Each document is there from the first exchange as a skeleton and
   // fills in section by section as the nodes complete. The document is
@@ -57,6 +58,7 @@
       + '<span class="fdock-title" id="fdockTitle">The Forge</span>'
       + '<span class="fdock-state" id="fdockState"></span>'
       + '<button class="fdock-act" id="fdockRead" type="button" title="Read at full size" aria-label="Read at full size">&#10530;</button>'
+      + '<button class="fdock-act" id="fdockClose" type="button" title="Close" aria-label="Close this asset">&#10005;</button>'
       + '</div>'
       + '<div class="fdock-stage" id="fdockStage"></div>';
 
@@ -124,6 +126,7 @@
     let exchanges = 0;
     let active = null;
     let userPicked = false;
+    let dismissed = false;   // the asset column was closed on purpose
 
     function pctOf(o) { return Math.max(0, Math.min(100, Math.round((exchanges / o.need) * 100))); }
 
@@ -153,6 +156,20 @@
       stateEl.textContent = stateWord(pctOf(o));
       docStage.scrollTop = 0;
       placeCursor(o);
+      document.body.classList.add('asset-open');
+    }
+
+    // Closing gives the room back to Kaiso and takes the rail's
+    // selection off, so nothing claims to be open when nothing is.
+    function closeAsset() {
+      dismissed = true;
+      active = null;
+      document.body.classList.remove('asset-open', 'fdock-read');
+      live.forEach((x) => {
+        x.panel.classList.remove('fasset-on');
+        x.row.classList.remove('active');
+      });
+      if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
     }
 
     // Put the boundary that just moved where it can be seen.
@@ -229,6 +246,7 @@
 
     function open(key) {
       document.body.classList.add('shell-on');
+      dismissed = false;
       if (key) { userPicked = true; focus(key); }
       else if (!active) focus(bestFocus());
     }
@@ -241,9 +259,13 @@
     dock.querySelector('#fdockRead').addEventListener('click', () => {
       document.body.classList.toggle('fdock-read');
     });
+    dock.querySelector('#fdockClose').addEventListener('click', closeAsset);
     veil.addEventListener('click', () => document.body.classList.remove('fdock-read'));
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') document.body.classList.remove('fdock-read');
+      if (e.key !== 'Escape') return;
+      // Out of read mode first, then out of the document.
+      if (document.body.classList.contains('fdock-read')) document.body.classList.remove('fdock-read');
+      else if (document.body.classList.contains('asset-open')) closeAsset();
     });
 
     // ── Wiring ───────────────────────────────────────────────────
@@ -252,10 +274,13 @@
       // Which document is on screen has to be settled before the render,
       // because the render moves the pen and follows the build frontier,
       // and both of those are about the active document.
+      document.body.classList.add('shell-on');
+      // The column shows itself once, on the first thing there is to
+      // show. After that it is the user's: a close is respected and the
+      // rail is how you come back.
       if (exchanges === 1) {
-        if (!userPicked) focus(bestFocus());
-        open();
-      } else if (!userPicked) {
+        if (!dismissed) open();
+      } else if (!userPicked && !dismissed && active) {
         // Move on only once the one being watched has landed, so the
         // view never jumps away from a document mid-build.
         const cur = live.find((x) => x.cfg.key === active);
@@ -265,7 +290,7 @@
       render();
     });
 
-    window.KaisoForge = { open, focus, keys: live.map((o) => o.cfg.key) };
+    window.KaisoForge = { open, close: closeAsset, focus, keys: live.map((o) => o.cfg.key) };
 
     render();
   })();

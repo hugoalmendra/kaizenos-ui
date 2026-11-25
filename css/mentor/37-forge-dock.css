@@ -389,3 +389,13 @@
     .krail .token-meter .tm-rate { display: block; }
     .krail .account-btn { width: 100%; flex: 0 0 auto; }
   }
+
+  /* ─── The mark, when the rail is narrow ─────────────────
+     The wordmark is 147px wide at its 24px height and the collapsed
+     rail is 68. It shortens to the OS mark — the one the loader
+     already uses — rather than being cropped or hanging over the
+     document. */
+  .brand .brand-min { display: none; }
+  body.rail-min .brand { left: 12px; }
+  body.rail-min .brand .brand-full { display: none; }
+  body.rail-min .brand .brand-min { display: block; }

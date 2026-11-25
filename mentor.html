@@ -60,7 +60,13 @@
 <div class="kos-tint" id="kosTint" aria-hidden="true"></div>
 
 <!-- KaizenOS wordmark -->
-<div class="brand"><img src="assets/kaizenOS.png" alt="KaizenOS" /></div>
+<div class="brand">
+  <img class="brand-full" src="assets/kaizenOS.png" alt="KaizenOS" />
+  <!-- Shown in place of the wordmark when the rail is collapsed: the
+       same mark the loader uses, so it is a shortening of the brand
+       rather than a second one. -->
+  <img class="brand-min" src="assets/os-mark.png" alt="" aria-hidden="true" />
+</div>
 
 <!-- KOS wheel: which pillar & node you're filling right now (opens plan on click) -->
 <button type="button" class="kos-indicator" id="kosIndicator"

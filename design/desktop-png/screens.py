@@ -94,8 +94,7 @@ SCREENS = [
     app('b8', 'Asset ready', 'B · Stage', "K.engage(); K.exchanges(8);"),
     app('b9', 'Funding readiness · ready to apply', 'B · Stage', TALK),
     app('b10', 'Time running low', 'B · Stage', ENGAGE + "K.low();"),
-    app('b11', 'Account menu', 'B · Stage',
-        TALK + "document.getElementById('accountMenu').classList.add('open');"),
+    app('b11', 'Rail · collapsed to the mark', 'B · Stage', TALK + "K.shut(); K.narrow();"),
     app('b12', 'Cookie choices', 'B · Stage', ENGAGE + "window.KaisoConsent.open();"),
 
     # ── C · Plan and tokens ─────────────────────────────────────
@@ -116,16 +115,18 @@ SCREENS = [
     app('c9', 'Out of time · session paused', 'C · Plan', TALK + "K.empty();"),
 
     # ── D · Library, plan, company ──────────────────────────────
-    app('d1', 'Library · nothing forged yet', 'D · Library', ENGAGE + "K.panel('library');"),
-    app('d2', 'Library · all six ready', 'D · Library', TALK + "K.panel('library');"),
-    app('d3', 'Your plan · KOS nodes', 'D · Library', TALK + "K.panel('kos');"),
-    app('d4', 'Your Company', 'D · Library', TALK + "window.KaisoCompany.open();"),
-    app('d5', 'Documents · nothing yet', 'D · Library', ENGAGE + "K.panel('docs');"),
-    app('d6', 'Documents · what Kaiso read', 'D · Library', READ + "K.panel('docs');"),
-    app('d7', 'Your plan · filled from a document', 'D · Library', READ + "K.panel('kos');"),
+    app('d1', 'The Forge · nothing forged yet', 'D · Rail & venture', ENGAGE),
+    app('d2', 'The Forge · all six ready', 'D · Rail & venture', TALK + "K.shut();"),
+    app('d3', 'Your plan · KOS nodes', 'D · Rail & venture', TALK + "K.panel('kos');"),
+    app('d4', 'Your Company', 'D · Rail & venture', TALK + "K.acctPage('company');"),
+    app('d5', 'Documents · nothing yet', 'D · Rail & venture', ENGAGE + "K.panel('docs');"),
+    app('d6', 'Documents · what Kaiso read', 'D · Rail & venture', READ + "K.panel('docs');"),
+    app('d7', 'Your plan · filled from a document', 'D · Rail & venture', READ + "K.panel('kos');"),
     # The founder answered Mission out loud, then handed over a deck that
     # says something else. Neither wins quietly.
-    app('d8', 'Documents · the deck disagrees', 'D · Library',
+    app('d9', 'The Forge · a document assembling', 'D · Rail & venture',
+        "K.engage(); K.exchanges(4); K.quiet(); K.asset('landing');"),
+    app('d8', 'Documents · the deck disagrees', 'D · Rail & venture',
         ENGAGE + "K.exchanges(1); K.quiet();"
         + "K.doc('helm-pitch-deck.md', " + json.dumps(DECK) + ");K.panel('docs');"),
 
@@ -140,12 +141,16 @@ SCREENS = [
     app('e8', 'Ask Kaiso to change · the way in', 'E · Outputs',
         TALK + "K.panel('exec'); K.aim('#panelExec .exec-sec');"),
     app('e9', 'Ask Kaiso to change · the ask', 'E · Outputs',
-        TALK + "K.panel('exec'); K.click('#panelExec .kedit-open'); K.top('#panelExec');"),
+        TALK + "K.panel('exec'); K.click('#panelExec .kedit-open'); K.top('#fdockStage');"),
+    app('e12', 'Pitch Deck · building, section by section', 'E · Outputs',
+        "K.engage(); K.exchanges(5); K.quiet(); K.asset('deck');"),
+    app('e13', 'Executive Summary · read at full size', 'E · Outputs',
+        TALK + "K.read('exec');"),
     app('e11', 'Executive Summary · claims traced to the deck', 'E · Outputs',
         READ + "K.panel('exec');"),
     app('e10', 'Ask Kaiso to change · changed', 'E · Outputs',
         TALK + "K.panel('exec'); K.click('#panelExec .kedit-open');"
-        "K.click('#panelExec .kedit-chip'); K.top('#panelExec');"),
+        "K.click('#panelExec .kedit-chip'); K.top('#fdockStage');"),
 
     # ── F · Account ─────────────────────────────────────────────
     app('f1', 'Manage account', 'F · Account', TALK + "K.acct('root');"),
@@ -158,6 +163,8 @@ SCREENS = [
     app('f8', 'Plan & billing', 'F · Account', TALK + "K.acct('billing');"),
     app('f9', 'Cancel plan', 'F · Account', TALK + "K.acct('cancel-plan');"),
     app('f10', 'Refund', 'F · Account', TALK + "K.acct('refund');"),
+    app('f12', 'Account · Your Plan', 'F · Account', TALK + "K.acctPage('kos');"),
+    app('f13', 'Account · Your Documents', 'F · Account', TALK + "K.acctPage('docs');"),
     app('f11', 'Give feedback', 'F · Account', TALK + "K.panel('feedback');"),
 ]
 

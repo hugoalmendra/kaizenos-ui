@@ -178,33 +178,68 @@
       render();
     }
 
-    function openPlan() {
-      if (!modal || !panelKos) return;
-      modal.querySelectorAll('.kpanel').forEach((p) => p.classList.remove('show'));
-      panelKos.classList.add('show');
-      modal.classList.add('open');
-      ind.classList.add('open');
-      ind.setAttribute('aria-expanded', 'true');
-      renderPlan();
+    // The plan is a section of the account page, not a modal of its own.
+    // The indicator still opens and closes it; it just lands somewhere
+    // the user can see where they are.
+    function planIsOpen() {
+      if (window.KaisoAccountPage) {
+        return document.body.classList.contains('account-open')
+          && panelKos && panelKos.classList.contains('on');
+      }
+      return !!(modal && modal.classList.contains('open')
+        && panelKos && panelKos.classList.contains('show'));
+    }
+
+    function markIndicator(open) {
+      if (!ind) return;
+      ind.classList.toggle('open', open);
+      ind.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function scrollToCurrent() {
       const current = planList && planList.querySelector('.plan-node.current');
       if (current) current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
 
+    function openPlan() {
+      if (!panelKos) return;
+      renderPlan();
+      if (window.KaisoAccountPage) {
+        window.KaisoAccountPage.open('kos');
+        markIndicator(true);
+        scrollToCurrent();
+        return;
+      }
+      if (!modal) return;
+      modal.querySelectorAll('.kpanel').forEach((p) => p.classList.remove('show'));
+      panelKos.classList.add('show');
+      modal.classList.add('open');
+      markIndicator(true);
+      scrollToCurrent();
+    }
+
     function closePlan() {
+      if (window.KaisoAccountPage) {
+        window.KaisoAccountPage.close();
+        markIndicator(false);
+        return;
+      }
       if (!modal) return;
       if (panelKos) panelKos.classList.remove('show');
       if (!modal.querySelector('.kpanel.show')) modal.classList.remove('open');
-      ind.classList.remove('open');
-      ind.setAttribute('aria-expanded', 'false');
+      markIndicator(false);
     }
+
+    // Leaving the plan by any other door — the page's close, another
+    // section, an asset — must not leave the indicator lit.
+    window.addEventListener('kaiso:account-section', (e) => {
+      if (!e.detail || e.detail.section !== 'kos') markIndicator(false);
+    });
 
     ind.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (modal && modal.classList.contains('open') && panelKos && panelKos.classList.contains('show')) {
-        closePlan();
-      } else {
-        openPlan();
-      }
+      if (planIsOpen()) closePlan();
+      else openPlan();
     });
 
     if (modal) {
@@ -223,6 +258,7 @@
       state: stepState,   // per-node state, for any surface that reads the plan
       openPlan,
       closePlan,
+      renderPlan,
       setStep(pillarId, nodeLabel) {
         const i = STEPS.findIndex((s) =>
           s.pillar.id === pillarId &&

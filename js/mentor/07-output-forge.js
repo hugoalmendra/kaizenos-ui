@@ -35,8 +35,9 @@
       btn.appendChild(label);
       btn.appendChild(go);
 
-      // Opening goes through the Library's own button, so the toast and the
-      // Library can never disagree about what opening an asset means.
+      // Opening still goes through the Library item's own button — the
+      // Library is no longer a screen, but it is still what knows how an
+      // asset is opened, so the toast and the forge cannot disagree.
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const o = pending;
@@ -96,7 +97,7 @@
         }
         if (ready && !o.wasReady) {
           o.wasReady = true;
-          if (exchanges > 0) showToast(o.name + ' is ready in your Library', o);
+          if (exchanges > 0) showToast(o.name + ' is ready in the Forge', o);
         }
       });
     }

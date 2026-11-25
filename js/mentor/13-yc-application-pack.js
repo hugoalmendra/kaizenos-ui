@@ -81,6 +81,31 @@
       return s.slice(0, 47) + '...';
     }
 
+    // YC asks for a one-minute founder video and almost nobody has one
+    // ready on the day. This is a read-aloud script, timed, built from
+    // the same session the rest of the pack comes from.
+    function videoScript(e, userMsgs) {
+      if (!e.company) return '(Keep talking with Kaiso — the script needs your own words)';
+      const who = (e.team || '').split('.')[0].replace(/<[^>]*>/g, '').trim();
+      const first = (userMsgs[0] || '').trim();
+      return [
+        '0:00 — 0:10  Who you are',
+        (who || 'Your name, and the one credential that makes this your problem to solve') + '.',
+        '',
+        '0:10 — 0:25  What you are building',
+        e.tagline + ' ' + (e.solution || ''),
+        '',
+        '0:25 — 0:40  Why it matters',
+        e.problem || '(the problem, in one breath)',
+        '',
+        '0:40 — 0:50  What is true already',
+        e.traction.length ? e.traction.join(' · ') : '(what exists today — users, revenue, or the thing you built last week)',
+        '',
+        '0:50 — 1:00  Why now, and why you',
+        (e.whyNow || '') + (first ? ' ' + first : ''),
+      ].join('\n');
+    }
+
     function buildYcPackTierA() {
       const e = scrapeExec();
       const userMsgs = getUserMessages();
@@ -107,15 +132,15 @@
             fields: [
               { ycLabel: 'Company name', ycHint: 'Company section', value: e.company || '(Your company name)', source: e.company ? 'session' : 'empty' },
               { ycLabel: 'Company URL', ycHint: 'Company section', value: e.companyUrl || '(Leave blank if none — better than a placeholder)', source: e.companyUrl ? 'session' : 'empty' },
-              { ycLabel: '50-character pitch', ycHint: 'Company section', value: truncate50(e.tagline), maxLen: 50, source: e.tagline ? 'session' : 'empty' },
-              { ycLabel: 'What is your company going to make?', ycHint: 'Company section', value: productDesc || '(Describe your product on YC)', source: productDesc ? 'session' : 'empty' },
+              { ycLabel: '50-character pitch', ycHint: 'Company section', value: truncate50(e.tagline), maxLen: 50, source: e.tagline ? 'session' : 'empty', pushback: 'If a stranger cannot repeat this back after one read, it is not done.' },
+              { ycLabel: 'What is your company going to make?', ycHint: 'Company section', value: productDesc || '(Describe your product on YC)', source: productDesc ? 'session' : 'empty', pushback: 'They will look for the verb. What does it do, not what it enables.' },
               { ycLabel: 'Location', ycHint: 'Company section', value: '(Fill on YC — city where founders will be during the batch)', source: 'empty' },
             ],
           },
           {
             name: 'Progress',
             fields: [
-              { ycLabel: 'How many active users or customers? Who is paying you the most?', ycHint: 'Progress · if "Are people using your product?" = Yes', value: tractionText, source: e.traction.length ? 'session' : 'empty' },
+              { ycLabel: 'How many active users or customers? Who is paying you the most?', ycHint: 'Progress · if "Are people using your product?" = Yes', value: tractionText, source: e.traction.length ? 'session' : 'empty', pushback: 'A small real number beats a large vague one. Name the biggest customer if you have one.' },
               { ycLabel: 'Revenue (6-month table)', ycHint: 'Progress · if "Do you have revenue?" = Yes', value: revenueNote ? revenueNote + '\n\n(Enter monthly USD on YC — oldest month first, not cumulative)' : '(Enter monthly revenue on YC if applicable)', source: revenueNote ? 'session' : 'empty' },
               { ycLabel: 'Growth narrative', ycHint: 'Progress · "Anything else regarding revenue or growth?"', value: progressNarrative || '(Share growth context on YC)', source: progressNarrative ? 'session' : 'empty' },
             ],
@@ -123,16 +148,24 @@
           {
             name: 'Idea',
             fields: [
-              { ycLabel: 'Why did you pick this idea?', ycHint: 'Idea section', value: whyYou, source: chatStory ? 'session' : 'empty' },
+              { ycLabel: 'Why did you pick this idea?', ycHint: 'Idea section', value: whyYou, source: chatStory ? 'session' : 'empty', pushback: 'The strongest version is a thing that happened to you, with a date on it.' },
               { ycLabel: 'Why now?', ycHint: 'Idea section', value: e.whyNow || '(Explain timing on YC)', source: e.whyNow ? 'session' : 'empty' },
-              { ycLabel: 'Competitors / alternatives', ycHint: 'Idea section', value: e.solution ? 'Incumbent workflow tools and manual ops teams. Our edge: ' + truncate50(e.tagline) : '(Describe alternatives on YC)', source: e.solution ? 'session' : 'empty' },
+              { ycLabel: 'Competitors / alternatives', ycHint: 'Idea section', value: e.solution ? 'The incumbent way of doing this, and the spreadsheet people use instead. Our edge: ' + truncate50(e.tagline) : '(Describe alternatives on YC)', source: e.solution ? 'session' : 'empty', pushback: 'Saying you have no competitors reads as not having looked. Name the status quo.' },
             ],
           },
           {
             name: 'Founder profile',
             fields: [
-              { ycLabel: 'Most impressive thing', ycHint: 'Founder bio · Accomplishments', value: e.team || '(Your strongest credential)', source: e.team ? 'session' : 'empty' },
+              { ycLabel: 'Most impressive thing', ycHint: 'Founder bio · Accomplishments', value: e.team || '(Your strongest credential)', source: e.team ? 'session' : 'empty', pushback: 'It does not have to be about startups. It has to be hard and verifiable.' },
               { ycLabel: 'Background & role', ycHint: 'Founder bio · Background', value: e.team || '(Your background on YC bio page)', source: e.team ? 'session' : 'empty' },
+            ],
+          },
+          {
+            name: 'Founder video · 60 seconds',
+            fields: [
+              { ycLabel: 'Script', ycHint: 'YC asks for a 1-minute founder video. Read this, do not perform it.',
+                value: videoScript(e, userMsgs), source: e.company ? 'session' : 'empty',
+                pushback: 'Shot on a phone, one take, good light, no slides. They are looking at you, not production value.' },
             ],
           },
           {
@@ -213,11 +246,17 @@
       fieldsEl.innerHTML = pack.sections.map((sec) => {
         const fields = (sec.fields || []).map((f) => {
           const empty = f.source === 'empty' || !f.value || String(f.value).startsWith('(');
+          // Only the 50-character pitch has a limit we can state as YC's.
+          // Everything else gets a length, which is information without
+          // being a claim about a form we do not control.
           const lenHtml = f.maxLen
             ? '<div class="yc-char-count' + (f.value.length > f.maxLen ? ' over' : '') + '">'
               + f.value.length + ' / ' + f.maxLen + ' chars</div>'
+            : (empty ? '' : '<div class="yc-char-count soft">' + f.value.length + ' chars</div>');
+          const push = f.pushback
+            ? '<div class="yc-push"><b>They will press on this.</b> ' + esc(f.pushback) + '</div>'
             : '';
-          return '<div class="yc-field" data-yc-label="' + esc(f.ycLabel) + '">'
+          return '<div class="yc-field' + (empty ? ' is-empty' : '') + '" data-yc-label="' + esc(f.ycLabel) + '">'
             + '<div class="yc-field-head">'
             + '<div class="yc-field-label">' + esc(f.ycLabel)
             + (f.ycHint ? '<small>' + esc(f.ycHint) + '</small>' : '')
@@ -226,6 +265,7 @@
             + '</div>'
             + '<div class="yc-field-value' + (empty ? ' empty' : '') + '">' + esc(f.value) + '</div>'
             + lenHtml
+            + push
             + '</div>';
         }).join('');
         return '<div class="yc-section"><div class="yc-sec-name">' + esc(sec.name) + '</div>' + fields + '</div>';
@@ -237,10 +277,26 @@
           const val = field?.querySelector('.yc-field-value')?.textContent || '';
           const label = field?.dataset.ycLabel || 'field';
           navigator.clipboard.writeText(val).then(() => {
+            // Ticking the row is the whole trick: the founder is looking
+            // at another tab most of the time and needs to find their
+            // place again in one glance, not re-read the list.
+            field.classList.add('done');
+            btn.textContent = 'Copied';
+            paintProgress();
             showToast('Copied — paste into YC\'s ' + label);
           }).catch(() => showToast('Copy failed — select text manually'));
         });
       });
+      paintProgress();
+    }
+
+    function paintProgress() {
+      const all = fieldsEl.querySelectorAll('.yc-field:not(.is-empty)');
+      const done = fieldsEl.querySelectorAll('.yc-field.done');
+      const el = document.getElementById('ycProgressText');
+      if (el) el.textContent = done.length + ' of ' + all.length + ' copied';
+      const bar = document.getElementById('ycProgressFill');
+      if (bar) bar.style.width = (all.length ? (done.length / all.length) * 100 : 0) + '%';
     }
 
     function packToMarkdown(pack) {
@@ -288,10 +344,30 @@
       }
     }
 
-    document.getElementById('ycOpenApplyBtn')?.addEventListener('click', () => {
+    // ─ Apply mode ────────────────────────────────────────────
+    // YC has no API and no prefill, so nothing can submit for the
+    // founder. What it can do is stop being a page they have to leave:
+    // the app narrows to a companion column beside the YC tab, the
+    // answers sit in YC's own order, and each one is a tap and a paste.
+    // An extension could type into the form, but it would ask for an
+    // install at the exact moment of intent and break the week YC
+    // rebuilds the form — which is the week everybody uses it.
+    function enterApplyMode() {
+      document.body.classList.add('yc-apply');
       window.open(YC_APPLY_URL, '_blank', 'noopener,noreferrer');
-    });
+    }
+    function exitApplyMode() {
+      document.body.classList.remove('yc-apply');
+    }
+    document.getElementById('ycOpenApplyBtn')?.addEventListener('click', enterApplyMode);
+    document.getElementById('ycExitApplyBtn')?.addEventListener('click', exitApplyMode);
     document.getElementById('ycDownloadMdBtn')?.addEventListener('click', downloadMarkdown);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('yc-apply')) exitApplyMode();
+    });
 
-    window.kaisoYc = { render, buildYcPack, packToMarkdown };
+    window.kaisoYc = {
+      render, buildYcPack, packToMarkdown,
+      apply: enterApplyMode, exitApply: exitApplyMode,
+    };
   })();

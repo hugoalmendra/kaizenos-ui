@@ -75,16 +75,16 @@
   } catch (e) {}
 
   var LOREM = [
-    ['user', 'We help small agencies stop losing hours to status updates.'],
-    ['kaiso', '⟨Problem⟩ Good. Who inside the agency feels that loss first — the person writing the update, or the one chasing it?'],
-    ['user', 'The account manager. They write the same thing three times a week.'],
-    ['kaiso', 'Then the buyer and the sufferer are the same person, which is the easy case. How many agencies have told you this unprompted?'],
-    ['user', 'Eleven out of the fourteen we spoke to.'],
-    ['kaiso', '⟨Evidence⟩ Eleven of fourteen is a signal, not a hunch. Say that number out loud in every pitch — it does more work than any adjective.'],
+    ['user', 'Every founder show is paid for by the fund whose portfolio is sitting in the chair.'],
+    ['kaiso', '⟨Problem⟩ Good. Who is worse off for that — the founder being interviewed, or the one watching it?'],
+    ['user', 'The one watching. They copy a story that was never true.'],
+    ['kaiso', 'Then the person you help and the person you sell to are the same, which is the easy case. How many founders have said that to you unprompted?'],
+    ['user', 'Nine of the first twelve guests, before we started recording.'],
+    ['kaiso', '⟨Evidence⟩ Nine of twelve is a signal, not a hunch. Say that number out loud in every pitch — it does more work than any adjective.'],
   ];
   var EARLIER = [
-    ['user', 'I want to understand whether this is a business or a feature.'],
-    ['kaiso', 'A fair question to open with. Tell me what the founder does on a Monday morning today, before your product exists.'],
+    ['user', 'I want to understand whether this is a show or a business.'],
+    ['kaiso', 'A fair question to open with. Tell me what a founder does today when they want to know what raising actually cost someone.'],
   ];
 
   function msg(who, text) {
@@ -173,6 +173,16 @@
     },
 
     panel: function (name) { window.KaisoPanels.open(name); },
+
+    // The account page and its sections. KaisoPanels routes most of
+    // these too, but the company surface only renders through the page.
+    acctPage: function (section) { window.KaisoAccountPage.open(section); },
+
+    // An asset in the column beside the rail, and the same read full.
+    asset: function (key) { window.KaisoForge.focus(key); },
+    read: function (key) { window.KaisoForge.focus(key); document.body.classList.add('fdock-read'); },
+    shut: function () { window.KaisoForge.close(); },
+    narrow: function () { document.body.classList.add('rail-min'); },
 
     // Hand Kaiso a document, the way a drop would. The text is the
     // thing being photographed, so it is a real read and not a fixture

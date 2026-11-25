@@ -94,11 +94,11 @@
        Company pillar — and grown from the wheel as it advances. */
     const captured = {
       'company:Mission': {
-        text: 'Solo founders lose months turning a rough idea into something an investor can read. Helm exists so the sequence is not the hard part — the work is.',
+        text: 'Founder advice is a highlight reel. Founders Unscripted exists so a first-time founder hears what the two roads actually cost.',
         source: 'Your session on 12 Aug', mine: false,
       },
       'company:Vision': {
-        text: 'Every serious founder walks into a raise with the same quality of material a well-funded team would have.',
+        text: 'The show a founder is told to watch before they decide whether to raise.',
         source: 'Your session on 12 Aug', mine: false,
       },
     };
@@ -108,10 +108,10 @@
        conversation; here it is a placeholder, and the source line says
        so honestly. */
     const STANDIN = {
-      'company:Wedge': 'A spoken mentor that interviews the founder and forges the artifacts out of the conversation itself — nothing to fill in, nothing to format.',
-      'company:Moat': 'The interview data. Every session makes the next artifact better, and nobody else has the transcript.',
-      'company:Why Now': 'Real-time voice models crossed the threshold this year. A conversation this natural was not possible eighteen months ago.',
-      'company:BHAG': 'The default first step for every founder raising for the first time.',
+      'company:Wedge': 'One comparison, held to: Silicon Valley against bootstrap, the same four segments every time, and nobody sees the questions.',
+      'company:Moat': 'The guest list and the tape. Founders say things to someone who has raised $18M and run a YC company that they do not say to a journalist.',
+      'company:Why Now': 'The middle of founder media collapsed. Big shows went to studios, small ones die before episode twenty, and video became the format founders watch.',
+      'company:BHAG': 'The default record of how companies actually get built.',
     };
 
     const openKeys = new Set();   // which cards are expanded — survives re-render

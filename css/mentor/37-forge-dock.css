@@ -1,0 +1,458 @@
+  /* ─── The forge shell ─────────────────────────────────────
+     Assets are the product, so they get the layout, not a panel in it.
+
+       rail (left)   every asset and how far along it is, always there
+       the rest      Kaiso, until you open an asset — then the document
+
+     An open asset takes the whole screen beside the rail rather than a
+     column of it: these are investor documents, and a document given
+     half a window reads as a preview of itself. Kaiso is underneath,
+     not gone, and closing brings it straight back. Each document is
+     there from the first exchange as a skeleton and fills in section by
+     section as the nodes complete — the document is the progress bar,
+     and the rail carries the same progress for the five you are not
+     looking at. */
+
+  :root { --rail-w: 268px; }
+  body.rail-min { --rail-w: 68px; }
+
+  /* ─── Rail ──────────────────────────────────────────────── */
+  .krail {
+    position: fixed; top: 0; left: 0; bottom: 0; width: var(--rail-w); z-index: 36;
+    display: flex; flex-direction: column;
+    background: linear-gradient(170deg, rgba(13, 11, 19, 0.96), rgba(6, 5, 10, 0.985));
+    border-right: 1px solid rgba(200, 168, 78, 0.16);
+    backdrop-filter: blur(14px);
+    transform: translateX(-100%);
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  body.active .krail { transform: none; }
+
+  .krail-head {
+    display: flex; align-items: center; gap: 9px; flex: 0 0 auto;
+    /* The brand mark is fixed at top-left and now lands inside the rail,
+       so the rail starts under it and the wordmark reads as its
+       masthead. Without this the collapse control sits behind the logo
+       and a collapsed rail cannot be opened again. */
+    padding: 58px 14px 10px; border-bottom: 0; justify-content: flex-end;
+  }
+  .krail-min { margin-left: auto; background: transparent; border: 0; cursor: pointer;
+    color: rgba(234, 227, 200, 0.4); font: inherit; font-size: 13px; line-height: 1; padding: 4px 2px;
+    transition: color 0.2s ease; }
+  .krail-min:hover { color: var(--gold-bright); }
+
+  .krail-list { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; padding: 10px 10px 16px;
+    scrollbar-width: thin; scrollbar-color: rgba(200, 168, 78, 0.2) transparent; }
+  .krail-list::-webkit-scrollbar { width: 5px; }
+  .krail-list::-webkit-scrollbar-thumb { background: rgba(200, 168, 78, 0.18); border-radius: 3px; }
+
+  .krow {
+    display: flex; align-items: center; gap: 11px; width: 100%;
+    padding: 10px 11px; margin-bottom: 4px; border-radius: 11px;
+    border: 1px solid transparent; background: transparent; cursor: pointer; font: inherit;
+    text-align: left; color: rgba(234, 227, 200, 0.55);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .krow:hover { background: rgba(234, 227, 200, 0.035); color: rgba(234, 227, 200, 0.85); }
+  .krow.active { background: rgba(200, 168, 78, 0.08); border-color: rgba(200, 168, 78, 0.3);
+    color: var(--gold-bright); }
+  .krow-ring {
+    width: 24px; height: 24px; flex: 0 0 24px; border-radius: 50%; display: grid; place-items: center;
+    background: conic-gradient(var(--gold-bright) calc(var(--p, 0) * 1%), rgba(200, 168, 78, 0.14) 0);
+    transition: background 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .krow-ring::after { content: ''; width: 16px; height: 16px; border-radius: 50%; background: #0a0810; }
+  .krow.done .krow-ring::after {
+    background: radial-gradient(circle, rgba(232, 200, 112, 0.34), #0a0810 72%); }
+  .krow-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .krow-name { font-size: 12px; font-weight: 500; letter-spacing: 0.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .krow-state { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.34); white-space: nowrap; }
+  .krow.done .krow-state { color: rgba(232, 200, 112, 0.6); }
+  .krow.flare { animation: krowFlare 1.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  @keyframes krowFlare {
+    0%   { box-shadow: inset 0 0 0 1px rgba(232, 200, 112, 0.5), 0 0 18px rgba(232, 200, 112, 0.22); }
+    100% { box-shadow: inset 0 0 0 1px rgba(232, 200, 112, 0), 0 0 0 rgba(232, 200, 112, 0); }
+  }
+
+  /* ─── The session, where the assets are ─────────────────
+     The time meter, the readiness grade and the account used to be a
+     glass rail in the top-right corner. That corner is the document's
+     now, and these were never about the document — they are about the
+     session. They belong with the one other thing that is. */
+  .krail-top { flex: 0 0 auto; padding: 14px 12px 4px; }
+  .krail .readiness {
+    /* It was a segment of a horizontal rail: stretched, with a divider
+       on its left and a cap on its width. Here it is a card. */
+    align-self: auto; max-width: none; border-left: 0;
+    padding: 11px 12px; border-radius: 12px;
+    border: 1px solid rgba(200, 168, 78, 0.14);
+    background: rgba(234, 227, 200, 0.025);
+  }
+  .krail .readiness.funded { max-width: none; }
+  /* The scribe collapses it out of the horizontal rail for room. There
+     is room here. */
+  body.chat-open .krail .readiness {
+    max-width: none; padding: 11px 12px; opacity: 1; pointer-events: auto;
+    border-left-color: rgba(200, 168, 78, 0.14);
+  }
+  /* At A+ the card grows an Apply to YC button. Inline, in a column
+     this narrow, it squeezes the verdict into three lines; it takes a
+     row of its own instead. */
+  .krail .readiness { flex-wrap: wrap; }
+  .krail .rd-yc-btn {
+    width: 100%; margin: 10px 0 0; text-align: center; justify-content: center;
+  }
+
+  /* The wheel indicator, as a row rather than a floating pill. */
+  .krail .kos-indicator {
+    position: static; transform: none; opacity: 1; pointer-events: auto;
+    display: grid; grid-template-columns: 9px 1fr auto; align-items: center;
+    gap: 8px 9px; width: 100%; margin-top: 8px;
+    padding: 10px 12px; border-radius: 12px; text-align: left;
+    background: rgba(234, 227, 200, 0.025);
+  }
+  body.active .krail .kos-indicator { transform: none; }
+  .krail .kos-indicator .kos-gem { grid-row: 1; }
+  .krail .kos-indicator .kos-pillar { grid-column: 2; }
+  .krail .kos-indicator .kos-sep { display: none; }
+  .krail .kos-indicator .kos-ready-pill { grid-column: 3; grid-row: 1; }
+  .krail .kos-indicator .kos-node {
+    grid-column: 2; grid-row: 2; font-size: 12px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .krail .kos-indicator .kos-count { grid-column: 3; grid-row: 2; margin-left: 0; }
+  .krail .kos-indicator .kos-chevron { display: none; }
+  .krail .kos-indicator:hover { background: rgba(200, 168, 78, 0.06); }
+  body.account-open .krail .kos-indicator.open {
+    border-color: var(--gold-bright); background: rgba(200, 168, 78, 0.09);
+  }
+
+  .krail-count { flex: 0 0 auto; padding: 14px 18px 8px;
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.34); white-space: nowrap; overflow: hidden; }
+  .krail-count b { color: rgba(232, 200, 112, 0.85); font-weight: 600; }
+
+  .krail-base { flex: 0 0 auto; padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgba(200, 168, 78, 0.1); }
+  .krail .token-meter { width: auto; padding: 8px 6px 10px; }
+  /* The ring is a ::before and the icon an svg. Left to absolute
+     offsets they drift apart — the ring was centred on 21 and the icon
+     on 28.5. They share one grid cell instead, each centred in it, so
+     they are concentric whatever either one measures. */
+  .krail .account-btn {
+    position: relative; width: 100%; align-self: auto; border-left: 0;
+    display: grid; grid-template-columns: 32px 1fr; align-items: center;
+    gap: 11px; padding: 5px 8px; border-radius: 10px; height: 42px;
+  }
+  .krail .account-btn::before {
+    position: static; grid-column: 1; grid-row: 1;
+    width: 32px; height: 32px; justify-self: center; align-self: center;
+  }
+  .krail .account-btn svg {
+    position: static; grid-column: 1; grid-row: 1;
+    justify-self: center; align-self: center; margin: 0;
+  }
+  .account-btn-lbl { grid-column: 2; grid-row: 1; justify-self: start; }
+  .account-btn-lbl { font-size: 12px; letter-spacing: 0.02em;
+    color: rgba(234, 227, 200, 0.72); }
+  .krail .account-btn:hover .account-btn-lbl { color: var(--gold-bright); }
+  /* The menu hung off the top-right corner the button used to be in. */
+  body.active .account-menu {
+    top: auto; right: auto; bottom: 68px; left: 12px;
+    width: calc(var(--rail-w) - 24px); z-index: 43;
+    transform: translateY(8px);
+  }
+  body.active .account-menu.open { transform: none; }
+
+  body.rail-min .krail-top,
+  body.rail-min .krail-count,
+  body.rail-min .token-meter,
+  body.rail-min .account-btn-lbl { display: none; }
+  body.rail-min .krail .account-btn {
+    grid-template-columns: 32px; justify-content: center; padding: 5px 0;
+  }
+  body.rail-min .account-menu { width: 214px; left: 76px; }
+
+  /* Collapsed: rings only, names on hover via the title attribute. */
+  body.rail-min .krow-main { display: none; }
+  body.rail-min .krow { justify-content: center; padding: 10px 0; }
+  body.rail-min .krail-head { justify-content: center; padding: 58px 0 10px; }
+
+  /* ─── The room the rail and the asset leave ─────────────
+     Kaiso is left exactly as it was: full height of whatever space is
+     free, and the scribe's own shrink-and-lift still does its job. The
+     columns only change where that space starts and ends. */
+  body.active .stage,
+  body.active .chat-window { left: var(--rail-w); }
+  body.active.chat-open .chat-window { border-radius: 22px 22px 0 0; }
+  .stage, .chat-window, .hud-top {
+    transition: right 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+                left 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* ─── Asset region ─────────────────────────────────────── */
+  .fdock {
+    position: fixed; top: 0; right: 0; bottom: 0; left: var(--rail-w); z-index: 37;
+    display: flex; flex-direction: column;
+    background:
+      radial-gradient(90% 50% at 70% 0%, rgba(120, 90, 160, 0.10), transparent 62%),
+      linear-gradient(200deg, rgba(13, 11, 19, 0.985), rgba(5, 4, 9, 0.995));
+    border-left: 1px solid rgba(200, 168, 78, 0.16);
+    /* A full-width panel sweeping in from the edge is a lot of motion
+       for opening a document. It arrives instead. */
+    opacity: 0; pointer-events: none; transform: translateY(8px) scale(0.995);
+    transform-origin: 50% 0;
+    transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+                left 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+                bottom 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  body.asset-open .fdock { opacity: 1; pointer-events: auto; transform: none; }
+  /* The title band and the session HUD float over the document, so the
+     document has to fade out as it passes under them rather than
+     sliding behind them in one piece. */
+  .fdock::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 96px;
+    pointer-events: none; z-index: 3;
+    background: linear-gradient(180deg, rgba(8, 7, 12, 0.96) 42%, rgba(8, 7, 12, 0) 100%);
+  }
+  .fdock-head { position: relative; z-index: 4; }
+  /* The scribe still takes its height out of the document rather than
+     over it, so you can keep talking while you read — but it takes less
+     of it. At its full-screen 70vh the document was left a sliver, and
+     a document you cannot read is not worth talking about. */
+  body.asset-open.chat-open .fdock { bottom: 44vh; }
+  body.asset-open.chat-open .chat-window { height: 44vh; }
+
+  /* Title and controls all sit left: the session HUD is right-aligned
+     and floats in this same band, so the right half is its. */
+  .fdock-head {
+    display: flex; align-items: center; gap: 10px; flex: 0 0 auto;
+    padding: 26px 20px 12px; border-bottom: 0;
+  }
+  .fdock-head .tm-dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 6px;
+    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright); }
+  .fdock-title { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fdock-state { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(234, 227, 200, 0.36); white-space: nowrap;
+    padding-left: 6px; margin-right: 2px; }
+  .fdock-act { background: transparent; border: 0; cursor: pointer; padding: 4px 6px;
+    color: rgba(234, 227, 200, 0.5); font: inherit; font-size: 14px; line-height: 1;
+    transition: color 0.2s ease; }
+  .fdock-act:hover { color: var(--gold-bright); }
+
+  .fdock-stage {
+    flex: 1 1 auto; overflow: auto; padding: 34px clamp(16px, 3vw, 40px) 0;
+    scrollbar-width: thin; scrollbar-color: rgba(200, 168, 78, 0.22) transparent;
+  }
+  .fdock-stage::-webkit-scrollbar { width: 6px; }
+  .fdock-stage::-webkit-scrollbar-thumb { background: rgba(200, 168, 78, 0.2); border-radius: 3px; }
+
+  /* Panels out of the modal keep their content styling, lose the box. */
+  .fdock-stage .kpanel {
+    display: none; position: static; width: 100%; max-width: 1000px; margin: 0 auto;
+    max-height: none; overflow: visible; background: none; border: 0; border-radius: 0;
+    padding: 0; box-shadow: none; animation: none;
+  }
+  .fdock-stage .kpanel.fasset-on { display: block; }
+  .fdock-stage .kp-head { display: none; }
+  /* The ask bar cancels .kpanel's 24px padding with a negative offset;
+     in here the panel has none, so it would float off the floor. */
+  .fdock-stage .kedit-bar { bottom: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;
+    padding-left: 0; padding-right: 0; }
+
+  /* ─── The document is the progress bar ──────────────────── */
+  .fsec { position: relative; transition:
+      opacity 0.7s ease, filter 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .fsec.fsec-skel {
+    opacity: 0.16; filter: blur(5px) saturate(0); transform: translateY(5px);
+    pointer-events: none; user-select: none;
+  }
+  .fsec.fsec-skel::after {
+    content: ''; position: absolute; inset: -2px; border-radius: 8px; pointer-events: none;
+    background: linear-gradient(100deg, transparent 32%, rgba(200, 168, 78, 0.10) 50%, transparent 68%);
+    background-size: 260% 100%; animation: fskel 2.8s linear infinite;
+  }
+  @keyframes fskel { from { background-position: 180% 0; } to { background-position: -80% 0; } }
+
+  .fsec.fsec-land { animation: fsecLand 0.95s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  @keyframes fsecLand {
+    0%   { opacity: 0.16; filter: blur(5px) saturate(0); transform: translateY(5px); }
+    45%  { opacity: 1; filter: blur(0) saturate(1.3) brightness(1.12); }
+    100% { opacity: 1; filter: none; transform: none; }
+  }
+  .fsec.fsec-land::before {
+    content: ''; position: absolute; left: -4px; right: -4px; top: 0; height: 100%;
+    pointer-events: none; border-radius: 8px;
+    background: linear-gradient(180deg, transparent, rgba(232, 200, 112, 0.14), transparent);
+    background-size: 100% 38%; animation: fscan 0.95s cubic-bezier(0.3, 0.6, 0.3, 1);
+  }
+  @keyframes fscan { from { background-position: 0 -120%; } to { background-position: 0 220%; } }
+
+  /* ─── The pen ───────────────────────────────────────────── */
+  .fforge-cursor {
+    display: flex; align-items: center; gap: 9px; margin: 16px 0; padding: 9px 13px;
+    border: 1px dashed rgba(200, 168, 78, 0.26); border-radius: 10px;
+    background: rgba(200, 168, 78, 0.035);
+    font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.72);
+  }
+  .ffc-dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 6px;
+    background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright);
+    animation: ffcPulse 1.6s ease-in-out infinite; }
+  @keyframes ffcPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.72); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fsec, .fdock, .krail, .stage, .glyph-area { transition-duration: 0.01ms; }
+    .fsec.fsec-land, .fsec.fsec-land::before, .fsec.fsec-skel::after,
+    .krow.flare, .ffc-dot { animation: none; }
+  }
+
+  /* ─── Read mode — the rail steps out too ───────────────
+     An open asset already has the screen beside the rail, so the only
+     thing left to give it is the rail. */
+  .fdock-veil { position: fixed; inset: 0; z-index: 38; opacity: 0; pointer-events: none;
+    background: rgba(2, 2, 7, 0.76); transition: opacity 0.4s ease; }
+  body.fdock-read .fdock-veil { opacity: 1; pointer-events: auto; }
+  body.fdock-read .fdock { left: 0; z-index: 41; border-left: 0; }
+  body.fdock-read .krail { transform: translateX(-100%); }
+  body.fdock-read .fdock-stage { padding: 30px clamp(18px, 5vw, 70px) 0; }
+  body.fdock-read .hud-top { opacity: 0; pointer-events: none; }
+
+  /* ─── What stands down while a document is open ─────────
+     The asset covers Kaiso, so everything that belongs to Kaiso steps
+     back rather than drawing across the document. Nothing is lost: the
+     rail is still announcing — a row flares when its asset lands, which
+     is the same news the pill used to carry, in the place you are
+     already watching. */
+  body.asset-open .kos-indicator,
+  body.asset-open #ktoast,
+  body.asset-open #kready,
+  body.asset-open .caption,
+  body.asset-open .session-timer,
+  body.asset-open .scroll-toggle,
+  body.asset-open .meta,
+  body.asset-open .meta-r,
+  body.asset-open .reset { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  /* The session HUD stays — it is the clock and the account, not
+     Kaiso's. It floats in the same band as the asset's own title, which
+     is why that title and its controls all sit on the left. */
+  body.asset-open .hud-top { z-index: 42; right: 24px; }
+
+  /* ─── Things centred on a window whose middle has moved ── */
+  body.active .ktoast,
+  body.active .caption { left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2); }
+  body.active .caption { width: min(720px, calc(100% - var(--rail-w) - 56px)); }
+  /* The corner controls would sit under the rail. The quill and the
+     caption toggle are a pair, 56px apart, and only the quill was moved
+     — which put them on top of each other the moment the rail was
+     collapsed and left the caption toggle behind the rail when it was
+     not. They move together. */
+  body.active .scroll-toggle { left: calc(var(--rail-w) + 32px); }
+  body.active .caption-toggle { left: calc(var(--rail-w) + 88px); }
+  /* Both belong to Kaiso, so both stand down for a document. */
+  body.asset-open .caption-toggle,
+  body.account-open .caption-toggle,
+  body.account-open .scroll-toggle,
+  body.account-open .caption,
+  body.account-open .session-timer { opacity: 0; pointer-events: none; }
+
+  /* ─── Phone — the rail becomes a drawer ─────────────────
+     It cannot lie down as a strip any more: it carries the clock, the
+     readiness grade and the account, and a row of pills has nowhere to
+     put those. So it stays itself and slides. */
+  .krail-open {
+    position: fixed; top: 20px; right: 18px; z-index: 44;
+    display: none; width: 40px; height: 40px; padding: 0;
+    align-content: center; justify-items: center; gap: 4px;
+    border: 1px solid rgba(200, 168, 78, 0.26); border-radius: 11px;
+    background: rgba(10, 9, 14, 0.82); cursor: pointer;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .krail-open span { display: block; width: 15px; height: 1.5px; border-radius: 2px;
+    background: rgba(232, 200, 112, 0.85); }
+  .krail-veil { position: fixed; inset: 0; z-index: 35; opacity: 0; pointer-events: none;
+    background: rgba(2, 2, 7, 0.68); transition: opacity 0.35s ease; }
+
+  @media (max-width: 900px) {
+    .krail-open { display: grid; }
+    body.active .krail-open { opacity: 1; pointer-events: auto; }
+    body.rail-out .krail-veil { opacity: 1; pointer-events: auto; }
+    .krail { width: min(320px, 86vw); z-index: 45; transform: translateX(-100%); }
+    body.active .krail { transform: translateX(-100%); }
+    body.active.rail-out .krail { transform: none; }
+    .krail-head { padding-top: 20px; }
+    /* Nothing is beside anything: Kaiso and an opened asset each take
+       the screen, and the drawer comes over the top of whichever. */
+    body.active .stage, body.active .chat-window { left: 0; }
+    body.active .scroll-toggle { left: 32px; }
+    body.active .caption-toggle { left: 88px; }
+    body.active .ktoast, body.active .caption { left: 50%; }
+    body.active .caption { width: min(720px, calc(100vw - 56px)); }
+    .fdock { left: 0; border-left: 0; }
+    .fdock-head { padding-top: max(18px, env(safe-area-inset-top, 0px)); padding-right: 68px; }
+    body.active .account-menu { left: 12px; width: min(296px, 80vw); z-index: 46; }
+    body.fdock-read .krail-open { opacity: 0; pointer-events: none; }
+    /* These were trimmed for a cramped top-right rail. The drawer is
+       not cramped, so they come back. */
+    .krail .readiness { display: flex; }
+    .krail .token-meter .tm-rate { display: block; }
+    .krail .account-btn { width: 100%; flex: 0 0 auto; }
+  }
+
+  /* ─── The mark, when the rail is narrow ─────────────────
+     The wordmark is 147px wide at its 24px height and the collapsed
+     rail is 68. It shortens to the OS mark — the one the loader
+     already uses — rather than being cropped or hanging over the
+     document. */
+  .brand .brand-min { display: none; }
+  body.rail-min .brand { left: 12px; }
+  body.rail-min .brand .brand-full { display: none; }
+  body.rail-min .brand .brand-min { display: block; }
+
+  /* ─── Kaiso, on or off ──────────────────────────────────
+     Neither speaks nor listens when it is off. It lives with the
+     session rather than in the scribe, because the moment you most
+     want him quiet is usually while you are reading something he
+     just made — and the scribe is closed then. */
+  .kvoice {
+    display: grid; grid-template-columns: 32px 1fr auto; align-items: center;
+    gap: 11px; width: 100%; height: 42px; padding: 5px 8px; margin-bottom: 2px;
+    border: 1px solid transparent; border-radius: 10px; background: transparent;
+    cursor: pointer; font: inherit; text-align: left;
+    transition: background 0.18s ease, border-color 0.18s ease;
+  }
+  .kvoice:hover { background: rgba(234, 227, 200, 0.035); }
+  .kvoice-ic { grid-column: 1; justify-self: center; display: grid; place-items: center; }
+  .kvoice-ic svg { width: 19px; height: 19px; fill: none;
+    stroke: var(--gold-bright); stroke-width: 1.5; transition: stroke 0.2s ease; }
+  .kvoice .kv-off { display: none; }
+  .kvoice.off .kv-on { display: none; }
+  .kvoice.off .kv-off { display: block; }
+  .kvoice.off .kvoice-ic svg { stroke: rgba(234, 227, 200, 0.4); }
+  .kvoice-main { grid-column: 2; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .kvoice-name { font-size: 12px; color: rgba(234, 227, 200, 0.8); }
+  .kvoice-state { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.6); }
+  .kvoice.off .kvoice-name { color: rgba(234, 227, 200, 0.5); }
+  .kvoice.off .kvoice-state { color: rgba(234, 227, 200, 0.3); }
+  /* The switch */
+  .kvoice-sw { grid-column: 3; width: 30px; height: 17px; border-radius: 999px;
+    background: rgba(200, 168, 78, 0.5); position: relative; transition: background 0.22s ease; }
+  .kvoice-sw i { position: absolute; top: 2.5px; left: 2.5px; width: 12px; height: 12px;
+    border-radius: 50%; background: #0a0810; transition: transform 0.22s cubic-bezier(0.2,0.7,0.2,1); }
+  .kvoice:not(.off) .kvoice-sw i { transform: translateX(13px); }
+  .kvoice.off .kvoice-sw { background: rgba(234, 227, 200, 0.16); }
+
+  body.rail-min .kvoice { grid-template-columns: 32px; justify-content: center; padding: 5px 0; }
+  body.rail-min .kvoice-main, body.rail-min .kvoice-sw { display: none; }
+
+  /* The sigil says so too: the phase line reads KAISO OFF and the
+     glyph stands down rather than looking like it is still listening. */
+  body.kaiso-off .glyph-area { opacity: 0.5; }
+  .kaiso-listening[data-phase="off"] { color: rgba(234, 227, 200, 0.38); }
+  .kaiso-listening[data-phase="off"] .pulse-dot {
+    animation: none; background: rgba(234, 227, 200, 0.3); box-shadow: none;
+  }

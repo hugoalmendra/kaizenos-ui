@@ -1,18 +1,19 @@
   /* ─── The forge shell ─────────────────────────────────────
      Assets are the product, so they get the layout, not a panel in it.
 
-       rail (left)    every asset and how far along it is, always there
-       Kaiso (middle) unchanged — the sigil and the scribe as they were
-       asset (right)  the open document, full height, closable
+       rail (left)   every asset and how far along it is, always there
+       the rest      Kaiso, until you open an asset — then the document
 
-     The asset is a column of its own rather than something laid over
-     the conversation: opening one narrows the room, it does not cover
-     it. Closing it gives the room back. Each document is there from the
-     first exchange as a skeleton and fills in section by section as the
-     nodes complete — the document is the progress bar, and the rail
-     carries the same progress for the five you are not looking at. */
+     An open asset takes the whole screen beside the rail rather than a
+     column of it: these are investor documents, and a document given
+     half a window reads as a preview of itself. Kaiso is underneath,
+     not gone, and closing brings it straight back. Each document is
+     there from the first exchange as a skeleton and fills in section by
+     section as the nodes complete — the document is the progress bar,
+     and the rail carries the same progress for the five you are not
+     looking at. */
 
-  :root { --rail-w: 256px; --asset-w: clamp(420px, 42vw, 680px); }
+  :root { --rail-w: 256px; }
   body.rail-min { --rail-w: 68px; }
 
   /* ─── Rail ──────────────────────────────────────────────── */
@@ -96,9 +97,6 @@
      columns only change where that space starts and ends. */
   body.shell-on .stage,
   body.shell-on .chat-window { left: var(--rail-w); }
-  body.asset-open .stage,
-  body.asset-open .chat-window { right: var(--asset-w); }
-  body.asset-open .hud-top { right: calc(var(--asset-w) + 24px); }
   body.shell-on.chat-open .chat-window { border-radius: 22px 22px 0 0; }
   .stage, .chat-window, .hud-top {
     transition: right 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -107,37 +105,57 @@
 
   /* ─── Asset region ─────────────────────────────────────── */
   .fdock {
-    position: fixed; top: 0; right: 0; bottom: 0; width: var(--asset-w); z-index: 37;
+    position: fixed; top: 0; right: 0; bottom: 0; left: var(--rail-w); z-index: 37;
     display: flex; flex-direction: column;
     background:
-      radial-gradient(120% 50% at 100% 0%, rgba(120, 90, 160, 0.10), transparent 62%),
-      linear-gradient(200deg, rgba(14, 12, 20, 0.96), rgba(6, 5, 10, 0.985));
-    border-left: 1px solid rgba(200, 168, 78, 0.22);
-    box-shadow: -26px 0 72px rgba(0, 0, 0, 0.62);
-    backdrop-filter: blur(14px);
-    transform: translateX(100%);
-    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
-                width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+      radial-gradient(90% 50% at 70% 0%, rgba(120, 90, 160, 0.10), transparent 62%),
+      linear-gradient(200deg, rgba(13, 11, 19, 0.985), rgba(5, 4, 9, 0.995));
+    border-left: 1px solid rgba(200, 168, 78, 0.16);
+    /* A full-width panel sweeping in from the edge is a lot of motion
+       for opening a document. It arrives instead. */
+    opacity: 0; pointer-events: none; transform: translateY(8px) scale(0.995);
+    transform-origin: 50% 0;
+    transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+                left 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+                bottom 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
-  body.asset-open .fdock { transform: none; }
+  body.asset-open .fdock { opacity: 1; pointer-events: auto; transform: none; }
+  /* The title band and the session HUD float over the document, so the
+     document has to fade out as it passes under them rather than
+     sliding behind them in one piece. */
+  .fdock::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 96px;
+    pointer-events: none; z-index: 3;
+    background: linear-gradient(180deg, rgba(8, 7, 12, 0.96) 42%, rgba(8, 7, 12, 0) 100%);
+  }
+  .fdock-head { position: relative; z-index: 4; }
+  /* The scribe still takes its height out of the document rather than
+     over it, so you can keep talking while you read — but it takes less
+     of it. At its full-screen 70vh the document was left a sliver, and
+     a document you cannot read is not worth talking about. */
+  body.asset-open.chat-open .fdock { bottom: 44vh; }
+  body.asset-open.chat-open .chat-window { height: 44vh; }
 
+  /* Title and controls all sit left: the session HUD is right-aligned
+     and floats in this same band, so the right half is its. */
   .fdock-head {
     display: flex; align-items: center; gap: 10px; flex: 0 0 auto;
-    padding: 13px 20px 11px; border-bottom: 1px solid rgba(200, 168, 78, 0.1);
+    padding: 26px 20px 12px; border-bottom: 0;
   }
   .fdock-head .tm-dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 6px;
     background: var(--gold-bright); box-shadow: 0 0 8px var(--gold-bright); }
   .fdock-title { font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
     color: rgba(232, 200, 112, 0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .fdock-state { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(234, 227, 200, 0.36); margin-left: auto; white-space: nowrap; }
+    color: rgba(234, 227, 200, 0.36); white-space: nowrap;
+    padding-left: 6px; margin-right: 2px; }
   .fdock-act { background: transparent; border: 0; cursor: pointer; padding: 4px 6px;
     color: rgba(234, 227, 200, 0.5); font: inherit; font-size: 14px; line-height: 1;
     transition: color 0.2s ease; }
   .fdock-act:hover { color: var(--gold-bright); }
 
   .fdock-stage {
-    flex: 1 1 auto; overflow: auto; padding: 20px clamp(16px, 3vw, 40px) 0;
+    flex: 1 1 auto; overflow: auto; padding: 34px clamp(16px, 3vw, 40px) 0;
     scrollbar-width: thin; scrollbar-color: rgba(200, 168, 78, 0.22) transparent;
   }
   .fdock-stage::-webkit-scrollbar { width: 6px; }
@@ -203,30 +221,49 @@
     .krow.flare, .ffc-dot { animation: none; }
   }
 
-  /* ─── Read mode ─────────────────────────────────────────── */
+  /* ─── Read mode — the rail steps out too ───────────────
+     An open asset already has the screen beside the rail, so the only
+     thing left to give it is the rail. */
   .fdock-veil { position: fixed; inset: 0; z-index: 38; opacity: 0; pointer-events: none;
-    background: rgba(2, 2, 7, 0.76); backdrop-filter: blur(5px); transition: opacity 0.4s ease; }
+    background: rgba(2, 2, 7, 0.76); transition: opacity 0.4s ease; }
   body.fdock-read .fdock-veil { opacity: 1; pointer-events: auto; }
-  body.fdock-read { --asset-w: 100vw; }
-  body.fdock-read .fdock { z-index: 41; border-left: 0;
-    background: linear-gradient(200deg, rgba(12, 10, 18, 0.99), rgba(5, 4, 9, 1)); }
-  body.fdock-read .stage, body.fdock-read .chat-window { right: 0; }
-  body.fdock-read .fdock-stage { padding: 28px clamp(18px, 5vw, 70px) 0; }
-  body.fdock-read .hud-top,
-  body.fdock-read .kos-indicator,
-  body.fdock-read #ktoast,
-  body.fdock-read #kready,
-  body.fdock-read .session-timer,
-  body.fdock-read .scroll-toggle,
-  body.fdock-read .meta,
-  body.fdock-read .meta-r,
-  body.fdock-read .reset { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  body.fdock-read .fdock { left: 0; z-index: 41; border-left: 0; }
+  body.fdock-read .krail { transform: translateX(-100%); }
+  body.fdock-read .fdock-stage { padding: 30px clamp(18px, 5vw, 70px) 0; }
+  body.fdock-read .hud-top { opacity: 0; pointer-events: none; }
+
+  /* ─── What stands down while a document is open ─────────
+     The asset covers Kaiso, so everything that belongs to Kaiso steps
+     back rather than drawing across the document. Nothing is lost: the
+     rail is still announcing — a row flares when its asset lands, which
+     is the same news the pill used to carry, in the place you are
+     already watching. */
+  body.asset-open .kos-indicator,
+  body.asset-open #ktoast,
+  body.asset-open #kready,
+  body.asset-open .caption,
+  body.asset-open .session-timer,
+  body.asset-open .scroll-toggle,
+  body.asset-open .meta,
+  body.asset-open .meta-r,
+  body.asset-open .reset { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  /* The session HUD stays — it is the clock and the account, not
+     Kaiso's. It floats in the same band as the asset's own title, which
+     is why that title and its controls all sit on the left. */
+  body.asset-open .hud-top { z-index: 42; right: 24px; }
+
+  /* ─── Things centred on a window whose middle has moved ── */
+  body.shell-on .ktoast,
+  body.shell-on .caption { left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2); }
+  body.shell-on .caption { width: min(720px, calc(100% - var(--rail-w) - 56px)); }
+  /* The corner controls would sit under the rail. */
+  body.shell-on .scroll-toggle,
+  body.shell-on .meta { left: calc(var(--rail-w) + 32px); }
 
   /* ─── Phone ─────────────────────────────────────────────
-     Nothing sits beside anything: the rail lies down as a strip of
-     rings under the brand, and an opened asset takes the screen. */
+     The rail lies down as a strip of rings under the brand, and an
+     opened asset takes the screen outright. */
   @media (max-width: 900px) {
-    :root { --asset-w: 100vw; }
     .krail { top: 62px; bottom: auto; left: 0; right: 0; width: auto;
       flex-direction: row; align-items: center; transform: translateY(-170%);
       border-right: 0; border-bottom: 1px solid rgba(200, 168, 78, 0.14); }
@@ -240,53 +277,10 @@
     .krow-state { display: none; }
     body.shell-on .stage { left: 0; top: 118px; }
     body.shell-on .chat-window { left: 0; }
-    body.asset-open .stage, body.asset-open .chat-window { right: 0; }
-    body.asset-open .hud-top { right: 24px; }
-    .fdock { border-left: 0; }
-    .fdock-head { padding-top: max(14px, env(safe-area-inset-top, 0px)); }
-    /* The asset covers the screen, so the HUD would lie across it. */
-    body.asset-open .hud-top,
-    body.asset-open .kos-indicator { opacity: 0; pointer-events: none; }
-  }
-
-  /* ─── Things that were centred on the window ─────────────
-     The sigil moves with the stage, so it is already right. These are
-     fixed to the window on their own, and the middle of the window is
-     no longer the middle of the room: the rail takes from the left and
-     an open asset takes from the right. */
-  body.shell-on .ktoast,
-  body.shell-on .caption { left: calc(var(--rail-w) + (100% - var(--rail-w)) / 2); }
-  /* The wheel indicator is the exception: re-centring it on the room
-     the rail leaves pushes it right, into the HUD rail it used to clear.
-     With no asset open it stays where it always was. */
-  body.asset-open .ktoast,
-  body.asset-open .kos-indicator,
-  body.asset-open .caption {
-    left: calc(var(--rail-w) + (100% - var(--rail-w) - var(--asset-w)) / 2);
-  }
-  /* The corner controls would sit under the rail. */
-  body.shell-on .scroll-toggle,
-  body.shell-on .meta { left: calc(var(--rail-w) + 32px); }
-  body.shell-on .caption { width: min(720px, calc(100% - var(--rail-w) - 56px)); }
-  body.asset-open .caption {
-    width: min(720px, calc(100% - var(--rail-w) - var(--asset-w) - 56px)); }
-
-  /* The wheel indicator is centred and the HUD rail is right-aligned;
-     with an asset open there is no longer room for both on one line, so
-     the indicator drops under it rather than being cut in half. */
-  body.asset-open .kos-indicator { top: 96px; }
-
-  /* The HUD rail is wider than the room an open asset leaves, so it
-     loses the readiness segment the same way it does for the scribe. */
-  body.asset-open .readiness {
-    max-width: 0; padding-left: 0; padding-right: 0;
-    opacity: 0; pointer-events: none; border-left-color: transparent;
-  }
-
-  @media (max-width: 900px) {
-    body.shell-on .ktoast, body.asset-open .ktoast,
-    body.shell-on .kos-indicator, body.asset-open .kos-indicator,
-    body.shell-on .caption, body.asset-open .caption { left: 50%; }
     body.shell-on .scroll-toggle, body.shell-on .meta { left: 32px; }
-    body.shell-on .caption, body.asset-open .caption { width: min(720px, calc(100vw - 56px)); }
+    body.shell-on .ktoast, body.shell-on .caption { left: 50%; }
+    body.shell-on .caption { width: min(720px, calc(100vw - 56px)); }
+    .fdock { left: 0; border-left: 0; }
+    .fdock-head { padding-top: max(16px, env(safe-area-inset-top, 0px)); }
+    body.asset-open .hud-top { opacity: 0; pointer-events: none; }
   }

@@ -411,3 +411,48 @@
   body.rail-min .brand { left: 12px; }
   body.rail-min .brand .brand-full { display: none; }
   body.rail-min .brand .brand-min { display: block; }
+
+  /* ─── Kaiso, on or off ──────────────────────────────────
+     Neither speaks nor listens when it is off. It lives with the
+     session rather than in the scribe, because the moment you most
+     want him quiet is usually while you are reading something he
+     just made — and the scribe is closed then. */
+  .kvoice {
+    display: grid; grid-template-columns: 32px 1fr auto; align-items: center;
+    gap: 11px; width: 100%; height: 42px; padding: 5px 8px; margin-bottom: 2px;
+    border: 1px solid transparent; border-radius: 10px; background: transparent;
+    cursor: pointer; font: inherit; text-align: left;
+    transition: background 0.18s ease, border-color 0.18s ease;
+  }
+  .kvoice:hover { background: rgba(234, 227, 200, 0.035); }
+  .kvoice-ic { grid-column: 1; justify-self: center; display: grid; place-items: center; }
+  .kvoice-ic svg { width: 19px; height: 19px; fill: none;
+    stroke: var(--gold-bright); stroke-width: 1.5; transition: stroke 0.2s ease; }
+  .kvoice .kv-off { display: none; }
+  .kvoice.off .kv-on { display: none; }
+  .kvoice.off .kv-off { display: block; }
+  .kvoice.off .kvoice-ic svg { stroke: rgba(234, 227, 200, 0.4); }
+  .kvoice-main { grid-column: 2; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .kvoice-name { font-size: 12px; color: rgba(234, 227, 200, 0.8); }
+  .kvoice-state { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(232, 200, 112, 0.6); }
+  .kvoice.off .kvoice-name { color: rgba(234, 227, 200, 0.5); }
+  .kvoice.off .kvoice-state { color: rgba(234, 227, 200, 0.3); }
+  /* The switch */
+  .kvoice-sw { grid-column: 3; width: 30px; height: 17px; border-radius: 999px;
+    background: rgba(200, 168, 78, 0.5); position: relative; transition: background 0.22s ease; }
+  .kvoice-sw i { position: absolute; top: 2.5px; left: 2.5px; width: 12px; height: 12px;
+    border-radius: 50%; background: #0a0810; transition: transform 0.22s cubic-bezier(0.2,0.7,0.2,1); }
+  .kvoice:not(.off) .kvoice-sw i { transform: translateX(13px); }
+  .kvoice.off .kvoice-sw { background: rgba(234, 227, 200, 0.16); }
+
+  body.rail-min .kvoice { grid-template-columns: 32px; justify-content: center; padding: 5px 0; }
+  body.rail-min .kvoice-main, body.rail-min .kvoice-sw { display: none; }
+
+  /* The sigil says so too: the phase line reads KAISO OFF and the
+     glyph stands down rather than looking like it is still listening. */
+  body.kaiso-off .glyph-area { opacity: 0.5; }
+  .kaiso-listening[data-phase="off"] { color: rgba(234, 227, 200, 0.38); }
+  .kaiso-listening[data-phase="off"] .pulse-dot {
+    animation: none; background: rgba(234, 227, 200, 0.3); box-shadow: none;
+  }

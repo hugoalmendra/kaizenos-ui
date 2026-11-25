@@ -109,6 +109,44 @@
     const kosInd = document.getElementById('kosIndicator');
     if (kosInd) topSlot.appendChild(kosInd);
     const base = rail.querySelector('#krailBase');
+
+    // One switch for the voice. It sits with the session rather than in
+    // the scribe, because wanting Kaiso quiet is not a thing you only
+    // want while the scribe is open — most often it is while you are
+    // reading a document he just made.
+    const voice = document.createElement('button');
+    voice.type = 'button';
+    voice.className = 'kvoice';
+    voice.id = 'kaisoVoiceBtn';
+    voice.innerHTML =
+      '<span class="kvoice-ic" aria-hidden="true">'
+      + '<svg viewBox="0 0 24 24"><path class="kv-on" d="M12 4.5v15M8 8v8M16 8v8M4.5 10.5v3M19.5 10.5v3" stroke-linecap="round"/>'
+      + '<path class="kv-off" d="M12 9.5v5M8 11v2M16 11v2M4 4l16 16" stroke-linecap="round"/></svg>'
+      + '</span>'
+      + '<span class="kvoice-main">'
+      + '<span class="kvoice-name">Kaiso</span>'
+      + '<span class="kvoice-state" id="kaisoVoiceState">Listening</span>'
+      + '</span>'
+      + '<span class="kvoice-sw" aria-hidden="true"><i></i></span>';
+    const voiceState = voice.querySelector('#kaisoVoiceState');
+    function paintVoice() {
+      const off = !!(window.KaisoVoice && window.KaisoVoice.isOff());
+      voice.classList.toggle('off', off);
+      voice.setAttribute('aria-pressed', off ? 'true' : 'false');
+      voiceState.textContent = off ? 'Off' : 'Listening';
+      voice.title = off
+        ? 'Turn Kaiso back on — he will listen and speak again'
+        : 'Turn Kaiso off — he will not speak or listen. The session keeps running and you can still type.';
+      voice.setAttribute('aria-label', voice.title);
+    }
+    voice.addEventListener('click', () => {
+      if (window.KaisoVoice) window.KaisoVoice.toggle();
+      paintVoice();
+    });
+    window.addEventListener('kaiso:voice', paintVoice);
+    paintVoice();
+    base.appendChild(voice);
+
     if (tokenMeter) base.appendChild(tokenMeter);
     if (accountBtn) {
       const lbl = document.createElement('span');

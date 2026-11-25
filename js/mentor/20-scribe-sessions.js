@@ -121,19 +121,19 @@
       {
         at: daysAgo(42, 9, 20), minutes: 18, turns: [
           [0, 'kaiso', 'If this worked perfectly, what would be different in the world?'],
-          [1, 'user', 'Solo founders would stop losing months turning a rough idea into something an investor can actually read.'],
+          [1, 'user', 'A first-time founder would hear what each road actually cost, instead of the version that got PR approval.'],
           [3, 'kaiso', 'Say that back to me as the reason the company exists.'],
-          [4, 'user', 'Helm exists so the sequence is not the hard part. The work is.'],
+          [4, 'user', 'Founders Unscripted exists so the money part gets said out loud.'],
           [11, 'kaiso', 'Five years out. What does the company look like?'],
-          [12, 'user', 'Every serious founder walks into a raise with the same quality of material a well-funded team would have.'],
+          [12, 'user', 'The show a founder is told to watch before they decide whether to raise.'],
         ],
       },
       {
         at: daysAgo(6, 16, 5), minutes: 9, turns: [
           [0, 'kaiso', 'What is the one thing you do that nobody else does well?'],
-          [1, 'user', 'We interview the founder and forge the artifacts out of the conversation itself.'],
+          [1, 'user', 'We put the two roads side by side — raised and bootstrapped — in the same format, every time.'],
           [5, 'kaiso', 'And what gets harder for someone else to copy the longer you run?'],
-          [6, 'user', 'The interview data. Every session makes the next artifact better, and nobody else has the transcript.'],
+          [6, 'user', 'The guest list and the tape. Nobody else has these conversations on the record.'],
         ],
       },
     ];

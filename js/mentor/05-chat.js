@@ -220,9 +220,10 @@
     // listening.
     function applyKaisoPhase() {
       if (!phaseEl) return;
-      const phase = kaisoSpeaking ? 'speaking'
-                  : (pendingTurn  ? 'thinking'
-                  :                 'listening');
+      const phase = kaisoOff      ? 'off'
+                  : (kaisoSpeaking ? 'speaking'
+                  : (pendingTurn   ? 'thinking'
+                  :                  'listening'));
       if (phase === currentPhase) return;
       currentPhase = phase;
       phaseEl.dataset.phase = phase;
@@ -421,6 +422,7 @@
     let recognition = null;
     let listening   = false;   // SR engine currently running
     let micMuted    = false;   // user mute — independent of echo-flush restarts
+    let kaisoOff    = false;   // the whole voice side, off: neither speaks nor listens
     let echoFlushing = false;  // internal abort to drop TTS echo, not a user mute
     // While Kaiso is speaking, SR keeps running but we drop every result
     // (interim or final). This is more reliable than abort()/restart —
@@ -582,6 +584,34 @@
       startListening();
       syncDoneBtn();
     }
+    // ─ Kaiso off — one switch for the whole voice side ───────
+    // The session keeps running and the scribe keeps taking what is
+    // typed. Kaiso just stops speaking and stops listening, which is
+    // two separate mechanisms behind one control: cancel and suppress
+    // the speech, mute the microphone.
+    function setKaisoOff(off) {
+      const next = !!off;
+      if (next === kaisoOff) return kaisoOff;
+      kaisoOff = next;
+      document.body.classList.toggle('kaiso-off', kaisoOff);
+      if (kaisoOff) {
+        cancelSpeech();
+        if (log.dataset.engaged && !micMuted) muteMic(); else syncMicVisual();
+      } else if (log.dataset.engaged) {
+        unmuteMic();
+      }
+      applyKaisoPhase();
+      syncDoneBtn();
+      window.dispatchEvent(new CustomEvent('kaiso:voice', { detail: { off: kaisoOff } }));
+      return kaisoOff;
+    }
+    window.KaisoVoice = {
+      isOff: () => kaisoOff,
+      off:   () => setKaisoOff(true),
+      on:    () => setKaisoOff(false),
+      toggle: () => setKaisoOff(!kaisoOff),
+    };
+
     function handleMicClick() {
       if (!log.dataset.engaged) {
         appendErr('Enable Kaiso first — click the hexagram to start the mentor session.');
@@ -730,6 +760,9 @@
     let currentAudioUrl = null;
 
     async function speak(text) {
+      // Off means off: no voice, and no caption pacing a voice that is
+      // not going to arrive. The reply is still in the scribe.
+      if (kaisoOff) { cancelSpeech(); return; }
       if (!cfg.ttsEnabled || !text) {
         // Voice off, caption still on: it paces itself through the reply.
         if (text && window.KaisoCaption) window.KaisoCaption.speech(text, null);

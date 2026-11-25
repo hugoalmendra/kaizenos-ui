@@ -1,7 +1,7 @@
 # Flat renders of the desktop screens
 
-`python3 make.py` writes one PNG per screen at 2x. Takes about three
-minutes for all 71. `index.json` comes out alongside, carrying each
+`python3 make.py` writes one PNG per screen at 2x. Takes about four
+minutes for all 81. `index.json` comes out alongside, carrying each
 render's title, page, grid position, source file and the state recipe
 that produced it.
 
@@ -61,8 +61,20 @@ minutes do not belong in the repo.
 These are placed in **KaizenOS — Desktop screens (reference)**:
 https://www.figma.com/design/OyUCCo3hJoZYqoSrNVLiKa
 
-Eight pages: A first run (17) · B stage (12) · C plan (9) · D library (4)
-· E outputs (10) · F account (11) · G documents (6) · H legal (2).
+Eight pages: A first run (17) · B stage (12) · C plan (9) · D rail &
+venture (9) · E outputs (13) · F account (13) · G documents (6) · H
+legal (2). 81 in all.
+
+Page D was "library" until the Library stopped being a screen. The rail
+carries the assets now, and the venture — the plan, the company, the
+documents — is where that page points.
+
+**Re-uploading matches frames by their id prefix**, so `B3 · …` keeps
+its node and the comments anchored to it. Frames whose screen no longer
+exists are removed; new screens get new frames. One wrinkle worth
+knowing: a frame created and filled in the same session comes back
+without its image — the upload places against the file as it was before
+the frame existed. Create the frames, then upload in a second pass.
 
 The app screens are 1440 × 900 — the viewport, which is what the founder
 sees, since the app scrolls inside its panels rather than down the page.
